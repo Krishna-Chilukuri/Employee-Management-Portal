@@ -39,6 +39,7 @@ public class AddEmployeeServlet extends HttpServlet {
 //            Long superior = (long) (Math.random() * (currSuperiorRank - 1));
             Long superior = rankHashMap.get(currSuperiorRank).get(randGen.nextInt(rankHashMap.get(currSuperiorRank).size()));
 //                    .get(randGen.nextLong() % currSuperiorRank);
+//            rebalanceHierarchy(employeeHashMap, testEmp);
             employeeHashMap.get(superior).addReportee(testEmp);
             testEmp.setReportsTo(employeeHashMap.get(superior));
         }
@@ -51,19 +52,33 @@ public class AddEmployeeServlet extends HttpServlet {
     static void rebalanceHierarchy(HashMap<Long, Employee> employeeHashMap, Employee newEmp) {
         Employee currBoss = newEmp.getReportsTo();
         if (currBoss == null) return;
-        Long newEmpRank = newEmp.getEmployeeRank();
+        long newEmpRank = newEmp.getEmployeeRank();
 
 //        List<Employee> newEmpReportees = new ArrayList<Employee>();
         List<Employee> currBossReportees = currBoss.getReportees();
+        List<Long> changeIDs = new ArrayList<>();
 
-        for (Employee currReportee : currBossReportees) {
+        for(Employee currReportee : currBossReportees) {
             if (currReportee.getEmployeeRank() > newEmpRank) {
-                currBoss.removeReportee(currReportee);
-                currReportee.setReportsTo(newEmp);
-                newEmp.addReportee(currReportee);
+                changeIDs.add(currReportee.getEmployeeId());
             }
-//            newEmp.setReportees(newEmpReportees);
         }
+
+        for (Long changeID : changeIDs) {
+            Employee currRep = employeeHashMap.get(changeID);
+            currBoss.removeReportee(currRep);
+            currRep.setReportsTo(newEmp);
+            newEmp.addReportee(currRep);
+        }
+//
+//        for (Employee currReportee : currBossReportees) {
+//            if (currReportee.getEmployeeRank() > newEmpRank) {
+//                currBoss.removeReportee(currReportee);
+//                currReportee.setReportsTo(newEmp);
+//                newEmp.addReportee(currReportee);
+//            }
+//            newEmp.setReportees(newEmpReportees);
+//        }
     }
 
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
