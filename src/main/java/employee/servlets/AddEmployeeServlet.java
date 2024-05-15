@@ -28,7 +28,7 @@ public class AddEmployeeServlet extends HttpServlet {
     static boolean addToHierarchy(HashMap<Long, Employee> employeeHashMap, HashMap<Long, List<Long>> rankHashMap, Employee testEmp) {
         Random randGen = new Random();
         Long currSuperiorRank = testEmp.getEmployeeRank() - 1;
-        while (!rankHashMap.containsKey(currSuperiorRank)) {
+        while (!rankHashMap.containsKey(currSuperiorRank) || (rankHashMap.containsKey(currSuperiorRank) && rankHashMap.get(currSuperiorRank).isEmpty())) {
             if (currSuperiorRank == 0) break;
             currSuperiorRank--;
         }
@@ -39,13 +39,31 @@ public class AddEmployeeServlet extends HttpServlet {
 //            Long superior = (long) (Math.random() * (currSuperiorRank - 1));
             Long superior = rankHashMap.get(currSuperiorRank).get(randGen.nextInt(rankHashMap.get(currSuperiorRank).size()));
 //                    .get(randGen.nextLong() % currSuperiorRank);
-            employeeHashMap.get(superior).getReportees().add(testEmp);
+            employeeHashMap.get(superior).addReportee(testEmp);
             testEmp.setReportsTo(employeeHashMap.get(superior));
         }
 
         employeeHashMap.put(testEmp.getEmployeeId(), testEmp);
         rankHashMap.get(testEmp.getEmployeeRank()).add(testEmp.getEmployeeId());
         return true;
+    }
+
+    static void rebalanceHierarchy(HashMap<Long, Employee> employeeHashMap, Employee newEmp) {
+        Employee currBoss = newEmp.getReportsTo();
+        if (currBoss == null) return;
+        Long newEmpRank = newEmp.getEmployeeRank();
+
+//        List<Employee> newEmpReportees = new ArrayList<Employee>();
+        List<Employee> currBossReportees = currBoss.getReportees();
+
+        for (Employee currReportee : currBossReportees) {
+            if (currReportee.getEmployeeRank() > newEmpRank) {
+                currBoss.removeReportee(currReportee);
+                currReportee.setReportsTo(newEmp);
+                newEmp.addReportee(currReportee);
+            }
+//            newEmp.setReportees(newEmpReportees);
+        }
     }
 
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
@@ -70,18 +88,22 @@ public class AddEmployeeServlet extends HttpServlet {
             }
         }
 
-
+        //is Employee being inserted a duplicate
         if (isDuplicateEmployee(ef1.employeeMap, newEmp)) {
             pw.println("Duplicate Employee, Insertion not Possible");
             return;
         }
+        //does the rank provided align with the hierarchy
         if (isRankNotPossible(ef1.rankMap, newEmp)) {
             pw.println("Insertion in rank is not possible");
             pw.println(ef1.rankMap.get(newEmp.getEmployeeRank()).size());
             return;
         }
 
-        addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp);
+        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
+            pw.println("Hierarchy can't be set");
+        }
+        rebalanceHierarchy(ef1.employeeMap, newEmp);
         pw.println("Employee Added");
         pw.println("ID : " + newEmp.getEmployeeId());
         pw.println("Name : " + newEmp.getEmployeeName());

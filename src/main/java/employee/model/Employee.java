@@ -50,4 +50,12 @@ public class Employee {
     public void setReportees(List<Employee> reportees) {
         this.reportees = reportees;
     }
+
+    public void addReportee(Employee reportee) {
+        this.reportees.add(reportee);
+    }
+
+    public void removeReportee(Employee reportee) {
+        this.reportees.remove(reportee);
+    }
 }
