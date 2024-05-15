@@ -28,6 +28,13 @@ public class RemoveEmployeeServlet extends HttpServlet {
         }
 
         if (ef1.employeeMap.containsKey(remId)) {
+            //Removal Process
+            Long superiorId = ef1.employeeMap.get(remId).getReportsTo().getEmployeeId();
+            Long coRank = ef1.employeeMap.get(remId).getEmployeeRank();
+
+            ef1.rankMap.get(coRank).remove(remId);
+
+
             pw.println("EMP IS PRESENT and is removed");
             Long currRank = ef1.employeeMap.get(remId).getEmployeeRank();
 

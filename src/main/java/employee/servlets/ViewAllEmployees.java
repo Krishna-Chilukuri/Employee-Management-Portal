@@ -15,7 +15,7 @@ public class ViewAllEmployees extends HttpServlet {
         PrintWriter pw = res.getWriter();
 
         ef1.employeeMap.forEach((key, val) ->
-                pw.println(key + " => " + val.getEmployeeId() + " " + val.getEmployeeName() + " " + val.getEmployeeRank() + " " + val.getReportsTo() + " " + val.getReportsLeft() + " " + val.getReportsRight()));
+                pw.println(key + " => " + val.getEmployeeId() + " " + val.getEmployeeName() + " " + val.getEmployeeRank() + " " + val.getReportsTo() + " " + val.getReportees() + " " +val));
 
         ef1.rankMap.forEach((key, val) ->
                 pw.println(key + " rank => " + val));
