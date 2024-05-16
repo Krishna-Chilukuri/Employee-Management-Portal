@@ -49,10 +49,16 @@ public class RemoveEmployeeServlet extends HttpServlet {
             remRepo.setReportsTo(newBoss);
         }
     }
+    static void removeEmployee(Long remId) {
+        EmployeeFactory ef1 = EmployeeFactory.getInstance();
+        Employee remEmp = ef1.employeeMap.get(remId);
+        handleReportees(ef1.employeeMap, ef1.rankMap, remEmp);
+        ef1.employeeMap.get(remEmp.getReportsTo().getEmployeeId()).removeReportee(remEmp);
+        ef1.employeeMap.remove(remEmp.getEmployeeId());
+    }
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
-
         Enumeration<String> e = req.getParameterNames();
 
         long remId = -1;
@@ -69,10 +75,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
             pw.println("ID not available to remove");
             return;
         }
-        Employee remEmp = ef1.employeeMap.get(remId);
-        handleReportees(ef1.employeeMap, ef1.rankMap, remEmp);
-        ef1.employeeMap.get(remEmp.getReportsTo().getEmployeeId()).removeReportee(remEmp);
-        ef1.employeeMap.remove(remEmp.getEmployeeId());
+
         pw.println("REmoval DONE!!!");
 //
 //        if (ef1.employeeMap.containsKey(remId)) {
