@@ -20,6 +20,18 @@
     <servlet-name>ViewEmployeeServlet</servlet-name>
     <servlet-class>employee.servlets.ViewEmployeeServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>UpperHierarchyServlet</servlet-name>
+    <servlet-class>employee.servlets.UpperHierarchyServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>LowerHierarchyServlet</servlet-name>
+    <servlet-class>employee.servlets.LowerHierarchyServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>KStepHierarchy</servlet-name>
+    <servlet-class>employee.servlets.KStepHierarchy</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>AddEmployeeServlet</servlet-name>
@@ -36,5 +48,17 @@
   <servlet-mapping>
     <servlet-name>ViewEmployeeServlet</servlet-name>
     <url-pattern>/ViewEmployeeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpperHierarchyServlet</servlet-name>
+    <url-pattern>/UpperHierarchy</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LowerHierarchyServlet</servlet-name>
+    <url-pattern>/LowerHierarchy</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>KStepHierarchy</servlet-name>
+    <url-pattern>/KStepHierarchy</url-pattern>
   </servlet-mapping>
 </web-app>

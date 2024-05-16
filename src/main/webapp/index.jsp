@@ -31,5 +31,23 @@
     <input type="number" name="viewId" id="viewId">
     <button type="submit">View Employee</button>
 </form>
+<form action="UpperHierarchy" method="post">
+    <label for="eid">Enter ID</label>
+    <input type="number" name="eid" id="eid">
+    <button type="submit">View Upper Hierarchy</button>
+</form>
+<form action="LowerHierarchy" method="post">
+    <label for="eid">Enter ID</label>
+    <input type="number" name="eid" id="eid">
+    <button type="submit">View Lower Hierarchy</button>
+</form>
+<form action="KStepHierarchy" method="post">
+    <label for="eid">Enter ID</label>
+    <label for="kval">Enter k</label>
+    <input type="number" name="eid" id="eid">
+    <input type="number" name="kval" id="kval">
+    <button type="submit">View K Step Hierarchy</button>
+</form>
+
 </body>
 </html>

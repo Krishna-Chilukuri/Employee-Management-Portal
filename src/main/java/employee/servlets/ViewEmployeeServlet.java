@@ -1,6 +1,7 @@
 package employee.servlets;
 
 import employee.factory.EmployeeFactory;
+import employee.model.Employee;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -28,9 +29,12 @@ public class ViewEmployeeServlet extends HttpServlet {
 
         pw.println("Search ID Given is : " + searchId);
         if (ef1.employeeMap.containsKey(searchId)) {
-            pw.println("ID : " + ef1.employeeMap.get(searchId).getEmployeeId());
-            pw.println("NAME : " + ef1.employeeMap.get(searchId).getEmployeeName());
-            pw.println("RANK : " + ef1.employeeMap.get(searchId).getEmployeeRank());
+            Employee searchEmp = ef1.employeeMap.get(searchId);
+            pw.println("ID : " + searchEmp.getEmployeeId());
+            pw.println("NAME : " + searchEmp.getEmployeeName());
+            pw.println("RANK : " + searchEmp.getEmployeeRank());
+            pw.println("Reports to : " + searchEmp.getReportsTo());
+            pw.println("Reportees : " + searchEmp.getReportees());
         }
         else {
             pw.println("Employee is not present");
