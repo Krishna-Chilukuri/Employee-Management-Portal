@@ -2,6 +2,7 @@ package employee.servlets;
 
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
+import jdk.internal.org.objectweb.asm.util.Printer;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -13,22 +14,19 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 
 import static employee.servlets.RemoveEmployeeServlet.removeEmployee;
-import static employee.servlets.RemoveEmployeeServlet.handleReportees;
 import static employee.servlets.AddEmployeeServlet.addEmployee;
-//import static employee.servlets.AddEmployeeServlet.
 
-
-public class PromoteServlet extends HttpServlet {
-    static boolean promoteEmp(Long empId, PrintWriter pw) {
+public class DemoteServlet extends HttpServlet {
+    static boolean demoteEmp(Long empId, PrintWriter pw) {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Employee oldEmp = ef1.employeeMap.get(empId);
         removeEmployee(empId);
-        oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() - 1);
-        pw.println("IN PROM: " + oldEmp.getEmployeeRank() + ' ' + oldEmp.getEmployeeRank() + oldEmp + ' ' + oldEmp);
+        oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() + 1);
+        pw.println("IN DEMOTE: " + oldEmp.getEmployeeRank() + ' ' + oldEmp);
         oldEmp.setReportees(new ArrayList<>());
         oldEmp.setReportsTo(null);
-        if (!addEmployee(oldEmp, pw)) {
-            oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() + 1);
+        if(!addEmployee(oldEmp, pw)) {
+            oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() - 1);
             addEmployee(oldEmp, pw);
             return false;
         }
@@ -38,7 +36,7 @@ public class PromoteServlet extends HttpServlet {
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         PrintWriter pw = res.getWriter();
         Enumeration<String> e = req.getParameterNames();
-        long promId = -1L, numProms = -1L;
+        long promId = -1L, numDems = -1L;
 
         while(e.hasMoreElements()) {
             String pname = e.nextElement();
@@ -46,17 +44,17 @@ public class PromoteServlet extends HttpServlet {
                 promId = Long.parseLong(req.getParameter(pname));
             }
             if (pname.equals("kval")) {
-                numProms = Long.parseLong(req.getParameter(pname));
+                numDems = Long.parseLong(req.getParameter(pname));
             }
         }
 
-        if (promId == -1 || numProms == -1) {
+        if (promId == -1 || numDems == -1) {
             pw.println("Promotion not possible");
             return;
         }
 
-        while (numProms > 0) {
-            if(promoteEmp(promId, pw)) numProms--;
+        while (numDems > 0) {
+            if(demoteEmp(promId, pw)) numDems--;
             else break;
         }
     }

@@ -43,11 +43,24 @@
 </form>
 <form action="KStepHierarchy" method="post">
     <label for="eid">Enter ID</label>
-    <label for="kval">Enter k</label>
     <input type="number" name="eid" id="eid">
+    <label for="kval">Enter k</label>
     <input type="number" name="kval" id="kval">
     <button type="submit">View K Step Hierarchy</button>
 </form>
-
+<form action="PromoteEmployee" method="post">
+    <label for="eid">Enter ID to promote</label>
+    <input type="number" name="eid" id="eid">
+    <label for="kval">Enter k</label>
+    <input type="number" name="kval" id="kval">
+    <button type="submit">Promote Employee</button>
+</form>
+<form action="DemoteEmployee" method="post">
+    <label for="eid">Enter ID to demote</label>
+    <input type="number" name="eid" id="eid">
+    <label for="kval">Enter k</label>
+    <input type="number" name="kval" id="kval">
+    <button type="submit">Demote Employee</button>
+</form>
 </body>
 </html>

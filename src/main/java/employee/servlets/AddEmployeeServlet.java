@@ -80,9 +80,31 @@ public class AddEmployeeServlet extends HttpServlet {
 //            newEmp.setReportees(newEmpReportees);
 //        }
     }
+    static boolean addEmployee(Employee newEmp, PrintWriter pw) {
+        EmployeeFactory ef1 = EmployeeFactory.getInstance();
+        if (isDuplicateEmployee(ef1.employeeMap, newEmp)) {
+            pw.println("Duplicate Employee, Insertion not Possible");
+            return false;
+        }
+        //does the rank provided align with the hierarchy
+        if (isRankNotPossible(ef1.rankMap, newEmp)) {
+            pw.println("Insertion in rank is not possible");
+            pw.println(ef1.rankMap.get(newEmp.getEmployeeRank()).size());
+            return false;
+        }
+
+        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
+            pw.println("Hierarchy can't be set");
+            return false;
+        }
+        rebalanceHierarchy(ef1.employeeMap, newEmp);
+        pw.println("RANK CURR LEN : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size());
+        pw.println("SIZE : " + ef1.employeeMap.get(newEmp.getEmployeeId()).getReportees().size());
+        return true;
+    }
 
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        EmployeeFactory ef1 = EmployeeFactory.getInstance();
+//        EmployeeFactory ef1 = EmployeeFactory.getInstance();
         PrintWriter pw = res.getWriter();
         Employee newEmp = new Employee();
         long higherRank;
@@ -103,27 +125,16 @@ public class AddEmployeeServlet extends HttpServlet {
             }
         }
 
-        //is Employee being inserted a duplicate
-        if (isDuplicateEmployee(ef1.employeeMap, newEmp)) {
-            pw.println("Duplicate Employee, Insertion not Possible");
-            return;
-        }
-        //does the rank provided align with the hierarchy
-        if (isRankNotPossible(ef1.rankMap, newEmp)) {
-            pw.println("Insertion in rank is not possible");
-            pw.println(ef1.rankMap.get(newEmp.getEmployeeRank()).size());
+        if (!addEmployee(newEmp, pw)) {
             return;
         }
 
-        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
-            pw.println("Hierarchy can't be set");
-        }
-        rebalanceHierarchy(ef1.employeeMap, newEmp);
+        //is Employee being inserted a duplicate
+
         pw.println("Employee Added");
         pw.println("ID : " + newEmp.getEmployeeId());
         pw.println("Name : " + newEmp.getEmployeeName());
         pw.println("Rank : " + newEmp.getEmployeeRank());
-        pw.println("RANK CURR LEN : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size());
 
 //        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
 //            pw.println("Hierarchy can't be set");
@@ -131,7 +142,7 @@ public class AddEmployeeServlet extends HttpServlet {
 //        else {
 //        }
 
-        pw.println("SIZE : " + ef1.employeeMap.get(newEmp.getEmployeeId()).getReportees().size());
+
         pw.close();
 
     }

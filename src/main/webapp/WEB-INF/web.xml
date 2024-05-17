@@ -32,6 +32,14 @@
     <servlet-name>KStepHierarchy</servlet-name>
     <servlet-class>employee.servlets.KStepHierarchy</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>PromoteServlet</servlet-name>
+    <servlet-class>employee.servlets.PromoteServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DemoteServlet</servlet-name>
+    <servlet-class>employee.servlets.DemoteServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>AddEmployeeServlet</servlet-name>
@@ -60,5 +68,13 @@
   <servlet-mapping>
     <servlet-name>KStepHierarchy</servlet-name>
     <url-pattern>/KStepHierarchy</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PromoteServlet</servlet-name>
+    <url-pattern>/PromoteEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DemoteServlet</servlet-name>
+    <url-pattern>/DemoteEmployee</url-pattern>
   </servlet-mapping>
 </web-app>
