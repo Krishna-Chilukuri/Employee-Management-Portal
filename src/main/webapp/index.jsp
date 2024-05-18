@@ -62,5 +62,15 @@
     <input type="number" name="kval" id="kval">
     <button type="submit">Demote Employee</button>
 </form>
+<form action="MultiThreadInsertions" method="post">
+    <label for="countOfEmps">Enter number of Employees to insert</label>
+    <input type="number" name="countOfEmps" id="countOfEmps">
+    <button type="submit">Insert Employees</button>
+</form>
+<form action="LoopingInsertions" method="post">
+    <label for="countOfEmps">Enter number of Employees to insert</label>
+    <input type="number" name="countOfEmps" id="countOfEmps">
+    <button type="submit">Insert Employees</button>
+</form>
 </body>
 </html>

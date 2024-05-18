@@ -25,7 +25,7 @@ public class AddEmployeeServlet extends HttpServlet {
         return checkRank <= rankHashMap.get(checkRank).size();
     }
 
-    static boolean addToHierarchy(HashMap<Long, Employee> employeeHashMap, HashMap<Long, List<Long>> rankHashMap, Employee testEmp) {
+    static synchronized boolean addToHierarchy(HashMap<Long, Employee> employeeHashMap, HashMap<Long, List<Long>> rankHashMap, Employee testEmp) {
         Random randGen = new Random();
         Long currSuperiorRank = testEmp.getEmployeeRank() - 1;
         while (!rankHashMap.containsKey(currSuperiorRank) || (rankHashMap.containsKey(currSuperiorRank) && rankHashMap.get(currSuperiorRank).isEmpty())) {
@@ -98,8 +98,8 @@ public class AddEmployeeServlet extends HttpServlet {
             return false;
         }
         rebalanceHierarchy(ef1.employeeMap, newEmp);
-        pw.println("RANK CURR LEN : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size());
-        pw.println("SIZE : " + ef1.employeeMap.get(newEmp.getEmployeeId()).getReportees().size());
+//        pw.println("RANK CURR LEN : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size());
+//        pw.println("SIZE : " + ef1.employeeMap.get(newEmp.getEmployeeId()).getReportees().size());
         return true;
     }
 

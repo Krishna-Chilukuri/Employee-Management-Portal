@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.exception.DemoteException;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 import jdk.internal.org.objectweb.asm.util.Printer;
@@ -17,7 +18,7 @@ import static employee.servlets.RemoveEmployeeServlet.removeEmployee;
 import static employee.servlets.AddEmployeeServlet.addEmployee;
 
 public class DemoteServlet extends HttpServlet {
-    static boolean demoteEmp(Long empId, PrintWriter pw) {
+    static boolean demoteEmp(Long empId, PrintWriter pw)  throws DemoteException {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Employee oldEmp = ef1.employeeMap.get(empId);
         removeEmployee(empId);
@@ -28,7 +29,7 @@ public class DemoteServlet extends HttpServlet {
         if(!addEmployee(oldEmp, pw)) {
             oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() - 1);
             addEmployee(oldEmp, pw);
-            return false;
+            throw new DemoteException("Demotion from " + oldEmp.getEmployeeRank() + " to " + (oldEmp.getEmployeeRank() + 1) + " is not possible");
         }
 
         return true;
@@ -54,8 +55,13 @@ public class DemoteServlet extends HttpServlet {
         }
 
         while (numDems > 0) {
-            if(demoteEmp(promId, pw)) numDems--;
-            else break;
+            try{
+                if(demoteEmp(promId, pw)) numDems--;
+            }
+            catch (DemoteException de) {
+                pw.println("Caught: " + de);
+                break;
+            }
         }
     }
 }

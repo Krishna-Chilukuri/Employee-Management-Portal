@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.exception.PromoteException;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 
@@ -19,7 +20,7 @@ import static employee.servlets.AddEmployeeServlet.addEmployee;
 
 
 public class PromoteServlet extends HttpServlet {
-    static boolean promoteEmp(Long empId, PrintWriter pw) {
+    static boolean promoteEmp(Long empId, PrintWriter pw) throws PromoteException {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Employee oldEmp = ef1.employeeMap.get(empId);
         removeEmployee(empId);
@@ -30,7 +31,7 @@ public class PromoteServlet extends HttpServlet {
         if (!addEmployee(oldEmp, pw)) {
             oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() + 1);
             addEmployee(oldEmp, pw);
-            return false;
+            throw new PromoteException("Promotion from " + oldEmp.getEmployeeRank() + " to " + (oldEmp.getEmployeeRank() - 1) + " is not possible");
         }
 
         return true;
@@ -56,8 +57,15 @@ public class PromoteServlet extends HttpServlet {
         }
 
         while (numProms > 0) {
-            if(promoteEmp(promId, pw)) numProms--;
-            else break;
+            try{
+                if(promoteEmp(promId, pw)) {
+                    numProms--;
+                }
+            }
+            catch (PromoteException pe) {
+                pw.println("Caught: " + pe);
+                break;
+            }
         }
     }
 }

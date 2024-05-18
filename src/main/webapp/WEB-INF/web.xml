@@ -40,6 +40,14 @@
     <servlet-name>DemoteServlet</servlet-name>
     <servlet-class>employee.servlets.DemoteServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>InsertMultiEmployees</servlet-name>
+    <servlet-class>employee.servlets.InsertMultiEmployees</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>TraditionalMultiInserts</servlet-name>
+    <servlet-class>employee.servlets.TraditionalMultiInserts</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>AddEmployeeServlet</servlet-name>
@@ -76,5 +84,13 @@
   <servlet-mapping>
     <servlet-name>DemoteServlet</servlet-name>
     <url-pattern>/DemoteEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>InsertMultiEmployees</servlet-name>
+    <url-pattern>/MultiThreadInsertions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TraditionalMultiInserts</servlet-name>
+    <url-pattern>/LoopingInsertions</url-pattern>
   </servlet-mapping>
 </web-app>
