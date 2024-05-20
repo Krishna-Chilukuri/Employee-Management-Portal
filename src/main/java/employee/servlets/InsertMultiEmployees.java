@@ -57,18 +57,6 @@ class insertionThread extends Thread {
                     }
                     rank++;
                 }
-//            for (Long rank: ef1.rankMap.keySet()) {
-////                pw.println("RANK U : " + rank);
-//                if (ef1.rankMap.get(rank).size() < rank) {
-//                    newEmp.setEmployeeRank(rank);
-//                    breakStat = true;
-//                    break;
-//                }
-//            }
-//            if (!breakStat) {
-//
-//            }
-//            this.pw.println("HERE: " + addEmployee(newEmp, this.pw));
                 addEmployee(newEmp, this.pw);
                 curr++;
                 this.numOfInsertions--;

@@ -15,6 +15,7 @@ public class UpperHierarchyServlet extends HttpServlet {
     static boolean isIdAvailable(HashMap<Long, Employee> empMap, Long empId) {
         return empMap.containsKey(empId);
     }
+    //Boss access constant
     static Employee findBoss(HashMap<Long, Employee> empMap, Long empId) {
         Employee currEmp = empMap.get(empId);
 
@@ -43,6 +44,7 @@ public class UpperHierarchyServlet extends HttpServlet {
             }
         }
     }
+    //Target rank lo only 1 kaabatti dekho
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         Enumeration<String> e = req.getParameterNames();
         EmployeeFactory ef1 = EmployeeFactory.getInstance();

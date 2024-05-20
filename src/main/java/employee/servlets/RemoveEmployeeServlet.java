@@ -17,6 +17,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
         return empMap.containsKey(remId);
     }
 
+    //Split into multiple functions
     static void handleReportees(HashMap<Long, Employee> empMap, HashMap<Long, List<Long>> rankMap, Employee remEmp) {
         if (remEmp.getReportees().isEmpty()) return;
         Random rand = new Random();
@@ -63,6 +64,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
             remRepo.setReportsTo(newBoss);
         }
     }
+    //Check for remId in empMap
     static void removeEmployee(Long remId) {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Employee remEmp = ef1.employeeMap.get(remId);

@@ -16,7 +16,6 @@ import java.util.Enumeration;
 import static employee.servlets.RemoveEmployeeServlet.removeEmployee;
 import static employee.servlets.RemoveEmployeeServlet.handleReportees;
 import static employee.servlets.AddEmployeeServlet.addEmployee;
-//import static employee.servlets.AddEmployeeServlet.
 
 
 public class PromoteServlet extends HttpServlet {

@@ -23,7 +23,7 @@ public class AddEmployeeServlet extends HttpServlet {
         long checkRank = testEmp.getEmployeeRank();
         if (!rankHashMap.containsKey(checkRank)) rankHashMap.put(checkRank, new ArrayList<Long>());
         return checkRank <= rankHashMap.get(checkRank).size();
-    }
+    }//check
 
     static synchronized boolean addToHierarchy(HashMap<Long, Employee> employeeHashMap, HashMap<Long, List<Long>> rankHashMap, Employee testEmp) {
         Random randGen = new Random();
@@ -89,7 +89,7 @@ public class AddEmployeeServlet extends HttpServlet {
         //does the rank provided align with the hierarchy
         if (isRankNotPossible(ef1.rankMap, newEmp)) {
             pw.println("Insertion in rank is not possible");
-            pw.println(ef1.rankMap.get(newEmp.getEmployeeRank()).size());
+            pw.println("HERE : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size() + ' ' + newEmp.getEmployeeRank());
             return false;
         }
 
@@ -130,11 +130,12 @@ public class AddEmployeeServlet extends HttpServlet {
         }
 
         //is Employee being inserted a duplicate
+        pw.println(newEmp);
 
-        pw.println("Employee Added");
-        pw.println("ID : " + newEmp.getEmployeeId());
-        pw.println("Name : " + newEmp.getEmployeeName());
-        pw.println("Rank : " + newEmp.getEmployeeRank());
+//        pw.println("Employee Added");
+//        pw.println("ID : " + newEmp.getEmployeeId());
+//        pw.println("Name : " + newEmp.getEmployeeName());
+//        pw.println("Rank : " + newEmp.getEmployeeRank());//toString()
 
 //        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
 //            pw.println("Hierarchy can't be set");

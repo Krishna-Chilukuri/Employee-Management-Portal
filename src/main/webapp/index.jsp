@@ -17,7 +17,7 @@
     <button type="submit">Submit</button>
 </form>
 <br><br><br>
-<form action="ViewAllEmployees" method="post">
+<form action="ViewAllEmployees" method="get">
     <button type="submit">View All Employees</button>
 </form>
 <form action="RemoveEmployeeServlet" method="post">
@@ -26,22 +26,22 @@
     <button type="submit">Remove Employee</button>
 </form>
 <br><br>
-<form action="ViewEmployeeServlet" method="post">
+<form action="ViewEmployeeServlet" method="get">
     <label for="viewId">Enter ID</label>
     <input type="number" name="viewId" id="viewId">
     <button type="submit">View Employee</button>
 </form>
-<form action="UpperHierarchy" method="post">
+<form action="UpperHierarchy" method="get">
     <label for="eid">Enter ID</label>
     <input type="number" name="eid" id="eid">
     <button type="submit">View Upper Hierarchy</button>
 </form>
-<form action="LowerHierarchy" method="post">
+<form action="LowerHierarchy" method="get">
     <label for="eid">Enter ID</label>
     <input type="number" name="eid" id="eid">
     <button type="submit">View Lower Hierarchy</button>
 </form>
-<form action="KStepHierarchy" method="post">
+<form action="KStepHierarchy" method="get">
     <label for="eid">Enter ID</label>
     <input type="number" name="eid" id="eid">
     <label for="kval">Enter k</label>
