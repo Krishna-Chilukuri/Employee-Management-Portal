@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.factory.DBFactory;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 
@@ -10,42 +11,67 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.*;
 
 
 public class AddEmployeeServlet extends HttpServlet {
 
-    static boolean isDuplicateEmployee(HashMap<Long, Employee> employeeHashMap, Employee testEmp) {
-        return employeeHashMap.containsKey(testEmp.getEmployeeId());
+    static boolean isDuplicateEmployee(Connection conn, long empId) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("select * from employees where employee_id = ?");
+        stmt.setLong(1, empId);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
     }
 
-    static boolean isRankNotPossible(HashMap<Long, List<Long>> rankHashMap, Employee testEmp) {
-        long checkRank = testEmp.getEmployeeRank();
-        if (!rankHashMap.containsKey(checkRank)) rankHashMap.put(checkRank, new ArrayList<Long>());
-        return checkRank <= rankHashMap.get(checkRank).size();
-    }//check
+    static boolean isRankPossible(Connection conn, long empRank) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("select count(*) as ct from employees where employee_rank = ?");
+        stmt.setLong(1, empRank);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            if (rs.getLong("ct") < empRank) return true;
+        }
+        return false;
+    }
 
-    static synchronized boolean addToHierarchy(HashMap<Long, Employee> employeeHashMap, HashMap<Long, List<Long>> rankHashMap, Employee testEmp) {
+    // Add to hierarchy
+    // find superior upto rank 1
+    // if no superior is available, this emp is boss
+    // if superior exists, add testEmp to the reportee list of superior
+    static synchronized boolean addToHierarchy(Connection conn, Employee testEmp, PrintWriter pw) throws SQLException {
         Random randGen = new Random();
-        Long currSuperiorRank = testEmp.getEmployeeRank() - 1;
-        while (!rankHashMap.containsKey(currSuperiorRank) || (rankHashMap.containsKey(currSuperiorRank) && rankHashMap.get(currSuperiorRank).isEmpty())) {
-            if (currSuperiorRank == 0) break;
-            currSuperiorRank--;
+        long currSuperiorRank = testEmp.getEmployeeRank() - 1;
+        PreparedStatement stmt = conn.prepareStatement("select count(*) as ct from employees where employee_rank = ?");
+        while (currSuperiorRank > 0) {
+            stmt.setLong(1, currSuperiorRank);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                if (rs.getLong("ct") == 0) currSuperiorRank--;
+                else break;
+            }
         }
-        testEmp.setReportees(new ArrayList<>());
-
+        pw.println("IN ADD TO HIERARCHY Superior: " + currSuperiorRank);
+        //curr superior rank dorikindi
+        //get all superiors of currSuperior Rank
         if (currSuperiorRank > 0) {
-            //Superior unnadu
-//            Long superior = (long) (Math.random() * (currSuperiorRank - 1));
-            Long superior = rankHashMap.get(currSuperiorRank).get(randGen.nextInt(rankHashMap.get(currSuperiorRank).size()));
-//                    .get(randGen.nextLong() % currSuperiorRank);
-//            rebalanceHierarchy(employeeHashMap, testEmp);
-            employeeHashMap.get(superior).addReportee(testEmp);
-            testEmp.setReportsTo(employeeHashMap.get(superior));
+            List<Long> superiorIds = new ArrayList<>();
+            stmt = conn.prepareStatement("select employee_id from employees where employee_rank")
         }
-
-        employeeHashMap.put(testEmp.getEmployeeId(), testEmp);
-        rankHashMap.get(testEmp.getEmployeeRank()).add(testEmp.getEmployeeId());
+//        Long currSuperiorRank = testEmp.getEmployeeRank() - 1;
+//        while (!rankHashMap.containsKey(currSuperiorRank) || (rankHashMap.containsKey(currSuperiorRank) && rankHashMap.get(currSuperiorRank).isEmpty())) {
+//            if (currSuperiorRank == 0) break;
+//            currSuperiorRank--;
+//        }
+//        testEmp.setReportees(new ArrayList<>());
+//
+//        if (currSuperiorRank > 0) {
+//            Long superior = rankHashMap.get(currSuperiorRank).get(randGen.nextInt(rankHashMap.get(currSuperiorRank).size()));
+//            employeeHashMap.get(superior).addReportee(testEmp);
+//            testEmp.setReportsTo(employeeHashMap.get(superior));
+//        }
+//
+//        employeeHashMap.put(testEmp.getEmployeeId(), testEmp);
+//        rankHashMap.get(testEmp.getEmployeeRank()).add(testEmp.getEmployeeId());
         return true;
     }
 
@@ -82,22 +108,43 @@ public class AddEmployeeServlet extends HttpServlet {
     }
     static boolean addEmployee(Employee newEmp, PrintWriter pw) {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
-        if (isDuplicateEmployee(ef1.employeeMap, newEmp)) {
-            pw.println("Duplicate Employee, Insertion not Possible");
-            return false;
-        }
-        //does the rank provided align with the hierarchy
-        if (isRankNotPossible(ef1.rankMap, newEmp)) {
-            pw.println("Insertion in rank is not possible");
-            pw.println("HERE : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size() + ' ' + newEmp.getEmployeeRank());
-            return false;
-        }
+        Connection conn;
+        DBFactory dbf = DBFactory.getInstance();
 
-        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
-            pw.println("Hierarchy can't be set");
-            return false;
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            if (isDuplicateEmployee(conn, newEmp.getEmployeeId())) {
+                pw.println("Duplicate Employee");
+                return false;
+            }
+            if (!isRankPossible(conn, newEmp.getEmployeeRank())) {
+                pw.println("Insertion in rank is not possible");
+                return false;
+            }
+            if (!addToHierarchy(conn, newEmp, pw)) {
+                pw.println("Hierarchy can't be set");
+                return false;
+            }
         }
-        rebalanceHierarchy(ef1.employeeMap, newEmp);
+        catch (SQLException se) { pw.println("Caught SQL Exception : " + se); }
+        catch (Exception e) { pw.println("Caught Exception : " + e); }
+//        if (isDuplicateEmployee(ef1.employeeMap, newEmp)) {
+//            pw.println("Duplicate Employee, Insertion not Possible");
+//            return false;
+//        }
+//        //does the rank provided align with the hierarchy
+//        if (isRankNotPossible(ef1.rankMap, newEmp)) {
+//            pw.println("Insertion in rank is not possible");
+//            pw.println("HERE : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size() + ' ' + newEmp.getEmployeeRank());
+//            return false;
+//        }
+//
+//        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
+//            pw.println("Hierarchy can't be set");
+//            return false;
+//        }
+//        rebalanceHierarchy(ef1.employeeMap, newEmp);
 //        pw.println("RANK CURR LEN : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size());
 //        pw.println("SIZE : " + ef1.employeeMap.get(newEmp.getEmployeeId()).getReportees().size());
         return true;

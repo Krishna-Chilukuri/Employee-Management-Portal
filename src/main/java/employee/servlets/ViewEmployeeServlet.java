@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.factory.DBFactory;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 
@@ -9,9 +10,50 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 public class ViewEmployeeServlet extends HttpServlet {
+    static void printEmployees(ResultSet rs1, Connection conn, PrintWriter pw) throws SQLException {
+        while (rs1.next()) {
+            long empId = rs1.getLong("employee_id");
+            String empName = rs1.getString("employee_name");
+            long empRank = rs1.getLong("employee_rank");
+            long reportsTo = rs1.getLong("reports_to");
+            List<Long> reportees = new ArrayList<>();
+            PreparedStatement stmt = conn.prepareStatement("select reportee from reportees where employee_id = ?");
+            stmt.setLong(1, empId);
+            ResultSet rs2 = stmt.executeQuery();
+            while (rs2.next()) {
+                reportees.add(rs2.getLong("reportee"));
+            }
+            pw.println("Employee{" +
+                    "employeeId = " + empId +
+                    ", employeeName = '" + empName + '\'' +
+                    ", employeeRank = " + empRank +
+                    ", reportsTo = " + reportsTo +
+                    ", reportees = " + reportees +
+                    '}');
+            rs2.close();
+            stmt.close();
+        }
+    }
+    void getEmployee(long searchId, PrintWriter pw) {
+        Connection conn;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            DBFactory dbf = DBFactory.getInstance();
+            conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            PreparedStatement stmt = conn.prepareStatement("select * from employees where employee_id = ?");
+            stmt.setLong(1, searchId);
+            ResultSet rs1 = stmt.executeQuery();
+            printEmployees(rs1, conn, pw);
+        }
+        catch (SQLException se) { pw.println("Caught SQL Exception : " + se); }
+        catch (Exception e) { pw.println("Caught Exception : " + e); }
+    }
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
@@ -39,5 +81,7 @@ public class ViewEmployeeServlet extends HttpServlet {
         else {
             pw.println("Employee is not present");
         }
+
+        getEmployee(searchId, pw);
     }
 }

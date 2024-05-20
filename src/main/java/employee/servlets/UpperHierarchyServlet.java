@@ -32,17 +32,18 @@ public class UpperHierarchyServlet extends HttpServlet {
         List<Employee> repList = new ArrayList<>();
         ListIterator<Employee> repListIter;
         empQ.add(curr);
-        while (empQ.peek() != null && empQ.peek().getEmployeeRank() <= targetRank) {
+        while (empQ.peek() != null && empQ.peek().getEmployeeRank() < targetRank) {
             curr = empQ.poll();
-            pw.println("EMP : " + curr.getEmployeeId() + ' ' + curr.getEmployeeName() + ' ' + curr.getEmployeeRank());
+            pw.println(curr);
             repList = curr.getReportees();
             repListIter = repList.listIterator();
             while (repListIter.hasNext()) {
                 repo = repListIter.next();
-                if (repo.getEmployeeRank() == targetRank && repo.getEmployeeId() != targetId) continue;
                 empQ.add(repo);
             }
         }
+        EmployeeFactory ef1 = EmployeeFactory.getInstance();
+        pw.println(ef1.employeeMap.get(targetId));
     }
     //Target rank lo only 1 kaabatti dekho
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
