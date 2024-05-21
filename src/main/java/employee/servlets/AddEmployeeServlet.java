@@ -51,59 +51,122 @@ public class AddEmployeeServlet extends HttpServlet {
             }
         }
         pw.println("IN ADD TO HIERARCHY Superior: " + currSuperiorRank);
-        //curr superior rank dorikindi
-        //get all superiors of currSuperior Rank
         if (currSuperiorRank > 0) {
             List<Long> superiorIds = new ArrayList<>();
-            stmt = conn.prepareStatement("select employee_id from employees where employee_rank")
+            stmt = conn.prepareStatement("select employee_id from employees where employee_rank = ?");
+            stmt.setLong(1, currSuperiorRank);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                superiorIds.add(rs.getLong("employee_id"));
+            }
+            pw.println("Superiors of RANK : " + currSuperiorRank + " => " + superiorIds);
+            long superiorId = superiorIds.get(randGen.nextInt(superiorIds.size()));
+            stmt = conn.prepareStatement("insert into reportees values(?, ?)");
+            stmt.setLong(1, superiorId);
+            stmt.setLong(2, testEmp.getEmployeeId());
+            int response = stmt.executeUpdate();
+            pw.println("After Update : " + response);
+
+            stmt = conn.prepareStatement("insert into employees values(?, ?, ?, ?)");
+            stmt.setLong(1, testEmp.getEmployeeId());
+            stmt.setString(2, testEmp.getEmployeeName());
+            stmt.setLong(3, testEmp.getEmployeeRank());
+            stmt.setLong(4, superiorId);
+            response = stmt.executeUpdate();
+            pw.println("After Insertion: " + response);
+            Employee superior = new Employee();
+            superior.setEmployeeId(superiorId);
+            testEmp.setReportsTo(superior);
         }
-//        Long currSuperiorRank = testEmp.getEmployeeRank() - 1;
-//        while (!rankHashMap.containsKey(currSuperiorRank) || (rankHashMap.containsKey(currSuperiorRank) && rankHashMap.get(currSuperiorRank).isEmpty())) {
-//            if (currSuperiorRank == 0) break;
-//            currSuperiorRank--;
-//        }
-//        testEmp.setReportees(new ArrayList<>());
-//
-//        if (currSuperiorRank > 0) {
-//            Long superior = rankHashMap.get(currSuperiorRank).get(randGen.nextInt(rankHashMap.get(currSuperiorRank).size()));
-//            employeeHashMap.get(superior).addReportee(testEmp);
-//            testEmp.setReportsTo(employeeHashMap.get(superior));
-//        }
-//
-//        employeeHashMap.put(testEmp.getEmployeeId(), testEmp);
-//        rankHashMap.get(testEmp.getEmployeeRank()).add(testEmp.getEmployeeId());
+        else {
+            stmt = conn.prepareStatement("insert into employees values(?, ?, ?, null)");
+            stmt.setLong(1, testEmp.getEmployeeId());
+            stmt.setString(2, testEmp.getEmployeeName());
+            stmt.setLong(3, testEmp.getEmployeeRank());
+            int response = stmt.executeUpdate();
+            pw.println("After Insertion if no superior : " + response);
+        }
+        stmt = conn.prepareStatement("select employee_id, employee_rank from employees where reports_to is NULL");
+        ResultSet rs = stmt.executeQuery();
+        pw.println("After looking for reports to NULL");
+        while (rs.next()) {
+            if (rs.getLong("employee_rank") > testEmp.getEmployeeRank()) {
+                stmt = conn.prepareStatement("update employees set reports_to = ? where employee_id = ?");
+                stmt.setLong(1, testEmp.getEmployeeId());
+                stmt.setLong(2, rs.getLong("employee_id"));
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("Reports to for rank " + rs.getLong("employee_rank") + " is updated");
+                }
+                else {
+                    throw new SQLException("Error while updation of reportsTo in employees table");
+                }
+                //add employee_id from query as reportee to testemp
+                stmt = conn.prepareStatement("insert into reportees values (?, ?)");
+                stmt.setLong(1, testEmp.getEmployeeId());
+                stmt.setLong(2, rs.getLong("employee_id"));
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("new employee is set as superior for " + rs.getLong("employee_id"));
+                }
+                else {
+                    throw new SQLException("Error while insertion into reportees table");
+                }
+            }
+        }
         return true;
     }
 
-    static void rebalanceHierarchy(HashMap<Long, Employee> employeeHashMap, Employee newEmp) {
+    static void rebalanceHierarchy(Connection conn, Employee newEmp, PrintWriter pw) throws SQLException {
         Employee currBoss = newEmp.getReportsTo();
         if (currBoss == null) return;
         long newEmpRank = newEmp.getEmployeeRank();
-
-//        List<Employee> newEmpReportees = new ArrayList<Employee>();
-        List<Employee> currBossReportees = currBoss.getReportees();
-        List<Long> changeIDs = new ArrayList<>();
-
-        for(Employee currReportee : currBossReportees) {
-            if (currReportee.getEmployeeRank() > newEmpRank) {
-                changeIDs.add(currReportee.getEmployeeId());
+        List<Long> currBossReportees = new ArrayList<>();
+        PreparedStatement stmt = conn.prepareStatement("select reportee, employee_rank from employees, reportees where employees.employee_id = reportee and reportees.employee_id = ?");
+//        stmt.setLong(1, newEmp.getEmployeeId());
+        stmt.setLong(1, currBoss.getEmployeeId());
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            long reporteeId = rs.getLong("reportee");
+            long reporteeRank = rs.getLong("employee_rank");
+            pw.println("IN WHILE : " + reporteeId + ' ' +reporteeRank);
+            if (reporteeRank > newEmp.getEmployeeRank()) {
+                pw.println("IN IF IN WHILE");
+                //change reportee to newEmp
+                stmt = conn.prepareStatement("update reportees set employee_id = ? where reportee = ?");
+                stmt.setLong(1, newEmp.getEmployeeId());
+                stmt.setLong(2, reporteeId);
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("Reportee Updated");
+                }
+                else {
+                    throw new SQLException("Error while updating superior for " + reporteeId);
+                }
+                pw.println("IN BETWEEN UPDATIONS");
+                stmt = conn.prepareStatement("update employees set reports_to = ? where employee_id = ?");
+                stmt.setLong(1, newEmp.getEmployeeId());
+                stmt.setLong(2, reporteeId);
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("Reports to in Employees updated");
+                }
+                else{
+                    throw new SQLException("Error while updating reports to in employees for "+ reporteeId);
+                }
             }
         }
 
-        for (Long changeID : changeIDs) {
-            Employee currRep = employeeHashMap.get(changeID);
-            currBoss.removeReportee(currRep);
-            currRep.setReportsTo(newEmp);
-            newEmp.addReportee(currRep);
-        }
+//        List<Employee> currBossReportees = currBoss.getReportees();
+//        List<Long> changeIDs = new ArrayList<>();
 //
-//        for (Employee currReportee : currBossReportees) {
+//        for(Employee currReportee : currBossReportees) {
 //            if (currReportee.getEmployeeRank() > newEmpRank) {
-//                currBoss.removeReportee(currReportee);
-//                currReportee.setReportsTo(newEmp);
-//                newEmp.addReportee(currReportee);
+//                changeIDs.add(currReportee.getEmployeeId());
 //            }
-//            newEmp.setReportees(newEmpReportees);
+//        }
+//
+//        for (Long changeID : changeIDs) {
+//            Employee currRep = employeeHashMap.get(changeID);
+//            currBoss.removeReportee(currRep);
+//            currRep.setReportsTo(newEmp);
+//            newEmp.addReportee(currRep);
 //        }
     }
     static boolean addEmployee(Employee newEmp, PrintWriter pw) {
@@ -126,6 +189,7 @@ public class AddEmployeeServlet extends HttpServlet {
                 pw.println("Hierarchy can't be set");
                 return false;
             }
+            rebalanceHierarchy(conn, newEmp, pw);
         }
         catch (SQLException se) { pw.println("Caught SQL Exception : " + se); }
         catch (Exception e) { pw.println("Caught Exception : " + e); }

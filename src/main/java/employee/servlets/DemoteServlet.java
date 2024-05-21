@@ -3,7 +3,6 @@ package employee.servlets;
 import employee.exception.DemoteException;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
-import jdk.internal.org.objectweb.asm.util.Printer;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -21,7 +20,7 @@ public class DemoteServlet extends HttpServlet {
     static boolean demoteEmp(Long empId, PrintWriter pw)  throws DemoteException {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Employee oldEmp = ef1.employeeMap.get(empId);
-        removeEmployee(empId);
+        removeEmployee(empId, pw);
         oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() + 1);
         pw.println("IN DEMOTE: " + oldEmp.getEmployeeRank() + ' ' + oldEmp);
         oldEmp.setReportees(new ArrayList<>());

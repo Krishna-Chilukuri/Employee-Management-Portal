@@ -22,7 +22,7 @@ public class PromoteServlet extends HttpServlet {
     static boolean promoteEmp(Long empId, PrintWriter pw) throws PromoteException {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Employee oldEmp = ef1.employeeMap.get(empId);
-        removeEmployee(empId);
+        removeEmployee(empId, pw);
         oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() - 1);
         pw.println("IN PROM: " + oldEmp.getEmployeeRank() + ' ' + oldEmp.getEmployeeRank() + oldEmp + ' ' + oldEmp);
         oldEmp.setReportees(new ArrayList<>());

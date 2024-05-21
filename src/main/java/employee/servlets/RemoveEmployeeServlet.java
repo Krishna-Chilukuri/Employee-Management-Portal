@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.factory.DBFactory;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 import jdk.internal.net.http.RequestPublishers;
@@ -10,11 +11,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.*;
 
 public class RemoveEmployeeServlet extends HttpServlet {
-    static boolean isIdAvailable(HashMap<Long, Employee> empMap, Long remId) {
-        return empMap.containsKey(remId);
+    static long isIdAvailable(Connection conn, long empId) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("select * from employees where employee_id = ?");
+        stmt.setLong(1, empId);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getLong("employee_rank");
+        }
+        return -1;
     }
 
     //Split into multiple functions
@@ -64,8 +72,137 @@ public class RemoveEmployeeServlet extends HttpServlet {
             remRepo.setReportsTo(newBoss);
         }
     }
+    static void handleReportees(Connection conn, long remId, long remRank, PrintWriter pw) throws SQLException {
+        //if no reportees return back
+        Random randgen = new Random();
+        PreparedStatement stmt = conn.prepareStatement("select reportee from reportees where employee_id = ?");
+        stmt.setLong(1, remId);
+        ResultSet rs = stmt.executeQuery();
+        List<Long> remReporteesIds = new ArrayList<>();
+        List<Long> currRankIds = new ArrayList<>();
+        long currRemRank = remRank;
+        while (rs.next()) {
+            remReporteesIds.add(rs.getLong("reportee"));
+        }
+        if (remReporteesIds.isEmpty()) return;
+        stmt = conn.prepareStatement("select employee_id from employees where employee_rank = ? and employee_id != ?");
+        stmt.setLong(2, remId);
+        while (remRank > 0) {
+            stmt.setLong(1, remRank);
+            rs = stmt.executeQuery();
+//            int currCount = 0;
+            while (rs.next()) {
+                currRankIds.add(rs.getLong("employee_id"));
+//                currCount += 1;
+            }
+            if (currRankIds.isEmpty()) remRank--;
+            else break;
+        }
+        pw.println("Superior rank : "+ remRank);
+        if (remRank > 0) {
+            //We got a superiors
+            int remIdx = 0;
+            ListIterator<Long> currRankId = currRankIds.listIterator();
+            while (remIdx < remReporteesIds.size()) {
+                long currRepId = remReporteesIds.get(remIdx++);
+                if (!currRankId.hasNext()) currRankId = currRankIds.listIterator();
+                long currBossId = currRankId.next();
+                //update employee_id to currBossId for currRepId in reportees
+                //update reports_to to currBossId for currRepId in employees
+                stmt = conn.prepareStatement("update reportees set employee_id = ? where reportee = ?");
+                stmt.setLong(1, currBossId);
+                stmt.setLong(2, currRepId);
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("Update done");
+                }
+                else {
+                    throw new SQLException("Update Error in reportees");
+                }
+                stmt = conn.prepareStatement("update employees set reports_to = ? where employee_id = ?");
+                stmt.setLong(1, currBossId);
+                stmt.setLong(2, currRepId);
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("Update Done");
+                }
+                else {
+                    throw new SQLException("Update Error in employees");
+                }
+            }
+        }
+        else {
+//            promote a reportee by 1 rank and use this reportee as boss
+            long newBoss = remReporteesIds.get(randgen.nextInt(remReporteesIds.size()));
+            remReporteesIds.remove(newBoss);
+            //promote newBoss by 1 rank
+            stmt = conn.prepareStatement("update employees set employee_rank = ? where employee_id = ?");
+            stmt.setLong(1, currRemRank - 1);
+            stmt.setLong(2, newBoss);
+            if (stmt.executeUpdate() == 1) {
+                pw.println("Update DOne");
+            }
+            else {
+                throw new SQLException("Update Error in employees while promoting one of removing reportees");
+            }
+            for (long remReportee: remReporteesIds) {
+                //update employee_id to newBoss for remReportee in reportees
+                //update reports_to to newBoss for remReportee in employees
+                stmt = conn.prepareStatement("update reportees set employee_id = ? where reportee = ?");
+                stmt.setLong(1, newBoss);
+                stmt.setLong(2, remReportee);
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("Update done");
+                }
+                else {
+                    throw new SQLException("Update Error in reportees");
+                }
+                stmt = conn.prepareStatement("update employees set reports_to = ? where employee_id = ?");
+                stmt.setLong(1, newBoss);
+                stmt.setLong(2, remReportee);
+                if (stmt.executeUpdate() == 1) {
+                    pw.println("Update Done");
+                }
+                else {
+                    throw new SQLException("Update Error in employees");
+                }
+            }
+        }
+    }
     //Check for remId in empMap
-    static void removeEmployee(Long remId) {
+    static void removeEmployee(Long remId, PrintWriter pw) {
+        DBFactory dbf = DBFactory.getInstance();
+        Connection conn;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            long remRank = isIdAvailable(conn, remId);
+            if (remRank == -1) {
+                pw.println("ID not available to remove");
+                return;
+            }
+            //ID Is present
+            handleReportees(conn, remId, remRank, pw);
+            //handle reportees
+            PreparedStatement stmt = conn.prepareStatement("delete from employees where employee_id = ?");
+            stmt.setLong(1, remId);
+            if (stmt.executeUpdate() == 1) {
+                pw.println("Deletion DONE");
+            }
+            else {
+                throw new SQLException("Deletion from employees error");
+            }
+            stmt = conn.prepareStatement("delete from reportees where reportee = ?");
+            stmt.setLong(1, remId);
+            if (stmt.executeUpdate() == 1) {
+                pw.println("Deletion DOne");
+            }
+            else {
+                throw new SQLException("Deletion from reportees error");
+            }
+            //reportees lo reportee == remEmpid record deletion
+            //remEmpid record deletion
+        }
+        catch (Exception e) { pw.println("Caught Exception : " + e); }
+
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Employee remEmp = ef1.employeeMap.get(remId);
         ef1.rankMap.get(remEmp.getEmployeeRank()).remove(remId);
@@ -90,12 +227,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
             }
         }
 
-        if (!isIdAvailable(ef1.employeeMap, remId)) {
-            pw.println("ID not available to remove");
-            return;
-        }
-
-        removeEmployee(remId);
+        removeEmployee(remId, pw);
 
         pw.println("REmoval DONE!!!");
 //
