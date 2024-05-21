@@ -26,52 +26,52 @@ public class RemoveEmployeeServlet extends HttpServlet {
     }
 
     //Split into multiple functions
-    static void handleReportees(HashMap<Long, Employee> empMap, HashMap<Long, List<Long>> rankMap, Employee remEmp) {
-        if (remEmp.getReportees().isEmpty()) return;
-        Random rand = new Random();
-        List<Employee> remReportees = remEmp.getReportees();
-        long remRank = remEmp.getEmployeeRank();
-        Long remId = remEmp.getEmployeeId();
-        List<Long> currRankIds = null;
-
-        while(remRank > 0) {
-            currRankIds = rankMap.get(remRank);
-            if (currRankIds.isEmpty() ) {
-                remRank--;
-                continue;
-            }
-            break;
-        }
-        if (currRankIds == null || currRankIds.isEmpty()) {
-//            Random rand = new Random();
-//            int randomElement = givenList.get(rand.nextInt(givenList.size()));
-            int randIdx = rand.nextInt(remReportees.size());
-            Employee newBoss = remReportees.get(randIdx);
-            rankMap.get(newBoss.getEmployeeRank()).remove(newBoss.getEmployeeId());
-            newBoss.setEmployeeRank(newBoss.getEmployeeRank() - 1);
-            rankMap.get(newBoss.getEmployeeRank()).add(newBoss.getEmployeeId());
-            newBoss.setReportsTo(null);
-            remReportees.remove(randIdx);
-            for (Employee reportee: remReportees) {
-                reportee.setReportsTo(newBoss);
-                newBoss.addReportee(reportee);
-            }
-            return;
-        }
-        int remIdx = 0;
-//        Long currRankId;
-        ListIterator<Long> currRankId = currRankIds.listIterator();
-        while (remIdx < remReportees.size()) {
-            //get a curr rank id boss
-            Employee remRepo = empMap.get(remReportees.get(remIdx++).getEmployeeId());
-            if (!currRankId.hasNext()) {
-                currRankId = currRankIds.listIterator();
-            }
-            Employee newBoss = empMap.get(currRankId.next());
-            newBoss.addReportee(remRepo);
-            remRepo.setReportsTo(newBoss);
-        }
-    }
+//    static void handleReportees(HashMap<Long, Employee> empMap, HashMap<Long, List<Long>> rankMap, Employee remEmp) {
+//        if (remEmp.getReportees().isEmpty()) return;
+//        Random rand = new Random();
+//        List<Employee> remReportees = remEmp.getReportees();
+//        long remRank = remEmp.getEmployeeRank();
+//        Long remId = remEmp.getEmployeeId();
+//        List<Long> currRankIds = null;
+//
+//        while(remRank > 0) {
+//            currRankIds = rankMap.get(remRank);
+//            if (currRankIds.isEmpty() ) {
+//                remRank--;
+//                continue;
+//            }
+//            break;
+//        }
+//        if (currRankIds == null || currRankIds.isEmpty()) {
+////            Random rand = new Random();
+////            int randomElement = givenList.get(rand.nextInt(givenList.size()));
+//            int randIdx = rand.nextInt(remReportees.size());
+//            Employee newBoss = remReportees.get(randIdx);
+//            rankMap.get(newBoss.getEmployeeRank()).remove(newBoss.getEmployeeId());
+//            newBoss.setEmployeeRank(newBoss.getEmployeeRank() - 1);
+//            rankMap.get(newBoss.getEmployeeRank()).add(newBoss.getEmployeeId());
+//            newBoss.setReportsTo(null);
+//            remReportees.remove(randIdx);
+//            for (Employee reportee: remReportees) {
+//                reportee.setReportsTo(newBoss);
+//                newBoss.addReportee(reportee);
+//            }
+//            return;
+//        }
+//        int remIdx = 0;
+////        Long currRankId;
+//        ListIterator<Long> currRankId = currRankIds.listIterator();
+//        while (remIdx < remReportees.size()) {
+//            //get a curr rank id boss
+//            Employee remRepo = empMap.get(remReportees.get(remIdx++).getEmployeeId());
+//            if (!currRankId.hasNext()) {
+//                currRankId = currRankIds.listIterator();
+//            }
+//            Employee newBoss = empMap.get(currRankId.next());
+//            newBoss.addReportee(remRepo);
+//            remRepo.setReportsTo(newBoss);
+//        }
+//    }
     static void handleReportees(Connection conn, long remId, long remRank, PrintWriter pw) throws SQLException {
         //if no reportees return back
         Random randgen = new Random();
@@ -80,7 +80,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
         ResultSet rs = stmt.executeQuery();
         List<Long> remReporteesIds = new ArrayList<>();
         List<Long> currRankIds = new ArrayList<>();
-        long currRemRank = remRank;
+        long currRemRank;
         while (rs.next()) {
             remReporteesIds.add(rs.getLong("reportee"));
         }
@@ -134,9 +134,9 @@ public class RemoveEmployeeServlet extends HttpServlet {
             long newBoss = remReporteesIds.get(randgen.nextInt(remReporteesIds.size()));
             remReporteesIds.remove(newBoss);
             //promote newBoss by 1 rank
-            stmt = conn.prepareStatement("update employees set employee_rank = ? where employee_id = ?");
-            stmt.setLong(1, currRemRank - 1);
-            stmt.setLong(2, newBoss);
+            stmt = conn.prepareStatement("update employees set employee_rank = employee_rank - 1 where employee_id = ?");
+//            stmt.setLong(1, currRemRank - 1);
+            stmt.setLong(1, newBoss);
             if (stmt.executeUpdate() == 1) {
                 pw.println("Update DOne");
             }
@@ -168,7 +168,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
         }
     }
     //Check for remId in empMap
-    static void removeEmployee(Long remId, PrintWriter pw) {
+    static boolean removeEmployee(Long remId, PrintWriter pw) {
         DBFactory dbf = DBFactory.getInstance();
         Connection conn;
         try {
@@ -177,7 +177,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
             long remRank = isIdAvailable(conn, remId);
             if (remRank == -1) {
                 pw.println("ID not available to remove");
-                return;
+                return false;
             }
             //ID Is present
             handleReportees(conn, remId, remRank, pw);
@@ -202,15 +202,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
             //remEmpid record deletion
         }
         catch (Exception e) { pw.println("Caught Exception : " + e); }
-
-        EmployeeFactory ef1 = EmployeeFactory.getInstance();
-        Employee remEmp = ef1.employeeMap.get(remId);
-        ef1.rankMap.get(remEmp.getEmployeeRank()).remove(remId);
-        handleReportees(ef1.employeeMap, ef1.rankMap, remEmp);
-        if (remEmp.getReportsTo() != null) {
-            ef1.employeeMap.get(remEmp.getReportsTo().getEmployeeId()).removeReportee(remEmp);
-        }
-        ef1.employeeMap.remove(remEmp.getEmployeeId());
+        return true;
     }
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
