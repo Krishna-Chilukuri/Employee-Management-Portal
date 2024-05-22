@@ -36,6 +36,7 @@ public class DemoteServlet extends HttpServlet {
             String empName = rs.getString("employee_name");
             if (!removeEmployee(empId, pw)) {
                 pw.println("Demotion not possible");
+                return false;
             }
             empRank++;
             Employee newEmp = new Employee();

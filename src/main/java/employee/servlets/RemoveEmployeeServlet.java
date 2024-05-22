@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.exception.PromoteException;
 import employee.factory.DBFactory;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
+
+import static employee.servlets.PromoteServlet.promoteEmp;
 
 public class RemoveEmployeeServlet extends HttpServlet {
     static long isIdAvailable(Connection conn, long empId) throws SQLException {
@@ -72,7 +75,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
 //            remRepo.setReportsTo(newBoss);
 //        }
 //    }
-    static void handleReportees(Connection conn, long remId, long remRank, PrintWriter pw) throws SQLException {
+    static void handleReportees(Connection conn, long remId, long remRank, PrintWriter pw) throws SQLException, PromoteException {
         //if no reportees return back
         Random randgen = new Random();
         PreparedStatement stmt = conn.prepareStatement("select reportee from reportees where employee_id = ?");
@@ -133,8 +136,29 @@ public class RemoveEmployeeServlet extends HttpServlet {
 //            promote a reportee by 1 rank and use this reportee as boss
             long newBoss = remReporteesIds.get(randgen.nextInt(remReporteesIds.size()));
             remReporteesIds.remove(newBoss);
+//            promoteEmp(newBoss, pw);
             //promote newBoss by 1 rank
-            stmt = conn.prepareStatement("update employees set employee_rank = employee_rank - 1 where employee_id = ?");
+            long bRank = isIdAvailable(conn, newBoss);
+            stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount - 1");
+            stmt.setLong(1, bRank);
+            pw.println("RANK MAP UPDATE : " + stmt.executeUpdate());
+//            if (stmt.executeUpdate() == 1) {
+//                pw.println("Rank Count table updated in rem 1");
+//            }
+//            else {
+//                throw new SQLException("Error while updating rank count map 1");
+//            }
+            bRank--;
+            stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount + 1");
+            stmt.setLong(1, bRank);
+            pw.println("RANK MAP UPDATE: " + stmt.execute());
+//            if (stmt.executeUpdate() == 1) {
+//                pw.println("Rank Count table updated in rem 2");
+//            }
+//            else {
+//                throw new SQLException("Error while updating rank count map 2");
+//            }
+            stmt = conn.prepareStatement("update employees set employee_rank = employee_rank - 1, reports_to = null where employee_id = ?");
 //            stmt.setLong(1, currRemRank - 1);
             stmt.setLong(1, newBoss);
             if (stmt.executeUpdate() == 1) {
@@ -158,7 +182,7 @@ public class RemoveEmployeeServlet extends HttpServlet {
                 stmt = conn.prepareStatement("update employees set reports_to = ? where employee_id = ?");
                 stmt.setLong(1, newBoss);
                 stmt.setLong(2, remReportee);
-                if (stmt.executeUpdate() == 1) {
+                if (stmt.executeUpdate() != 0) {
                     pw.println("Update Done");
                 }
                 else {
@@ -190,16 +214,28 @@ public class RemoveEmployeeServlet extends HttpServlet {
             else {
                 throw new SQLException("Deletion from employees error");
             }
-            stmt = conn.prepareStatement("delete from reportees where reportee = ?");
+            stmt = conn.prepareStatement("delete from reportees where reportee = ? or employee_id = ?");
             stmt.setLong(1, remId);
+            stmt.setLong(2, remId);
             if (stmt.executeUpdate() == 1) {
                 pw.println("Deletion DOne");
             }
             else {
-                throw new SQLException("Deletion from reportees error");
+                pw.println(remId + " is not a reportee of any employee");
+//                throw new SQLException("Deletion from reportees error");
             }
             //reportees lo reportee == remEmpid record deletion
             //remEmpid record deletion
+            stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount - 1");
+            stmt.setLong(1, remRank);
+            pw.println("RANK COUNR UPDATE : " + stmt.executeUpdate());
+//            if (stmt.executeUpdate() == 1) {
+//                pw.println("Rank Count table updated");
+//            }
+//            else {
+//                throw new SQLException("Error while updating rank count map");
+//            }
+            pw.println("POST RANK COUNT UPDATION");
         }
         catch (Exception e) { pw.println("Caught Exception : " + e); }
         return true;

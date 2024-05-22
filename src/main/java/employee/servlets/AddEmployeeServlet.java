@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
 
+import static employee.servlets.ViewAllEmployees.getEmployees;
 
 public class AddEmployeeServlet extends HttpServlet {
 
@@ -90,7 +91,9 @@ public class AddEmployeeServlet extends HttpServlet {
         ResultSet rs = stmt.executeQuery();
         pw.println("After looking for reports to NULL");
         while (rs.next()) {
+            pw.println("MANAGING NEW EMP REPORTEES");
             if (rs.getLong("employee_rank") > testEmp.getEmployeeRank()) {
+                pw.println("MANAGING NEW EMP REPORTEES INTO IF");
                 stmt = conn.prepareStatement("update employees set reports_to = ? where employee_id = ?");
                 stmt.setLong(1, testEmp.getEmployeeId());
                 stmt.setLong(2, rs.getLong("employee_id"));
@@ -117,7 +120,10 @@ public class AddEmployeeServlet extends HttpServlet {
 
     static void rebalanceHierarchy(Connection conn, Employee newEmp, PrintWriter pw) throws SQLException {
         Employee currBoss = newEmp.getReportsTo();
-        if (currBoss == null) return;
+        if (currBoss == null) {
+            pw.println("IN REBALANCE : currBoss is null");
+            return;
+        }
         long newEmpRank = newEmp.getEmployeeRank();
         List<Long> currBossReportees = new ArrayList<>();
         PreparedStatement stmt = conn.prepareStatement("select reportee, employee_rank from employees, reportees where employees.employee_id = reportee and reportees.employee_id = ?");
@@ -129,6 +135,7 @@ public class AddEmployeeServlet extends HttpServlet {
             long reporteeRank = rs.getLong("employee_rank");
             pw.println("IN WHILE : " + reporteeId + ' ' +reporteeRank);
             if (reporteeRank > newEmp.getEmployeeRank()) {
+                pw.println("IN ADD:::::::::::: " + reporteeRank + ' ' + newEmp.getEmployeeRank());
                 pw.println("IN IF IN WHILE");
                 //change reportee to newEmp
                 stmt = conn.prepareStatement("update reportees set employee_id = ? where reportee = ?");
@@ -185,11 +192,26 @@ public class AddEmployeeServlet extends HttpServlet {
                 pw.println("Insertion in rank is not possible");
                 return false;
             }
+            pw.println("BEFORE ADDING " + newEmp.getEmployeeId() + ' ' + newEmp.getEmployeeRank() + " to hierarchy");
+            getEmployees(pw);
             if (!addToHierarchy(conn, newEmp, pw)) {
                 pw.println("Hierarchy can't be set");
                 return false;
             }
+            pw.println("After adding to hie");
+            getEmployees(pw);
             rebalanceHierarchy(conn, newEmp, pw);
+            pw.println("After rebalancing");
+            getEmployees(pw);
+            PreparedStatement stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount + 1");
+            stmt.setLong(1, newEmp.getEmployeeRank());
+            stmt.executeUpdate();
+//            if (stmt.executeUpdate() == 1) {
+//                pw.println("Rank Count table updated");
+//            }
+//            else {
+//                throw new SQLException("Error while updating rank count map");
+//            }
         }
         catch (SQLException se) { pw.println("Caught SQL Exception : " + se); }
         catch (Exception e) { pw.println("Caught Exception : " + e); }

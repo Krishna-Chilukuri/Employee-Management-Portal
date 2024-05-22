@@ -16,7 +16,7 @@ import java.util.List;
 import static employee.servlets.ViewEmployeeServlet.printEmployees;
 
 public class ViewAllEmployees extends HttpServlet {
-    void getEmployees(PrintWriter pw) {
+    static void getEmployees(PrintWriter pw) {
         Connection conn;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
