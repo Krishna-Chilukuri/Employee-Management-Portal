@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.factory.DBFactory;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 
@@ -9,53 +10,67 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.*;
 
 public class KStepHierarchy extends HttpServlet {
     static boolean isIdAvailable(HashMap<Long, Employee> empMap, Long empId) {
         return empMap.containsKey(empId);
     }
-    static List<Employee> kStepHierarchy(Employee centerEmp, Long k, PrintWriter pw) {
+    static List<Long> kStepHierarchy(long empId, long k, PrintWriter pw) {
         boolean breakStat = false;
-        Long locK = k, currK;
-        Employee curr;
-        List<Employee> retkStep = new ArrayList<>();
-        curr = centerEmp;
+        long locK = k, currK;
+        List<Long> retkStep = new ArrayList<>();
+        long curr = empId;
 
-        while(curr.getReportsTo() != null) {
-            if (locK == 0) {
-                retkStep.add(curr);
-                breakStat = true;
-                break;
-            }
-            curr = curr.getReportsTo();
-            locK--;
-        }
-        if (!breakStat) {
-            pw.println("No Superiors present " + k + " steps from " + centerEmp.getEmployeeId());
-        }
-        breakStat = false;
-        locK = k;
-        Queue<Employee> kStepDownQ = new LinkedList<>();
-        Queue<Long> kStepDownK = new LinkedList<>();
-        kStepDownQ.add(centerEmp);
-        kStepDownK.add(locK);
-        while (kStepDownQ.peek() != null && locK > 0) {
-            curr = kStepDownQ.poll();
-            currK = kStepDownK.poll();
-            if (currK > 0) {
-                currK--;
-                for (Employee emp: curr.getReportees()) {
-                    kStepDownQ.add(emp);
-                    kStepDownK.add(currK);
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            DBFactory dbf = DBFactory.getInstance();
+            Connection conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            PreparedStatement stmt = conn.prepareStatement("select reports_to from employees where employee_id = ?");
+            ResultSet rs;
+            while (curr > 0 && locK > 0) {
+                stmt.setLong(1, curr);
+                rs = stmt.executeQuery();
+                if (!rs.next()) {
+                    pw.println("No more upper employee available");
+                    breakStat = true;
+                    break;
                 }
-            } else if (currK == 0) {
+                curr = rs.getLong("reports_to");
+                locK--;
+            }
+            if (!breakStat) {
                 retkStep.add(curr);
             }
+            locK = k;
+            Queue<Long> kStepDownQ = new LinkedList<>();
+            Queue<Long> kStepDownK = new LinkedList<>();
+            kStepDownQ.add(empId);
+            kStepDownK.add(k);
+            stmt = conn.prepareStatement("select reportee from reportees where employee_id = ?");
+            while (kStepDownQ.peek() != null) {
+                curr = kStepDownQ.poll();
+                currK = kStepDownK.poll();
+                if (currK > 0){
+                    currK--;
+                    stmt.setLong(1, curr);
+                    rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        kStepDownQ.add(rs.getLong("reportee"));
+                        kStepDownK.add(currK);
+                    }
+                } else if (currK == 0) {
+                    retkStep.add(curr);
+                }
+            }
         }
-
+        catch (Exception e) {
+            pw.println("Caught Exception : " + e);
+        }
         return retkStep;
     }
+
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         Enumeration<String> e = req.getParameterNames();
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
@@ -72,21 +87,23 @@ public class KStepHierarchy extends HttpServlet {
             }
         }
 
-        pw.println("Upper Hierarchy for " + empId);
-        if (!isIdAvailable(ef1.employeeMap, empId)) {
-            pw.println("ID is not available");
-            return;
-        }
+        pw.println("K Step Hierarchy for " + empId);
+//        if (!isIdAvailable(ef1.employeeMap, empId)) {
+//            pw.println("ID is not available");
+//            return;
+//        }
         if (kval < 0) {
             pw.println("Look into urself");
             return;
         }
 
         Employee centerEmp = ef1.employeeMap.get(empId);
-        List<Employee> retList = kStepHierarchy(centerEmp, kval, pw);
+//        List<String> retList = kStepHierarchy(centerEmp, kval, pw);
+        List<Long> retList = kStepHierarchy(empId, kval, pw);
 
-        for (Employee emp: retList) {
-            pw.println("EMP : " + emp.getEmployeeId() + " " + emp.getEmployeeName() + ' ' + emp.getEmployeeRank());
+        for (Long retEmpId: retList) {
+            pw.println(retEmpId);
+//            pw.println("EMP : " + emp.getEmployeeId() + " " + emp.getEmployeeName() + ' ' + emp.getEmployeeRank());
         }
     }
 }

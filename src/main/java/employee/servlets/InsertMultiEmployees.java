@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.factory.DBFactory;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 
@@ -9,9 +10,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import static employee.servlets.AddEmployeeServlet.addEmployee;
+import static employee.servlets.ViewAllEmployees.getEmployees;
 
 class randomNames {
     private static List<String> namesList = Arrays.asList("Rama", "Krishna", "Kaantha", "Teja", "Prudhvi", "Sai", "John", "Peter", "Chilu", "KP", "Srinu", "Raj", "Ravi", "Ramesh", "Eluri", "Suresh");
@@ -24,43 +28,102 @@ class randomNames {
 
 }
 
+class mutexSemaphone {
+    static final Semaphore mutexSem = new Semaphore(1);
+
+//    private mutexSemaphone() {
+//        this.mutexSem = new Semaphore(1);
+//    }
+
+    public static Semaphore getInstance() {
+        return mutexSem;
+    }
+}
+
 class insertionThread extends Thread {
     private long offset;
     private long numOfInsertions;
+    private Connection conn;
     private PrintWriter pw;
-    insertionThread(int offset, int numOfInsertions, PrintWriter pw) {
+//    private final Semaphore mutexSem = new Semaphore(1);
+    insertionThread(int offset, int numOfInsertions, Connection conn, PrintWriter pw) {
         this.offset = offset;
         this.numOfInsertions = numOfInsertions;
+        this.conn = conn;
         this.pw = pw;
     }
-    public void run() {
-        long curr = (this.offset * this.numOfInsertions) - this.numOfInsertions + 1;
+    public synchronized void run() {
+        try {
+            mutexSemaphone.mutexSem.acquire();
+//            mutexSemaphone sem = mutexSemaphone.getInstance();
+            long curr = (this.offset * this.numOfInsertions) - this.numOfInsertions + 1;
 //        boolean breakStat = false;
-        EmployeeFactory ef1 = EmployeeFactory.getInstance();
+            EmployeeFactory ef1 = EmployeeFactory.getInstance();
+            boolean breakStat = false;
 
 //        this.pw.println("IN RUN : " + curr + " -> " +(this.offset * this.numOfInsertions));
-        synchronized (ef1) {
+//        synchronized () {
+            pw.println("==================\nGOT SEMAPHORE " + this.offset + "\n=====================");
             while (this.numOfInsertions > 0) {
                 //Insertion Process
                 Employee newEmp = new Employee();
                 newEmp.setEmployeeId(curr);
                 newEmp.setEmployeeName(randomNames.randomName());
-                long rank = 1L;
-                while (true) {
-                    if (!ef1.rankMap.containsKey(rank)) {
-                        newEmp.setEmployeeRank(rank);
-                        break;
+                long rank = 0;
+                try {
+                    PreparedStatement stmt = this.conn.prepareStatement("select rankNum, rankCount from rankCounts order by rankNum ASC");
+                    ResultSet rs = stmt.executeQuery();
+//                    if (rs == null) {
+//                        newEmp.setEmployeeRank(rank);
+//                        breakStat = true;
+//                    }
+                    while(rs.next()) {
+                        rank = rs.getLong("rankNum");
+                        long currCount = rs.getLong("rankCount");
+                        if (rank > currCount) {
+                            newEmp.setEmployeeRank(rank);
+                            breakStat = true;
+                            break;
+                        }
                     }
-                    if (ef1.rankMap.get(rank).size() < rank) {
+                    if (!breakStat) {
+                        pw.println("FALSE BREAKSTAT for " + rank);
+//                        if (rank > 1) rank++;
+                        rank++;
                         newEmp.setEmployeeRank(rank);
-                        break;
                     }
-                    rank++;
+                    pw.println("Before adding " + newEmp.getEmployeeId());
+                    getEmployees(pw);
+                    pw.println("RANK : " + rank);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
+
+//                while (true) {
+//                    if (!ef1.rankMap.containsKey(rank)) {
+//                        newEmp.setEmployeeRank(rank);
+//                        break;
+//                    }
+//                    if (ef1.rankMap.get(rank).size() < rank) {
+//                        newEmp.setEmployeeRank(rank);
+//                        break;
+//                    }
+//                    rank++;
+//                }
+                pw.println("TRYING TO ADD" + newEmp);
                 addEmployee(newEmp, this.pw);
+                pw.println("EMPLOYEE INSERTED : " + newEmp.getEmployeeId());
                 curr++;
                 this.numOfInsertions--;
+//            }
             }
+        } catch (InterruptedException e) {
+            pw.println("==================\nINTERRUPT CAUSED IN TRY OF THREAD\n====================");
+            throw new RuntimeException(e);
+        }
+        finally {
+            pw.println("=================\n SEMAPHORE RELEASED\n=================");
+            mutexSemaphone.mutexSem.release();
         }
     }
 }
@@ -84,11 +147,18 @@ public class InsertMultiEmployees  extends HttpServlet {
         int numOfThreads = 4;
         int numOfInsertions = (int) (numOfEmps / numOfThreads);
         pw.println("NUM OF INSERTIONS: " + numOfInsertions);
-        for (int i = 1; i <= numOfThreads; i++) {
-            pw.println("IN SERVICE FOR " + i);
-            insertionThread th = new insertionThread(i, numOfInsertions, pw);
-            th.start();
+        Connection conn;
+        DBFactory dbf = DBFactory.getInstance();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            for (int i = 1; i <= numOfThreads; i++) {
+                pw.println("IN SERVICE FOR " + i);
+                insertionThread th = new insertionThread(i, numOfInsertions, conn, pw);
+                th.start();
+            }
         }
+        catch (Exception ex) { pw.println("Error Caught for threads: " + ex); }
         long finishTime = System.currentTimeMillis();
         pw.println("Time to Insert " + numOfEmps +" Employees : " + (finishTime - startTime));
         pw.close();

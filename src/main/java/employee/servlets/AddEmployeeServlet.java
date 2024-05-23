@@ -176,7 +176,7 @@ public class AddEmployeeServlet extends HttpServlet {
 //            newEmp.addReportee(currRep);
 //        }
     }
-    static boolean addEmployee(Employee newEmp, PrintWriter pw) {
+    static synchronized boolean addEmployee(Employee newEmp, PrintWriter pw) {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
         Connection conn;
         DBFactory dbf = DBFactory.getInstance();

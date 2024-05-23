@@ -48,6 +48,10 @@
     <servlet-name>TraditionalMultiInserts</servlet-name>
     <servlet-class>employee.servlets.TraditionalMultiInserts</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>employee.servlets.LoginServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>AddEmployeeServlet</servlet-name>
@@ -92,5 +96,9 @@
   <servlet-mapping>
     <servlet-name>TraditionalMultiInserts</servlet-name>
     <url-pattern>/LoopingInsertions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/Login</url-pattern>
   </servlet-mapping>
 </web-app>

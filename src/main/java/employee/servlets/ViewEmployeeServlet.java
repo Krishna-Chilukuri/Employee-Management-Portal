@@ -17,7 +17,9 @@ import java.util.List;
 
 public class ViewEmployeeServlet extends HttpServlet {
     static void printEmployees(ResultSet rs1, Connection conn, PrintWriter pw) throws SQLException {
+        boolean resStat = false;
         while (rs1.next()) {
+            resStat = true;
             long empId = rs1.getLong("employee_id");
             String empName = rs1.getString("employee_name");
             long empRank = rs1.getLong("employee_rank");
@@ -39,8 +41,11 @@ public class ViewEmployeeServlet extends HttpServlet {
             rs2.close();
             stmt.close();
         }
+        if (!resStat) {
+            pw.println("Employee is not present");
+        }
     }
-    void getEmployee(long searchId, PrintWriter pw) {
+    static void getEmployee(long searchId, PrintWriter pw) {
         Connection conn;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

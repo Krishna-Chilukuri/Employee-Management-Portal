@@ -1,5 +1,6 @@
 package employee.servlets;
 
+import employee.factory.DBFactory;
 import employee.factory.EmployeeFactory;
 import employee.model.Employee;
 
@@ -9,26 +10,74 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
+
+
+import static employee.servlets.ViewEmployeeServlet.getEmployee;
 
 public class LowerHierarchyServlet extends HttpServlet {
     static boolean isIdAvailable(HashMap<Long, Employee> empMap, Long empId) {
         return empMap.containsKey(empId);
     }
 
-    static void hierarchyFromEmp(Employee reqEmp, PrintWriter pw) {
-        Queue<Employee> empQ = new LinkedList<>();
-        Employee curr;
+    static void hierarchyFromEmp(long reqEmp, PrintWriter pw) {
+        Queue<Long> empQ = new LinkedList<>();
+        long curr;
         List<Employee> currReps;
         empQ.add(reqEmp);
 
-        while (empQ.peek() != null) {
-            curr = empQ.poll();
-            pw.println("EMP : " + curr.getEmployeeId() + ' ' + curr.getEmployeeName() + ' ' + curr.getEmployeeRank());
-            currReps = curr.getReportees();
-            if (currReps.isEmpty()) continue;
-            empQ.addAll(currReps);
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            DBFactory dbf = DBFactory.getInstance();
+            Connection conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            PreparedStatement stmt1 = conn.prepareStatement("select * from employees where employee_id = ?");
+            PreparedStatement stmt2 = conn.prepareStatement("select reportee from reportees where employee_id = ?");
+            ResultSet rs1, rs2;
+            while (empQ.peek() != null) {
+                curr = empQ.poll();
+                stmt1.setLong(1, curr);
+                rs1 = stmt1.executeQuery();
+//                pw.println(curr);
+                if (rs1.next()) {
+                    long empId = rs1.getLong("employee_id");
+                    String empName = rs1.getString("employee_name");
+                    long empRank = rs1.getLong("employee_rank");
+                    long reportsTo = rs1.getLong("reports_to");
+                    List<Long> reportees = new ArrayList<>();
+                    //emp is present
+                    //find reportees
+                    stmt2.setLong(1, curr);
+                    rs2 = stmt2.executeQuery();
+                    while (rs2.next()) {
+                        empQ.add(rs2.getLong("reportee"));
+                        reportees.add(rs2.getLong("reportee"));
+                    }
+                    pw.println("Employee{" +
+                            "employeeId = " + empId +
+                            ", employeeName = '" + empName + '\'' +
+                            ", employeeRank = " + empRank +
+                            ", reportsTo = " + reportsTo +
+                            ", reportees = " + reportees +
+                            '}');
+                }
+                else {
+                    pw.println("Employee not present");
+                    return;
+                }
+//                getEmployee(curr, pw);
+//            pw.println("EMP : " + curr.getEmployeeId() + ' ' + curr.getEmployeeName() + ' ' + curr.getEmployeeRank());
+//                ResultSet rs = stmt.executeQuery();
+
+//                currReps = curr.getReportees();
+//                if (currReps.isEmpty()) continue;
+//                empQ.addAll(currReps);
+            }
         }
+        catch (Exception ex) { pw.println("Caught : " + ex); }
     }
 
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
@@ -45,13 +94,13 @@ public class LowerHierarchyServlet extends HttpServlet {
         }
 
         pw.println("Lower Hierarchy for : " + empId);
-        if (!isIdAvailable(ef1.employeeMap, empId)) {
-            pw.println("ID is not available");
-            return;
-        }
+//        if (!isIdAvailable(ef1.employeeMap, empId)) {
+//            pw.println("ID is not available");
+//            return;
+//        }
 
-        Employee reqEmp = ef1.employeeMap.get(empId);
+//        Employee reqEmp = ef1.employeeMap.get(empId);
 
-        hierarchyFromEmp(reqEmp, pw);
+        hierarchyFromEmp(empId, pw);
     }
 }
