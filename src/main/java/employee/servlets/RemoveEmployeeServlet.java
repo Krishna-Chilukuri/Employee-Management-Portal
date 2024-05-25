@@ -10,11 +10,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
 
+import static employee.servlets.AddEmployeeServlet.checkPrivilege;
+import static employee.servlets.AddEmployeeServlet.readCookie;
+import static employee.servlets.PromoteServlet.getEmployeeRank;
 import static employee.servlets.PromoteServlet.promoteEmp;
 
 public class RemoveEmployeeServlet extends HttpServlet {
@@ -253,6 +258,14 @@ public class RemoveEmployeeServlet extends HttpServlet {
             if (pname.equals("remid")) {
                 remId = Long.parseLong(req.getParameter(pname));
             }
+        }
+        long remRank = getEmployeeRank(remId);
+        String reqUserId = readCookie((HttpServletRequest) req, "user");
+        pw.println("Req user id : " + reqUserId);
+
+        if (!checkPrivilege(reqUserId, remRank, pw, (HttpServletResponse) res)) {
+            pw.println("You can't remove this employee");
+            return;
         }
 
         removeEmployee(remId, pw);

@@ -10,6 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -19,9 +21,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import static employee.servlets.AddEmployeeServlet.*;
 import static employee.servlets.RemoveEmployeeServlet.removeEmployee;
 import static employee.servlets.RemoveEmployeeServlet.handleReportees;
-import static employee.servlets.AddEmployeeServlet.addEmployee;
 
 
 public class PromoteServlet extends HttpServlet {
@@ -69,6 +71,25 @@ public class PromoteServlet extends HttpServlet {
 
         return true;
     }
+    static long getEmployeeRank(long empId) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            DBFactory dbf = DBFactory.getInstance();
+            Connection conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            PreparedStatement stmt = conn.prepareStatement("select employee_rank from employees where employee_id = ?");
+            stmt.setLong(1, empId);
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()) {
+                return -1;
+            }
+            return rs.getLong("employee_rank");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+//            pw.println("Caught Exception : " + e);
+        }
+        return -1;
+    }
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         PrintWriter pw = res.getWriter();
         Enumeration<String> e = req.getParameterNames();
@@ -86,6 +107,20 @@ public class PromoteServlet extends HttpServlet {
 
         if (promId == -1 || numProms == -1) {
             pw.println("Promotion not possible");
+            return;
+        }
+        long newRank = getEmployeeRank(promId);
+        if (newRank == -1) {
+            pw.println("Employee to promote is not available");
+            return;
+        }
+        newRank = newRank - numProms;
+
+        String reqUserId = readCookie((HttpServletRequest) req, "user");
+        pw.println("Req User ID : " + reqUserId);
+
+        if (!checkPrivilege(reqUserId, newRank, pw, (HttpServletResponse) res)) {
+            pw.println("You can't promote " + promId);
             return;
         }
 

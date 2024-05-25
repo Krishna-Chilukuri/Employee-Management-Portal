@@ -8,7 +8,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -236,6 +239,56 @@ public class AddEmployeeServlet extends HttpServlet {
         return true;
     }
 
+    static String readCookie(HttpServletRequest req, String key) {
+        return Arrays.stream(req.getCookies())
+                .filter(cookie -> key.equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .findAny()
+                .map(Object::toString)
+                .orElse("");
+    }
+
+    static boolean checkPrivilege(String reqUserId, long newEmpRank, PrintWriter pw, HttpServletResponse res) {
+        Connection conn;
+        DBFactory dbf = DBFactory.getInstance();
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            PreparedStatement stmt = conn.prepareStatement("select privilege from login where username = ?");
+            stmt.setString(1, reqUserId);
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()) {
+                pw.println("No user your ID found");
+                Cookie userDetails = new Cookie("user", "");
+                userDetails.setMaxAge(0);
+                res.addCookie(userDetails);
+                return false;
+            }
+            String privilege = rs.getString("privilege");
+            if (privilege.equals("owner") || privilege.equals("admin")) {
+                return true;
+            }
+            else {
+                stmt = conn.prepareStatement("select employee_rank from employees where employee_id = ?");
+                stmt.setLong(1, Long.parseLong(reqUserId));
+                rs = stmt.executeQuery();
+                if (!rs.next()) {
+                    return false;
+                }
+                long reqUserRank = rs.getLong("employee_rank");
+                if (reqUserRank > newEmpRank) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            pw.println("Caught Exception : " + e);
+//            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
 //        EmployeeFactory ef1 = EmployeeFactory.getInstance();
         PrintWriter pw = res.getWriter();
@@ -256,6 +309,15 @@ public class AddEmployeeServlet extends HttpServlet {
             else if(pname.equals("erank")) {
                 newEmp.setEmployeeRank(Long.parseLong(req.getParameter(pname)));
             }
+        }
+
+        String reqUserId = readCookie((HttpServletRequest) req,"user");
+        pw.println("reqUserId is : " + reqUserId);
+//        long reqUser = Long.parseLong(reqUserId);
+//        pw.println("reqUser : " + reqUser);
+//
+        if (!checkPrivilege(reqUserId, newEmp.getEmployeeRank(), pw, (HttpServletResponse) res)) {
+            pw.println("You can't insert this employee");
         }
 
         if (!addEmployee(newEmp, pw)) {
