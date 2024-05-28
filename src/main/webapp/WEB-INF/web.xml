@@ -48,6 +48,38 @@
     <servlet-name>TraditionalMultiInserts</servlet-name>
     <servlet-class>employee.servlets.TraditionalMultiInserts</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>employee.servlets.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>LogOutServlet</servlet-name>
+    <servlet-class>employee.servlets.LogOutServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PromoteToAdmin</servlet-name>
+    <servlet-class>employee.servlets.PromoteToAdmin</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PromoteToOwner</servlet-name>
+    <servlet-class>employee.servlets.PromoteToOwner</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RemoveAdminOwner</servlet-name>
+    <servlet-class>employee.servlets.RemoveAdminOwner</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DemoteOwner</servlet-name>
+    <servlet-class>employee.servlets.DemoteOwner</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ViewAdminOwner</servlet-name>
+    <servlet-class>employee.servlets.ViewAdminOwner</servlet-class>
+  </servlet>
+<!--  <servlet>-->
+<!--    <servlet-name>LoginTrackerServlet</servlet-name>-->
+<!--    <servlet-class>employee.servlets.LoginTrackerServlet</servlet-class>-->
+<!--  </servlet>-->
   
   <servlet-mapping>
     <servlet-name>AddEmployeeServlet</servlet-name>
@@ -93,4 +125,36 @@
     <servlet-name>TraditionalMultiInserts</servlet-name>
     <url-pattern>/LoopingInsertions</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/Login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogOutServlet</servlet-name>
+    <url-pattern>/Logout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PromoteToAdmin</servlet-name>
+    <url-pattern>/PromoteToAdmin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PromoteToOwner</servlet-name>
+    <url-pattern>/PromoteToOwner</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RemoveAdminOwner</servlet-name>
+    <url-pattern>/RemoveAdminOwner</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DemoteOwner</servlet-name>
+    <url-pattern>/DemoteOwner</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ViewAdminOwner</servlet-name>
+    <url-pattern>/ViewAdminOwner</url-pattern>
+  </servlet-mapping>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>LoginTrackerServlet</servlet-name>-->
+<!--    <url-pattern>/*</url-pattern>-->
+<!--  </servlet-mapping>-->
 </web-app>

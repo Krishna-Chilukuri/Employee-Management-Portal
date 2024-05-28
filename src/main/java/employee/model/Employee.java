@@ -58,4 +58,15 @@ public class Employee {
     public void removeReportee(Employee reportee) {
         this.reportees.remove(reportee);
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId = " + employeeId +
+                ", employeeName = '" + employeeName + '\'' +
+                ", employeeRank = " + employeeRank +
+                ", reportsTo = " + reportsTo +
+                ", reportees = " + reportees +
+                '}';
+    }
 }
