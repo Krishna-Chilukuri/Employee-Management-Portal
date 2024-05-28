@@ -49,7 +49,7 @@ public class KStepHierarchy extends HttpServlet {
             kStepDownQ.add(empId);
             kStepDownK.add(k);
             stmt = conn.prepareStatement("select reportee from reportees where employee_id = ?");
-            while (kStepDownQ.peek() != null) {
+            while (kStepDownQ.peek() != null && kStepDownK.peek() != null) {
                 curr = kStepDownQ.poll();
                 currK = kStepDownK.poll();
                 if (currK > 0){
@@ -88,22 +88,15 @@ public class KStepHierarchy extends HttpServlet {
         }
 
         pw.println("K Step Hierarchy for " + empId);
-//        if (!isIdAvailable(ef1.employeeMap, empId)) {
-//            pw.println("ID is not available");
-//            return;
-//        }
         if (kval < 0) {
             pw.println("Look into urself");
             return;
         }
 
-        Employee centerEmp = ef1.employeeMap.get(empId);
-//        List<String> retList = kStepHierarchy(centerEmp, kval, pw);
         List<Long> retList = kStepHierarchy(empId, kval, pw);
 
         for (Long retEmpId: retList) {
             pw.println(retEmpId);
-//            pw.println("EMP : " + emp.getEmployeeId() + " " + emp.getEmployeeName() + ' ' + emp.getEmployeeRank());
         }
     }
 }

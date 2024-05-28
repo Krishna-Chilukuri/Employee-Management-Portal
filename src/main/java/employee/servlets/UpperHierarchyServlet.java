@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.util.*;
 
 public class UpperHierarchyServlet extends HttpServlet {
-    //Boss access constant
     static void hierarchyUptoRank(long targetId, PrintWriter pw) {
         Queue<Long> empQ = new LinkedList<>();
         Queue<Long> rankQ = new LinkedList<>();
@@ -52,8 +51,6 @@ public class UpperHierarchyServlet extends HttpServlet {
                 rankQ.add(bossRank);
             }
 
-//            empQ.addAll(bossIds);
-//            rankQ.addAll();
             stmt = conn.prepareStatement("select employee_id, employee_rank from employees where reports_to = ?");
             PreparedStatement stmt1 = conn.prepareStatement("select * from employees where employee_id = ?");
             PreparedStatement stmt2 = conn.prepareStatement("select reportee from reportees where employee_id = ?");
@@ -62,7 +59,6 @@ public class UpperHierarchyServlet extends HttpServlet {
                 rankQ.poll();
                 stmt1.setLong(1, curr);
                 rs1 = stmt1.executeQuery();
-//                pw.println(curr);
                 if (rs1.next()) {
                     long empId = rs1.getLong("employee_id");
                     String empName = rs1.getString("employee_name");
@@ -89,7 +85,6 @@ public class UpperHierarchyServlet extends HttpServlet {
                     pw.println("Employee not present");
                     return;
                 }
-//                pw.println(curr);
                 stmt.setLong(1, curr);
                 rs = stmt.executeQuery();
                 while (rs.next()) {
@@ -100,26 +95,7 @@ public class UpperHierarchyServlet extends HttpServlet {
 
         }
         catch (Exception e) { pw.println("Caught Exception : " + e); }
-//        Employee curr = boss;
-//        Employee repo;
-//        Queue<Employee> empQ = new LinkedList<>();
-//        List<Employee> repList = new ArrayList<>();
-//        ListIterator<Employee> repListIter;
-//        empQ.add(curr);
-//        while (empQ.peek() != null && empQ.peek().getEmployeeRank() < targetRank) {
-//            curr = empQ.poll();
-//            pw.println(curr);
-//            repList = curr.getReportees();
-//            repListIter = repList.listIterator();
-//            while (repListIter.hasNext()) {
-//                repo = repListIter.next();
-//                empQ.add(repo);
-//            }
-//        }
-//        EmployeeFactory ef1 = EmployeeFactory.getInstance();
-//        pw.println(ef1.employeeMap.get(targetId));
     }
-    //Target rank lo only 1 kaabatti dekho
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         Enumeration<String> e = req.getParameterNames();
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
@@ -134,12 +110,6 @@ public class UpperHierarchyServlet extends HttpServlet {
         }
 
         pw.println("Upper Hierarchy for " + empId);
-//        if (!isIdAvailable(ef1.employeeMap, empId)) {
-//            pw.println("ID is not available");
-//            return;
-//        }
-//        Employee currBoss = findBoss(ef1.employeeMap, empId);
-//        pw.println("CUrr Tree Boss : " + currBoss.getEmployeeId() + currBoss.getEmployeeName() + currBoss.getEmployeeRank());
 
         hierarchyUptoRank(empId, pw);
     }

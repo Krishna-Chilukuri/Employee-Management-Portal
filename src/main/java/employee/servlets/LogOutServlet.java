@@ -16,7 +16,5 @@ public class LogOutServlet extends HttpServlet {
         PrintWriter pw = res.getWriter();
         pw.println("Log out Done");
         res.addCookie(userDetails);
-//        RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
-//        rd.forward(req, res);
     }
 }

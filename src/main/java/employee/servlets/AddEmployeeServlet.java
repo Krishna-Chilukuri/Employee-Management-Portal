@@ -130,7 +130,6 @@ public class AddEmployeeServlet extends HttpServlet {
         long newEmpRank = newEmp.getEmployeeRank();
         List<Long> currBossReportees = new ArrayList<>();
         PreparedStatement stmt = conn.prepareStatement("select reportee, employee_rank from employees, reportees where employees.employee_id = reportee and reportees.employee_id = ?");
-//        stmt.setLong(1, newEmp.getEmployeeId());
         stmt.setLong(1, currBoss.getEmployeeId());
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
@@ -162,22 +161,6 @@ public class AddEmployeeServlet extends HttpServlet {
                 }
             }
         }
-
-//        List<Employee> currBossReportees = currBoss.getReportees();
-//        List<Long> changeIDs = new ArrayList<>();
-//
-//        for(Employee currReportee : currBossReportees) {
-//            if (currReportee.getEmployeeRank() > newEmpRank) {
-//                changeIDs.add(currReportee.getEmployeeId());
-//            }
-//        }
-//
-//        for (Long changeID : changeIDs) {
-//            Employee currRep = employeeHashMap.get(changeID);
-//            currBoss.removeReportee(currRep);
-//            currRep.setReportsTo(newEmp);
-//            newEmp.addReportee(currRep);
-//        }
     }
     static synchronized boolean addEmployee(Employee newEmp, PrintWriter pw) {
         EmployeeFactory ef1 = EmployeeFactory.getInstance();
@@ -209,33 +192,9 @@ public class AddEmployeeServlet extends HttpServlet {
             PreparedStatement stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount + 1");
             stmt.setLong(1, newEmp.getEmployeeRank());
             stmt.executeUpdate();
-//            if (stmt.executeUpdate() == 1) {
-//                pw.println("Rank Count table updated");
-//            }
-//            else {
-//                throw new SQLException("Error while updating rank count map");
-//            }
         }
         catch (SQLException se) { pw.println("Caught SQL Exception : " + se); }
         catch (Exception e) { pw.println("Caught Exception : " + e); }
-//        if (isDuplicateEmployee(ef1.employeeMap, newEmp)) {
-//            pw.println("Duplicate Employee, Insertion not Possible");
-//            return false;
-//        }
-//        //does the rank provided align with the hierarchy
-//        if (isRankNotPossible(ef1.rankMap, newEmp)) {
-//            pw.println("Insertion in rank is not possible");
-//            pw.println("HERE : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size() + ' ' + newEmp.getEmployeeRank());
-//            return false;
-//        }
-//
-//        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
-//            pw.println("Hierarchy can't be set");
-//            return false;
-//        }
-//        rebalanceHierarchy(ef1.employeeMap, newEmp);
-//        pw.println("RANK CURR LEN : " + ef1.rankMap.get(newEmp.getEmployeeRank()).size());
-//        pw.println("SIZE : " + ef1.employeeMap.get(newEmp.getEmployeeId()).getReportees().size());
         return true;
     }
 
@@ -259,7 +218,7 @@ public class AddEmployeeServlet extends HttpServlet {
             stmt.setString(1, reqUserId);
             ResultSet rs = stmt.executeQuery();
             if (!rs.next()) {
-                pw.println("No user your ID found");
+                pw.println("No user of your ID found");
                 Cookie userDetails = new Cookie("user", "");
                 userDetails.setMaxAge(0);
                 res.addCookie(userDetails);
@@ -269,7 +228,11 @@ public class AddEmployeeServlet extends HttpServlet {
             if (privilege.equals("owner") || privilege.equals("admin")) {
                 return true;
             }
-            else {
+            else if (privilege.equals("guest")) {
+                pw.println("Guests are permitted only to view Users but not to manipulate the hierarchies");
+                return false;
+            }
+            else if (privilege.equals("prev_user")){
                 stmt = conn.prepareStatement("select employee_rank from employees where employee_id = ?");
                 stmt.setLong(1, Long.parseLong(reqUserId));
                 rs = stmt.executeQuery();
@@ -277,9 +240,13 @@ public class AddEmployeeServlet extends HttpServlet {
                     return false;
                 }
                 long reqUserRank = rs.getLong("employee_rank");
-                if (reqUserRank > newEmpRank) {
+                if (reqUserRank < newEmpRank) {
                     return true;
                 }
+            }
+            else {
+                pw.println("User privilege type doesn't exist");
+                return false;
             }
         }
         catch (Exception e) {
@@ -287,6 +254,22 @@ public class AddEmployeeServlet extends HttpServlet {
 //            e.printStackTrace();
         }
         return false;
+    }
+
+    static void addUser(long empId, String userPwd) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            DBFactory dbf = DBFactory.getInstance();
+            Connection conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            PreparedStatement stmt = conn.prepareStatement("insert into login values(?, ?, ?)");
+            stmt.setString(1, String.valueOf(empId));
+            stmt.setString(2, userPwd);
+            stmt.setString(3, "priv_user");
+            stmt.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
@@ -313,31 +296,18 @@ public class AddEmployeeServlet extends HttpServlet {
 
         String reqUserId = readCookie((HttpServletRequest) req,"user");
         pw.println("reqUserId is : " + reqUserId);
-//        long reqUser = Long.parseLong(reqUserId);
-//        pw.println("reqUser : " + reqUser);
-//
         if (!checkPrivilege(reqUserId, newEmp.getEmployeeRank(), pw, (HttpServletResponse) res)) {
             pw.println("You can't insert this employee");
+            return;
         }
 
         if (!addEmployee(newEmp, pw)) {
             return;
         }
 
-        //is Employee being inserted a duplicate
+        addUser(newEmp.getEmployeeId(), newEmp.getEmployeeName());
+
         pw.println(newEmp);
-
-//        pw.println("Employee Added");
-//        pw.println("ID : " + newEmp.getEmployeeId());
-//        pw.println("Name : " + newEmp.getEmployeeName());
-//        pw.println("Rank : " + newEmp.getEmployeeRank());//toString()
-
-//        if (!addToHierarchy(ef1.employeeMap, ef1.rankMap, newEmp)) {
-//            pw.println("Hierarchy can't be set");
-//        }
-//        else {
-//        }
-
 
         pw.close();
 

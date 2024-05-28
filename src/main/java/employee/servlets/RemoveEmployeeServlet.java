@@ -33,53 +33,6 @@ public class RemoveEmployeeServlet extends HttpServlet {
         return -1;
     }
 
-    //Split into multiple functions
-//    static void handleReportees(HashMap<Long, Employee> empMap, HashMap<Long, List<Long>> rankMap, Employee remEmp) {
-//        if (remEmp.getReportees().isEmpty()) return;
-//        Random rand = new Random();
-//        List<Employee> remReportees = remEmp.getReportees();
-//        long remRank = remEmp.getEmployeeRank();
-//        Long remId = remEmp.getEmployeeId();
-//        List<Long> currRankIds = null;
-//
-//        while(remRank > 0) {
-//            currRankIds = rankMap.get(remRank);
-//            if (currRankIds.isEmpty() ) {
-//                remRank--;
-//                continue;
-//            }
-//            break;
-//        }
-//        if (currRankIds == null || currRankIds.isEmpty()) {
-////            Random rand = new Random();
-////            int randomElement = givenList.get(rand.nextInt(givenList.size()));
-//            int randIdx = rand.nextInt(remReportees.size());
-//            Employee newBoss = remReportees.get(randIdx);
-//            rankMap.get(newBoss.getEmployeeRank()).remove(newBoss.getEmployeeId());
-//            newBoss.setEmployeeRank(newBoss.getEmployeeRank() - 1);
-//            rankMap.get(newBoss.getEmployeeRank()).add(newBoss.getEmployeeId());
-//            newBoss.setReportsTo(null);
-//            remReportees.remove(randIdx);
-//            for (Employee reportee: remReportees) {
-//                reportee.setReportsTo(newBoss);
-//                newBoss.addReportee(reportee);
-//            }
-//            return;
-//        }
-//        int remIdx = 0;
-////        Long currRankId;
-//        ListIterator<Long> currRankId = currRankIds.listIterator();
-//        while (remIdx < remReportees.size()) {
-//            //get a curr rank id boss
-//            Employee remRepo = empMap.get(remReportees.get(remIdx++).getEmployeeId());
-//            if (!currRankId.hasNext()) {
-//                currRankId = currRankIds.listIterator();
-//            }
-//            Employee newBoss = empMap.get(currRankId.next());
-//            newBoss.addReportee(remRepo);
-//            remRepo.setReportsTo(newBoss);
-//        }
-//    }
     static void handleReportees(Connection conn, long remId, long remRank, PrintWriter pw) throws SQLException, PromoteException {
         //if no reportees return back
         Random randgen = new Random();
@@ -147,24 +100,11 @@ public class RemoveEmployeeServlet extends HttpServlet {
             stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount - 1");
             stmt.setLong(1, bRank);
             pw.println("RANK MAP UPDATE : " + stmt.executeUpdate());
-//            if (stmt.executeUpdate() == 1) {
-//                pw.println("Rank Count table updated in rem 1");
-//            }
-//            else {
-//                throw new SQLException("Error while updating rank count map 1");
-//            }
             bRank--;
             stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount + 1");
             stmt.setLong(1, bRank);
             pw.println("RANK MAP UPDATE: " + stmt.execute());
-//            if (stmt.executeUpdate() == 1) {
-//                pw.println("Rank Count table updated in rem 2");
-//            }
-//            else {
-//                throw new SQLException("Error while updating rank count map 2");
-//            }
             stmt = conn.prepareStatement("update employees set employee_rank = employee_rank - 1, reports_to = null where employee_id = ?");
-//            stmt.setLong(1, currRemRank - 1);
             stmt.setLong(1, newBoss);
             if (stmt.executeUpdate() == 1) {
                 pw.println("Update DOne");
@@ -227,23 +167,29 @@ public class RemoveEmployeeServlet extends HttpServlet {
             }
             else {
                 pw.println(remId + " is not a reportee of any employee");
-//                throw new SQLException("Deletion from reportees error");
             }
             //reportees lo reportee == remEmpid record deletion
             //remEmpid record deletion
             stmt = conn.prepareStatement("insert into rankCounts (rankNum, rankCount) VALUES (?, 1) on duplicate key update rankCount = rankCount - 1");
             stmt.setLong(1, remRank);
             pw.println("RANK COUNR UPDATE : " + stmt.executeUpdate());
-//            if (stmt.executeUpdate() == 1) {
-//                pw.println("Rank Count table updated");
-//            }
-//            else {
-//                throw new SQLException("Error while updating rank count map");
-//            }
             pw.println("POST RANK COUNT UPDATION");
         }
         catch (Exception e) { pw.println("Caught Exception : " + e); }
         return true;
+    }
+    static void removeUser(long empId, PrintWriter pw) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            DBFactory dbf = DBFactory.getInstance();
+            Connection conn = DriverManager.getConnection(dbf.url, dbf.username, dbf.password);
+            PreparedStatement stmt = conn.prepareStatement("delete from login where username = ?");
+            stmt.setString(1, String.valueOf(empId));
+            stmt.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
@@ -269,26 +215,9 @@ public class RemoveEmployeeServlet extends HttpServlet {
         }
 
         removeEmployee(remId, pw);
+        removeUser(remId, pw);
 
         pw.println("REmoval DONE!!!");
-//
-//        if (ef1.employeeMap.containsKey(remId)) {
-//            //Removal Process
-//            Long superiorId = ef1.employeeMap.get(remId).getReportsTo().getEmployeeId();
-//            Long coRank = ef1.employeeMap.get(remId).getEmployeeRank();
-//
-//            ef1.rankMap.get(coRank).remove(remId);
-//
-//
-//            pw.println("EMP IS PRESENT and is removed");
-//            Long currRank = ef1.employeeMap.get(remId).getEmployeeRank();
-//
-//            ef1.employeeMap.remove(remId);
-//            ef1.rankMap.get(currRank).remove(remId);
-//        }
-//        else {
-//            pw.println("Emp is not present");
-//        }
 
         pw.close();
     }

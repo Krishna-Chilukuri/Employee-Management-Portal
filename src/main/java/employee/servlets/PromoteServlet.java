@@ -56,19 +56,6 @@ public class PromoteServlet extends HttpServlet {
         }
         catch (Exception e) { pw.println("Caught Exception : " + e); }
 
-//        EmployeeFactory ef1 = EmployeeFactory.getInstance();
-//        Employee oldEmp = ef1.employeeMap.get(empId);
-//        removeEmployee(empId, pw);
-//        oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() - 1);
-//        pw.println("IN PROM: " + oldEmp.getEmployeeRank() + ' ' + oldEmp.getEmployeeRank() + oldEmp + ' ' + oldEmp);
-//        oldEmp.setReportees(new ArrayList<>());
-//        oldEmp.setReportsTo(null);
-//        if (!addEmployee(oldEmp, pw)) {
-//            oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() + 1);
-//            addEmployee(oldEmp, pw);
-//            throw new PromoteException("Promotion from " + oldEmp.getEmployeeRank() + " to " + (oldEmp.getEmployeeRank() - 1) + " is not possible");
-//        }
-
         return true;
     }
     static long getEmployeeRank(long empId) {
@@ -86,7 +73,6 @@ public class PromoteServlet extends HttpServlet {
         }
         catch (Exception e) {
             e.printStackTrace();
-//            pw.println("Caught Exception : " + e);
         }
         return -1;
     }

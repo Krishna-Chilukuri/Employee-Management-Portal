@@ -28,16 +28,7 @@ public class LoginServlet extends HttpServlet {
             if (pname.equals("userpassword")) password = req.getParameter(pname);
         }
 
-//        HttpSession session = req.getSession(false);
-//        if (session != null) {
-//            pw.println("Welcome Miter " + session.getAttribute("user"));
-//            RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/pages/homePage.jsp");
-//            rd.forward(req, res);
-//        }
-
-
         if (username.isEmpty() || password.isEmpty()) {
-//            pw.println("Username and password are needed");
             RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
             rd.forward(req, res);
             return;
@@ -55,22 +46,15 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = stmt.executeQuery();
             if (!rs.next()) {
                 //LOgin Failed
-//                pw.println("login Failed");
                 RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
                 rd.forward(req, res);
                 return;
             }
             String privilege = rs.getString("privilege");
-//            pw.println("Login Successful");
-//            session = req.getSession();
-//            session.setAttribute("user", username);
-//            session.setAttribute("privilege", rs.getString("privilege"));
             Cookie userDetails = new Cookie("user", username);
             userDetails.setMaxAge(60 * 60);
-//            userDetails.setDomain("localhost:8080/untitled2");
             res.addCookie(userDetails);
             RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/pages/homePage.jsp");
-//            res.sendRedirect("/WEB-INF/pages/homePage.jsp");
             rd.include(req, res);   
             rd.forward(req, res);
 

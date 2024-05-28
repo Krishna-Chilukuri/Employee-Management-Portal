@@ -41,7 +41,6 @@ public class LowerHierarchyServlet extends HttpServlet {
                 curr = empQ.poll();
                 stmt1.setLong(1, curr);
                 rs1 = stmt1.executeQuery();
-//                pw.println(curr);
                 if (rs1.next()) {
                     long empId = rs1.getLong("employee_id");
                     String empName = rs1.getString("employee_name");
@@ -68,13 +67,6 @@ public class LowerHierarchyServlet extends HttpServlet {
                     pw.println("Employee not present");
                     return;
                 }
-//                getEmployee(curr, pw);
-//            pw.println("EMP : " + curr.getEmployeeId() + ' ' + curr.getEmployeeName() + ' ' + curr.getEmployeeRank());
-//                ResultSet rs = stmt.executeQuery();
-
-//                currReps = curr.getReportees();
-//                if (currReps.isEmpty()) continue;
-//                empQ.addAll(currReps);
             }
         }
         catch (Exception ex) { pw.println("Caught : " + ex); }
@@ -94,13 +86,6 @@ public class LowerHierarchyServlet extends HttpServlet {
         }
 
         pw.println("Lower Hierarchy for : " + empId);
-//        if (!isIdAvailable(ef1.employeeMap, empId)) {
-//            pw.println("ID is not available");
-//            return;
-//        }
-
-//        Employee reqEmp = ef1.employeeMap.get(empId);
-
         hierarchyFromEmp(empId, pw);
     }
 }

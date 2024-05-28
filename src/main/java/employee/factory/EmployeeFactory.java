@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 
 public class EmployeeFactory {
-//    public Employee boss;
     public HashMap<Long, Employee> employeeMap;
     public HashMap<Long, List<Long>> rankMap;
 

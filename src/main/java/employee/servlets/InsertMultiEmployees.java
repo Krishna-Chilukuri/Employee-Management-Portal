@@ -31,10 +31,6 @@ class randomNames {
 class mutexSemaphone {
     static final Semaphore mutexSem = new Semaphore(1);
 
-//    private mutexSemaphone() {
-//        this.mutexSem = new Semaphore(1);
-//    }
-
     public static Semaphore getInstance() {
         return mutexSem;
     }
@@ -45,7 +41,6 @@ class insertionThread extends Thread {
     private long numOfInsertions;
     private Connection conn;
     private PrintWriter pw;
-//    private final Semaphore mutexSem = new Semaphore(1);
     insertionThread(int offset, int numOfInsertions, Connection conn, PrintWriter pw) {
         this.offset = offset;
         this.numOfInsertions = numOfInsertions;
@@ -55,14 +50,9 @@ class insertionThread extends Thread {
     public synchronized void run() {
         try {
             mutexSemaphone.mutexSem.acquire();
-//            mutexSemaphone sem = mutexSemaphone.getInstance();
             long curr = (this.offset * this.numOfInsertions) - this.numOfInsertions + 1;
-//        boolean breakStat = false;
             EmployeeFactory ef1 = EmployeeFactory.getInstance();
             boolean breakStat = false;
-
-//        this.pw.println("IN RUN : " + curr + " -> " +(this.offset * this.numOfInsertions));
-//        synchronized () {
             pw.println("==================\nGOT SEMAPHORE " + this.offset + "\n=====================");
             while (this.numOfInsertions > 0) {
                 //Insertion Process
@@ -73,10 +63,6 @@ class insertionThread extends Thread {
                 try {
                     PreparedStatement stmt = this.conn.prepareStatement("select rankNum, rankCount from rankCounts order by rankNum ASC");
                     ResultSet rs = stmt.executeQuery();
-//                    if (rs == null) {
-//                        newEmp.setEmployeeRank(rank);
-//                        breakStat = true;
-//                    }
                     while(rs.next()) {
                         rank = rs.getLong("rankNum");
                         long currCount = rs.getLong("rankCount");
@@ -88,7 +74,6 @@ class insertionThread extends Thread {
                     }
                     if (!breakStat) {
                         pw.println("FALSE BREAKSTAT for " + rank);
-//                        if (rank > 1) rank++;
                         rank++;
                         newEmp.setEmployeeRank(rank);
                     }
@@ -99,23 +84,11 @@ class insertionThread extends Thread {
                     throw new RuntimeException(e);
                 }
 
-//                while (true) {
-//                    if (!ef1.rankMap.containsKey(rank)) {
-//                        newEmp.setEmployeeRank(rank);
-//                        break;
-//                    }
-//                    if (ef1.rankMap.get(rank).size() < rank) {
-//                        newEmp.setEmployeeRank(rank);
-//                        break;
-//                    }
-//                    rank++;
-//                }
                 pw.println("TRYING TO ADD" + newEmp);
                 addEmployee(newEmp, this.pw);
                 pw.println("EMPLOYEE INSERTED : " + newEmp.getEmployeeId());
                 curr++;
                 this.numOfInsertions--;
-//            }
             }
         } catch (InterruptedException e) {
             pw.println("==================\nINTERRUPT CAUSED IN TRY OF THREAD\n====================");

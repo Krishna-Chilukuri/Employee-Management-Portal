@@ -53,19 +53,6 @@ public class DemoteServlet extends HttpServlet {
             }
         }
         catch (Exception e) { pw.println("Caught Exception : " + e); }
-//        removeEmployee(empId, pw);
-//        EmployeeFactory ef1 = EmployeeFactory.getInstance();
-//        Employee oldEmp = ef1.employeeMap.get(empId);
-//        removeEmployee(empId, pw);
-//        oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() + 1);
-//        pw.println("IN DEMOTE: " + oldEmp.getEmployeeRank() + ' ' + oldEmp);
-//        oldEmp.setReportees(new ArrayList<>());
-//        oldEmp.setReportsTo(null);
-//        if(!addEmployee(oldEmp, pw)) {
-//            oldEmp.setEmployeeRank(oldEmp.getEmployeeRank() - 1);
-//            addEmployee(oldEmp, pw);
-//            throw new DemoteException("Demotion from " + oldEmp.getEmployeeRank() + " to " + (oldEmp.getEmployeeRank() + 1) + " is not possible");
-//        }
 
         return true;
     }
