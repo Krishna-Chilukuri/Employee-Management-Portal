@@ -232,7 +232,7 @@ public class AddEmployeeServlet extends HttpServlet {
                 pw.println("Guests are permitted only to view Users but not to manipulate the hierarchies");
                 return false;
             }
-            else if (privilege.equals("prev_user")){
+            else if (privilege.equals("priv_user")){
                 stmt = conn.prepareStatement("select employee_rank from employees where employee_id = ?");
                 stmt.setLong(1, Long.parseLong(reqUserId));
                 rs = stmt.executeQuery();
