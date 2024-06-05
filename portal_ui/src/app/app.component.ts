@@ -33,21 +33,22 @@ export class AppComponent {
     this.jsonString = JSON.stringify(this.loginCreds);
     fetch ("http://localhost:8080/api/login/getId?id="+(this.loginCreds.username)+"&password="+(this.loginCreds.password), {
       method: 'GET',
-      headers: {
+      headers: {  
         'Content-Type': 'application/json',
       },
     })
     .then ((response) => response.json())
     .then ((data) => {
       console.log(data);
-      let logDetails = Object.assign(new LoginCreds(), data);
+      var logDetails = Object.assign(new LoginSuccess(), data);
       console.log(logDetails);
       console.log("Success : " + data.length);
       for (let index = 0; index < data.length; index++) {
         const element = data[index];
         console.log(data);
       }
-      console.log("After data");
+      console.log("After data : " + logDetails.sessionId + ' ' + typeof(logDetails.sessionId));
+      document.cookie = "sessionId="+logDetails.sessionId+";username="+logDetails.username+";";
     })
     .catch ((error) => {
       console.log("ERROR : " + error);
@@ -81,4 +82,9 @@ export class AppComponent {
 export class LoginCreds {
   username : string = "";
   password : string = ""; 
+}
+
+export class LoginSuccess {
+  sessionId : string = "";
+  username : string = "";
 }
