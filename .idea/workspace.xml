@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="223911c8-14de-4f22-a6ca-2db2fb9ecfb5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/empPortalLogs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/portal/empPortalLogs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal_ui/src/app/app.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/portal_ui/src/app/app.component.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal_ui/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/portal_ui/src/app/app.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

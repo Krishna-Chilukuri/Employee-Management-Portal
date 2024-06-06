@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    margin: 0;
+    padding: 0;
+}
+nav {
+    background-color: rgb(6, 6, 69);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    // width: 100%;
+    height: 10vh;
+    color: white;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    list-style: none;
+    margin: 0 25px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+nav ul li a:hover {
+    text-decoration: none;
+    color: lavender;
+    font-size: 1.02rem;
+}

@@ -46,6 +46,9 @@ public class LoginController {
     @GetMapping(value = "/getId", produces = "application/json")
     public LoginSuccess getLogin(@RequestParam(name = "id") String username, @RequestParam(name = "password") String password) throws IOException {
         Login login = loginServiceImplementation.getLoginById(username);
+        if (login.getUsername() == null) {
+            return new LoginSuccess();
+        }
         Logger lg = Logger.getInstance();
         lg.log("Login Attempted");
         if (login.getPassword().equals(password)) {

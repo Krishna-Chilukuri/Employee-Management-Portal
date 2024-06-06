@@ -1,0 +1,13 @@
+<p>login works!</p>
+<div class="loginContainer">
+    <form id="login-form" class="loginForm" (ngSubmit)="checkCredentials()" ngNativeValidate>
+      <label for="userid">Enter User ID</label>
+      <input type="text" name="userid" id="userid" [(ngModel)]="loginCreds.username" required>
+      <label for="password">Enter Password</label>
+      <input type="password" name="password" id="password" [(ngModel)]="loginCreds.password" required>
+      <input type="submit" value="Submit">
+    </form>
+    <form (ngSubmit)="listAll()">
+      <button type="submit">CLICK</button>
+    </form>
+</div>
