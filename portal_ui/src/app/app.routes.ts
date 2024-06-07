@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { AddEmployeeComponent } from './add-employee/add-employee.component';
 import { RemoveEmployeeComponent } from './remove-employee/remove-employee.component';
 import { ViewAllEmployeesComponent } from './view-all-employees/view-all-employees.component';
+import { ViewEmployeeComponent } from './view-employee/view-employee.component';
 
 export const routes: Routes = [
     {
@@ -29,6 +30,11 @@ export const routes: Routes = [
     {
         path: 'viewAllEmployee',
         component: ViewAllEmployeesComponent,
-        title: "View Employees",
-    }
+        title: "View All Employees",
+    },
+    {
+        path: 'viewEmployee',
+        component: ViewEmployeeComponent,
+        title: "View Employee",
+    },
 ];

@@ -48,4 +48,25 @@ public class EmployeeServiceImplementation implements EmployeeService {
         employeeRepository.findById(empId).orElseThrow(() -> new ResourceNotFoundException("Employee", "Id", empId));
         employeeRepository.deleteById(empId);
     }
+
+    @Override
+    public long getRankCount(long empRank) {
+        long count = employeeRepository.countByEmployeeRank(empRank);
+        return count;
+    }
+
+    @Override
+    public List<Long> getEmployeesByRank(long empRank) {
+        return employeeRepository.getEmployeeIdsByRank(empRank);
+    }
+
+    @Override
+    public List<Long> getEmployeesByReportsTo(long empId, long newSuperiorRank) {
+        return employeeRepository.getEmployeesByReportsToId(empId, newSuperiorRank);
+    }
+
+    @Override
+    public void updateReportsTo(long reportsTo, long empId) {
+        employeeRepository.updateReportsToID(reportsTo, empId);
+    }
 }

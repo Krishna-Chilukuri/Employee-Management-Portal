@@ -1,45 +1,26 @@
-[2024/06/06 ; 14:39:35] Login Attempted
-[2024/06/06 ; 14:39:35] kp login successful!
-[2024/06/06 ; 14:39:38] Login Attempted
-[2024/06/06 ; 14:39:38] kp login successful!
-[2024/06/06 ; 14:39:45] Login Attempted
-[2024/06/06 ; 14:39:45] Login Failed
-[2024/06/06 ; 14:39:50] Login Attempted
-[2024/06/06 ; 14:40:03] Login Attempted
-[2024/06/06 ; 14:40:04] Login Attempted
-[2024/06/06 ; 14:40:04] Login Attempted
-[2024/06/06 ; 14:40:05] Login Attempted
-[2024/06/06 ; 14:40:26] Login Attempted
-[2024/06/06 ; 14:40:26] Login Failed
-[2024/06/06 ; 14:40:31] Login Attempted
-[2024/06/06 ; 14:41:30] Login Attempted
-[2024/06/06 ; 14:41:32] Login Attempted
-[2024/06/06 ; 14:41:33] Login Attempted
-[2024/06/06 ; 14:43:19] Login Attempted
-[2024/06/06 ; 14:43:19] kp login successful!
-[2024/06/06 ; 15:10:09] Login Attempted
-[2024/06/06 ; 15:10:09] kp login successful!
-[2024/06/06 ; 15:10:26] Login Attempted
-[2024/06/06 ; 15:10:26] kp login successful!
-[2024/06/06 ; 15:35:18] Login Attempted
-[2024/06/06 ; 15:35:18] Login Failed
-[2024/06/06 ; 15:35:22] Login Attempted
-[2024/06/06 ; 15:35:22] kp login successful!
-[2024/06/06 ; 15:35:47] Login Attempted
-[2024/06/06 ; 15:35:47] kp login successful!
-[2024/06/06 ; 15:37:02] Login Attempted
-[2024/06/06 ; 15:37:02] kp login successful!
-[2024/06/06 ; 15:52:29] Login Attempted
-[2024/06/06 ; 15:52:29] kp login successful!
-[2024/06/06 ; 15:53:04] Login Attempted
-[2024/06/06 ; 15:53:04] kp login successful!
-[2024/06/06 ; 15:53:30] Login Attempted
-[2024/06/06 ; 15:53:30] kp login successful!
-[2024/06/06 ; 15:57:56] Login Attempted
-[2024/06/06 ; 15:57:56] kp login successful!
-[2024/06/06 ; 15:58:29] Login Attempted
-[2024/06/06 ; 15:58:29] kp login successful!
-[2024/06/06 ; 17:47:43] Login Attempted
-[2024/06/06 ; 17:47:43] kp login successful!
-[2024/06/06 ; 17:51:21] Login Attempted
-[2024/06/06 ; 17:51:21] kp login successful!
+[2024/06/07 ; 17:18:44] Emp received: Employee{employeeId=0, employeeName='KP', employeeRank=1, reportsTo=0}
+[2024/06/07 ; 17:18:44] SuPERIOR Found : 0
+[2024/06/07 ; 17:18:44] EMPLOYEE CAN BE INSERTED
+[2024/06/07 ; 17:18:44] LOGIN CREATED : login{username='552', password='KP', privilege='priv_user'}
+[2024/06/07 ; 17:18:54] Emp received: Employee{employeeId=0, employeeName='chinna kepa', employeeRank=4, reportsTo=0}
+[2024/06/07 ; 17:18:54] SuPERIOR Found : 1
+[2024/06/07 ; 17:18:54] 552
+[2024/06/07 ; 17:18:54] Selected Superior : 552
+[2024/06/07 ; 17:18:54] CHECK2:Employee{employeeId=553, employeeName='chinna kepa', employeeRank=4, reportsTo=552}
+[2024/06/07 ; 17:18:54] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=553, employee_id=552}
+[2024/06/07 ; 17:18:54] EMPLOYEE CAN BE INSERTED
+[2024/06/07 ; 17:18:54] LOGIN CREATED : login{username='553', password='chinna kepa', privilege='priv_user'}
+[2024/06/07 ; 17:19:08] Emp received: Employee{employeeId=0, employeeName='madhya kepa', employeeRank=2, reportsTo=0}
+[2024/06/07 ; 17:19:08] SuPERIOR Found : 1
+[2024/06/07 ; 17:19:08] 552
+[2024/06/07 ; 17:19:08] Selected Superior : 552
+[2024/06/07 ; 17:19:08] CHECK2:Employee{employeeId=554, employeeName='madhya kepa', employeeRank=2, reportsTo=552}
+[2024/06/07 ; 17:19:08] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=554, employee_id=552}
+[2024/06/07 ; 17:19:08] EMPLOYEE CAN BE INSERTED
+[2024/06/07 ; 17:19:08] LOGIN CREATED : login{username='554', password='madhya kepa', privilege='priv_user'}
+[2024/06/07 ; 17:30:35] Emp received: Employee{employeeId=0, employeeName='chinna kepa', employeeRank=4, reportsTo=0}
+[2024/06/07 ; 17:30:35] SuPERIOR Found : 0
+[2024/06/07 ; 17:30:35] EMPLOYEE CAN BE INSERTED
+[2024/06/07 ; 17:30:35] LOGIN CREATED : login{username='602', password='chinna kepa', privilege='priv_user'}
+[2024/06/07 ; 17:30:52] Emp received: Employee{employeeId=0, employeeName='pedda kepa', employeeRank=1, reportsTo=0}
+[2024/06/07 ; 17:30:52] SuPERIOR Found : 0

@@ -27,5 +27,10 @@ public class LoginServiceImplementation implements LoginService {
         return loginRepository.findAll();
     }
 
+    @Override
+    public Login saveLogin(Login log) {
+        return loginRepository.save(log);
+    }
+
 
 }

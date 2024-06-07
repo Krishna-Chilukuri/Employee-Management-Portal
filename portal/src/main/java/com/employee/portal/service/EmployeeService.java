@@ -10,4 +10,8 @@ public interface EmployeeService {
     Employee getEmployeeById(long empId);
     Employee updateEmployee(Employee emp, long empId);
     void deleteEmployee(long empId);
+    long getRankCount(long empRank);
+    List<Long> getEmployeesByRank(long empRank);
+    List<Long> getEmployeesByReportsTo(long empId, long newSuperiorRank);
+    void updateReportsTo(long reportsTo, long empId);
 }

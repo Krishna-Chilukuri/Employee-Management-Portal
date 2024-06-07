@@ -1,0 +1,8 @@
+<p>view-employee works!</p>
+<div class="viewEmpDiv">
+    <form id="view-emp-form" class="viewEmpForm" (ngSubmit)="viewEmployee()">
+        <label for="empId">Enter Employee ID</label>
+        <input type="number" name="empId" id="empId" [(ngModel)]="employeeId">
+        <input type="submit" value="View Employee">
+    </form>
+</div>
