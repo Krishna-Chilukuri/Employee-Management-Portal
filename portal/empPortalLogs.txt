@@ -16,3 +16,13 @@
 [2024/06/10 ; 13:39:09] REPORTS TO UPDATED SUCCESSFULLY
 [2024/06/10 ; 13:39:09] EMPLOYEE CAN BE INSERTED
 [2024/06/10 ; 13:39:09] LOGIN CREATED : login{username='953', password='kep11', privilege='priv_user'}
+[2024/06/10 ; 13:39:31] Emp received: Employee{employeeId=0, employeeName='kep2', employeeRank=2, reportsTo=0}
+[2024/06/10 ; 13:39:31] SuPERIOR Found : 1
+[2024/06/10 ; 13:39:31] 953
+[2024/06/10 ; 13:39:31] Selected Superior : 953
+[2024/06/10 ; 13:39:31] CHECK2:Employee{employeeId=954, employeeName='kep2', employeeRank=2, reportsTo=953}
+[2024/06/10 ; 13:39:31] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=954, employee_id=953}
+[2024/06/10 ; 13:39:31] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 13:39:31] FOUND REPORTS TO 0[]
+[2024/06/10 ; 13:39:31] EMPLOYEE CAN BE INSERTED
+[2024/06/10 ; 13:39:31] LOGIN CREATED : login{username='954', password='kep2', privilege='priv_user'}
