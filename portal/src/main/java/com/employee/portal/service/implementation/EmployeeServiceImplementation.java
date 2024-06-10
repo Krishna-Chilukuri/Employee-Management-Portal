@@ -69,4 +69,8 @@ public class EmployeeServiceImplementation implements EmployeeService {
     public void updateReportsTo(long reportsTo, long empId) {
         employeeRepository.updateReportsToID(reportsTo, empId);
     }
+
+    public List<Long> getReporteesOfId(long empId) {
+        return employeeRepository.getReportees(empId);
+    }
 }

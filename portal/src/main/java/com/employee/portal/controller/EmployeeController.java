@@ -10,12 +10,14 @@ import com.employee.portal.service.implementation.LoginServiceImplementation;
 
 import com.employee.portal.service.implementation.ReporteeServiceImplementation;
 import jakarta.persistence.GeneratedValue;
+import org.apache.juli.logging.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -56,8 +58,68 @@ public class EmployeeController {
     public void deleteEmployee(@RequestParam(name = "empId") long empId) throws IOException {
         Logger lg = Logger.getInstance();
         lg.log("Delete Request received for " + empId);
+        lg.log("HERE : " + employeeServiceImpl.getEmployeeById(empId));
+        if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
+            lg.log("EMPloyee not available to delete");
+            return;
+        }
+        handleReportees(empId);
+        lg.log("REPORTEES HANDLED");
+        try{
         employeeServiceImpl.deleteEmployee(empId);
+        lg.log("Employee deleted");
+
+        loginServiceImplementation.removeLogin(String.valueOf(empId));
+        }
+        catch (Exception e) {
+            lg.log("CAUGHT : " + e);
+        }
 //        return new ResponseEntity<Employee>(new Employee(), HttpStatus.OK);
+    }
+
+    public void handleReportees(long empId) throws IOException {
+        Random randGen = new Random();
+        Logger lg = Logger.getInstance();
+        List<Long> reporteesIds = employeeServiceImpl.getReporteesOfId(empId);
+        if (reporteesIds.isEmpty()) {
+            lg.log("No reportees to handle");
+            return;
+        }
+        lg.log("Reportees to handle : "+ reporteesIds );
+        long newReportsTo = 0L;
+        long remRank = employeeServiceImpl.getEmployeeById(empId).getEmployeeRank();
+        List<Long> colleagueIds = employeeServiceImpl.getEmployeesByRank(remRank);
+        colleagueIds.remove(empId);
+        lg.log("Colleagues : " + colleagueIds);
+        if (colleagueIds.isEmpty()) {
+            //find superior
+            long superiorId = employeeServiceImpl.getEmployeeById(empId).getReportsTo();
+            if (superiorId == 0) {
+                //no superiors: Promote the highest reportee and use as new Boss
+                newReportsTo = reporteesIds.remove(0);
+                lg.log("new Boss : " + newReportsTo);
+                reporteeServiceImplementation.removeReportee(newReportsTo);
+                Employee emp = employeeServiceImpl.getEmployeeById(newReportsTo);
+                emp.setReportsTo(0);
+                if (emp.getEmployeeRank() >= 2) emp.setEmployeeRank(emp.getEmployeeRank() - 1);
+                lg.log("NEW BOSS SELECTED FROM REPORTEE");
+            }
+            else {
+                reporteeServiceImplementation.removeReportee(empId);
+                newReportsTo = superiorId;
+            }
+        }
+        else {
+            newReportsTo = colleagueIds.get(randGen.nextInt(colleagueIds.size()));
+        }
+        Reportee repo = new Reportee();
+        repo.setEmployee_id(newReportsTo);
+        for (long repoId: reporteesIds) {
+            employeeServiceImpl.updateReportsTo(newReportsTo, repoId);
+            reporteeServiceImplementation.removeReportee(repoId);
+            repo.setReportee(repoId);
+            reporteeServiceImplementation.saveReportee(repo);
+        }
     }
 
     @RequestMapping("/view")

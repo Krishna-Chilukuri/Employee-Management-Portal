@@ -32,5 +32,10 @@ public class LoginServiceImplementation implements LoginService {
         return loginRepository.save(log);
     }
 
+    @Override
+    public void removeLogin(String username) {
+        loginRepository.deleteById(username);
+    }
+
 
 }

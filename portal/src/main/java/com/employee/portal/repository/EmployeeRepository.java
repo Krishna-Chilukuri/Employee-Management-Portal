@@ -24,4 +24,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Modifying
     @Query("UPDATE Employee SET reportsTo = :newReportsTo WHERE employeeId = :empId")
     void updateReportsToID(long newReportsTo, long empId);
+
+    @Query("SELECT employeeId FROM Employee WHERE reportsTo = :empId ORDER BY employeeRank DESC")
+    List<Long> getReportees(long empId);
 }

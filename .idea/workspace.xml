@@ -9,6 +9,9 @@
       <change beforePath="$PROJECT_DIR$/portal/empPortalLogs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/portal/empPortalLogs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/controller/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/controller/EmployeeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/repository/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/repository/EmployeeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/LoginService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/implementation/EmployeeServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/implementation/EmployeeServiceImplementation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/implementation/LoginServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/implementation/LoginServiceImplementation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

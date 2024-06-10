@@ -8,4 +8,5 @@ public interface LoginService {
     Login getLoginById(String loginId);
     List<Login> findAll();
     Login saveLogin(Login log);
+    void removeLogin(String username);
 }
