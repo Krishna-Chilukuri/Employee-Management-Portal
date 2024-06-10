@@ -1,0 +1,59 @@
+[2024/06/10 ; 17:42:59] Emp received: Employee{employeeId=0, employeeName='asa1111', employeeRank=2, reportsTo=0}
+[2024/06/10 ; 17:43:00] SUPERIOR RANK : 1
+[2024/06/10 ; 17:43:00] SuPERIOR Found : 1
+[2024/06/10 ; 17:43:00] 1004
+[2024/06/10 ; 17:43:00] Selected Superior : 1004
+[2024/06/10 ; 17:43:00] CHECK2:Employee{employeeId=1402, employeeName='asa1111', employeeRank=2, reportsTo=1004}
+[2024/06/10 ; 17:43:00] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=1402, employee_id=1004}
+[2024/06/10 ; 17:43:00] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 17:43:00] FOUND REPORTS TO 0[]
+[2024/06/10 ; 17:43:00] EMPLOYEE CAN BE INSERTED
+[2024/06/10 ; 17:43:00] LOGIN CREATED : login{username='1402', password='asa1111', privilege='priv_user'}
+[2024/06/10 ; 17:43:10] Demote Request received for :1402 for 1 demotions
+[2024/06/10 ; 17:43:10] No reportees to handle
+[2024/06/10 ; 17:43:10] Emp Of Rank : 2 are : []curr emp : Employee{employeeId=1402, employeeName='asa1111', employeeRank=3, reportsTo=1004}
+[2024/06/10 ; 17:43:10] SUPERIOR RANK : 2
+[2024/06/10 ; 17:43:10] SuPERIOR Found : 1
+[2024/06/10 ; 17:43:10] 1004
+[2024/06/10 ; 17:43:10] Selected Superior : 1004
+[2024/06/10 ; 17:43:10] CHECK2:Employee{employeeId=1402, employeeName='asa1111', employeeRank=3, reportsTo=1004}
+[2024/06/10 ; 17:43:10] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=1402, employee_id=1004}
+[2024/06/10 ; 17:43:10] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 17:43:10] FOUND REPORTS TO 0[]
+[2024/06/10 ; 17:43:10] Demoted 1402 to 3
+[2024/06/10 ; 17:43:28] Demote Request received for :1004 for 3 demotions
+[2024/06/10 ; 17:43:28] Reportees to handle : [1402]
+[2024/06/10 ; 17:43:28] Colleagues : []
+[2024/06/10 ; 17:43:28] new Boss : 1402
+[2024/06/10 ; 17:43:28] NEW BOSS SELECTED FROM REPORTEE
+[2024/06/10 ; 17:43:28] Emp Of Rank : 1 are : []curr emp : Employee{employeeId=1004, employeeName='kep223', employeeRank=2, reportsTo=0}
+[2024/06/10 ; 17:43:28] SUPERIOR RANK : 1
+[2024/06/10 ; 17:43:28] SuPERIOR Found : 0
+[2024/06/10 ; 17:43:28] INSERTING with no superior
+[2024/06/10 ; 17:43:28] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 17:43:28] FOUND REPORTS TO 0[]
+[2024/06/10 ; 17:43:28] Demoted 1004 to 2
+[2024/06/10 ; 17:43:28] No reportees to handle
+[2024/06/10 ; 17:43:28] Emp Of Rank : 2 are : [1402]curr emp : Employee{employeeId=1004, employeeName='kep223', employeeRank=3, reportsTo=0}
+[2024/06/10 ; 17:43:28] SUPERIOR RANK : 2
+[2024/06/10 ; 17:43:28] SuPERIOR Found : 2
+[2024/06/10 ; 17:43:28] 1402
+[2024/06/10 ; 17:43:28] Selected Superior : 1402
+[2024/06/10 ; 17:43:28] CHECK2:Employee{employeeId=1004, employeeName='kep223', employeeRank=3, reportsTo=1402}
+[2024/06/10 ; 17:43:28] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=1004, employee_id=1402}
+[2024/06/10 ; 17:43:28] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 17:43:28] FOUND REPORTS TO 0[]
+[2024/06/10 ; 17:43:28] Demoted 1004 to 3
+[2024/06/10 ; 17:43:28] No reportees to handle
+[2024/06/10 ; 17:43:28] Emp Of Rank : 3 are : []curr emp : Employee{employeeId=1004, employeeName='kep223', employeeRank=4, reportsTo=1402}
+[2024/06/10 ; 17:43:28] SUPERIOR RANK : 3
+[2024/06/10 ; 17:43:28] SuPERIOR Found : 2
+[2024/06/10 ; 17:43:28] 1402
+[2024/06/10 ; 17:43:28] Selected Superior : 1402
+[2024/06/10 ; 17:43:28] CHECK2:Employee{employeeId=1004, employeeName='kep223', employeeRank=4, reportsTo=1402}
+[2024/06/10 ; 17:43:28] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=1004, employee_id=1402}
+[2024/06/10 ; 17:43:28] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 17:43:28] FOUND REPORTS TO 0[]
+[2024/06/10 ; 17:43:28] Demoted 1004 to 4
+[2024/06/10 ; 17:47:21] Login Attempted
+[2024/06/10 ; 17:47:21] kp login successful!

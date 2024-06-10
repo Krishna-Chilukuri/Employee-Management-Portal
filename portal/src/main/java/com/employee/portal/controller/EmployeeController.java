@@ -77,6 +77,76 @@ public class EmployeeController {
 //        return new ResponseEntity<Employee>(new Employee(), HttpStatus.OK);
     }
 
+    @RequestMapping("/promote")
+    public ResponseEntity<String> promoteEmployee(@RequestParam(name = "empId") long empId, @RequestParam(name = "numProms") long numProms) throws IOException {
+        Logger lg = Logger.getInstance();
+        lg.log("Promote Request received for :" + empId + " for " + numProms +" promotions");
+        Employee employee = employeeServiceImpl.getEmployeeById(empId);
+        if (employee.getEmployeeName() == null) {
+            lg.log("Employee is not present to promote");
+            return new ResponseEntity<String>("Employee not Found", HttpStatus.NOT_FOUND);
+        }
+        if (employee.getEmployeeRank() - numProms <= 0) {
+            lg.log("These number of promotions is not possible");
+            return new ResponseEntity<>("These number of promotions is not possible", HttpStatus.BAD_REQUEST);
+        }
+        promoteProcess(employee, numProms);//Take return and send response based on it. RAnk max cap  or promotion from 1
+        return new ResponseEntity<String>("Promotion Done", HttpStatus.OK);
+    }
+
+    @RequestMapping("/demote")
+    public ResponseEntity<String> demoteEmployee(@RequestParam(name = "empId") long empId, @RequestParam(name = "numDems") long numDems) throws IOException {
+        Logger lg = Logger.getInstance();
+        lg.log("Demote Request received for :" + empId + " for " + numDems + " demotions");
+        Employee employee = employeeServiceImpl.getEmployeeById(empId);
+        if (employee.getEmployeeName() == null) {
+            lg.log("Employee is not present to demote");
+            return new ResponseEntity<String>("Employee not Found", HttpStatus.NOT_FOUND);
+        }
+        demoteProcess(employee, numDems);
+        return new ResponseEntity<String>("Demotion Done", HttpStatus.OK);
+    }
+
+    void promoteProcess(Employee employee, long numProms) throws IOException {
+        Logger lg = Logger.getInstance();
+        while (numProms > 0) {
+            if (employee.getEmployeeRank() == 1) {//Redundant check (checked already at promoteEmployee())
+                lg.log("Promotion from 1 is not possible");
+                break;
+            }
+            long nextRank = employee.getEmployeeRank() - 1;
+            long nextLvlCount = employeeServiceImpl.getRankCount(nextRank);
+            if (nextLvlCount == nextRank) {
+                lg.log("RANK MAX CAP REACHED");
+                break;
+            }
+            handleReportees(employee.getEmployeeId());
+            employee.setEmployeeRank(nextRank);
+            employee = addtoHierarchy(employee);
+            numProms--;
+            lg.log("Promoted " + employee.getEmployeeId() + " to " + employee.getEmployeeRank());
+        }
+    }
+
+    void demoteProcess(Employee employee, long numDems) throws IOException {
+        Logger lg = Logger.getInstance();
+        while (numDems > 0) {
+            long nextRank = employee.getEmployeeRank() + 1;
+            long nextLvlCount = employeeServiceImpl.getRankCount(nextRank);
+            if (nextLvlCount == nextRank) {
+                lg.log("RANK MAX CAP REACHED");
+                break;
+            }
+            handleReportees(employee.getEmployeeId());
+            employee.setEmployeeRank(nextRank);
+            employeeServiceImpl.updateEmployee(employee, employee.getEmployeeId());
+            lg.log("Emp Of Rank : " + (nextRank - 1) + " are : " + employeeServiceImpl.getEmployeesByRank(nextRank - 1) + "curr emp : " + employee);
+            employee = addtoHierarchy(employee);
+            numDems--;
+            lg.log("Demoted " + employee.getEmployeeId() + " to " + employee.getEmployeeRank());
+        }
+    }
+
     public void handleReportees(long empId) throws IOException {
         Random randGen = new Random();
         Logger lg = Logger.getInstance();
@@ -145,7 +215,9 @@ public class EmployeeController {
 
     Employee addtoHierarchy(Employee employee) throws IOException {
         Random randGen = new Random();
+        Logger lg = Logger.getInstance();
         long superiorRank = employee.getEmployeeRank() - 1;
+        lg.log("SUPERIOR RANK : " + superiorRank);
         while (superiorRank > 0) {
             if (employeeServiceImpl.getRankCount(superiorRank) == 0) {
                 superiorRank--;
@@ -155,7 +227,6 @@ public class EmployeeController {
                 break;
             }
         }
-        Logger lg = Logger.getInstance();
         long superiorId = 0L;
         lg.log("SuPERIOR Found : " + superiorRank);
         if (superiorRank > 0) {//Superior Available

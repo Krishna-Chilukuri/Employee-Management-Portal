@@ -1,0 +1,16 @@
+<p>hierarchies works!</p>
+<div class="hierarchiesDiv">
+    <form id="hierarchy-form" class="hierarchyForm" (ngSubmit)="getHierarchy()" ngNativeValidate>
+        <label for="empId">Enter Employee ID</label>
+        <input type="number" name="empId" id="empId" [(ngModel)]="empId">
+        <label for="kVal">Enter k</label>
+        <input type="number" name="kVal" id="kVal" [(ngModel)]="kVal">
+        <input type="radio" name="typeOfHie" id="upper" value="upper" required [(ngModel)]="choiceOfHie">
+        <label for="upper">Upper Hierarchy</label>
+        <input type="radio" name="typeOfHie" id="lower" value="lower" [(ngModel)]="choiceOfHie">
+        <label for="lower">Lower Hierarchy</label>
+        <input type="radio" name="typeOfHie" id="kStep" value="kStep"[(ngModel)]="choiceOfHie">
+        <label for="kStep">K-Step Hierarchy</label>
+        <input type="submit" value="View Hierarchy">
+    </form>
+</div>
