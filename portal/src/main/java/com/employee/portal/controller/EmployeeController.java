@@ -112,23 +112,39 @@ public class EmployeeController {
             lg.log("CHECKING FOR REPORTEE ASSIGNMENT" + reportee);
             reporteeServiceImplementation.saveReportee(reportee);
         }
-        employee = employeeServiceImpl.saveEmployee(employee);
+        else {
+            lg.log("INSERTING with no superior");
+            employee.setReportsTo(0);
+            employee = employeeServiceImpl.saveEmployee(employee);
+        }
         //find if there are any reportsTo = 0
+        lg.log("POST SUPERIOR ASSIGNMENT");
         List<Long> noReportsToIds = employeeServiceImpl.getEmployeesByReportsTo(0, employee.getEmployeeRank());
+        lg.log("FOUND REPORTS TO 0" + noReportsToIds);
         long empId = employee.getEmployeeId();
         Reportee repo = new Reportee();
 //        Employee repoEmp;
-//        repo.setEmployee_id(empId);
+        repo.setEmployee_id(empId);
         for (long repoId: noReportsToIds) {
+            lg.log("REPORTS TO MODIFIED : " + repoId + empId);
             //Every (repoId, employee.getEmployeeId()) ni add to reportees
             //Every repoId ki add employee.getEmployeeId() as reportsTo
             repo.setReportee(repoId);
             reporteeServiceImplementation.saveReportee(repo);
 //            repoEmp = employeeServiceImpl.getEmployeeById(repoId);
+            lg.log("REPORTEE TABLE UPDATED");
 //            repoEmp.setReportsTo(empId);
+            //ERROR IN updateReportsTo
+            lg.log("TEST : " + repoId + "->" + empId);
+            try{
             employeeServiceImpl.updateReportsTo(empId, repoId);
+            }
+            catch (Exception e) {
+                lg.log("Caught: " + e);
+            }
 //            employeeServiceImpl.deleteEmployee(repoId);//Update instead of delete
 //            employeeServiceImpl.saveEmployee(repoEmp);
+            lg.log("REPORTS TO UPDATED SUCCESSFULLY");
         }
         if (superiorId != 0) {
             //Rebalancing superior reportees of rank > new Employee rank

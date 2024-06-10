@@ -1,26 +1,18 @@
-[2024/06/07 ; 17:18:44] Emp received: Employee{employeeId=0, employeeName='KP', employeeRank=1, reportsTo=0}
-[2024/06/07 ; 17:18:44] SuPERIOR Found : 0
-[2024/06/07 ; 17:18:44] EMPLOYEE CAN BE INSERTED
-[2024/06/07 ; 17:18:44] LOGIN CREATED : login{username='552', password='KP', privilege='priv_user'}
-[2024/06/07 ; 17:18:54] Emp received: Employee{employeeId=0, employeeName='chinna kepa', employeeRank=4, reportsTo=0}
-[2024/06/07 ; 17:18:54] SuPERIOR Found : 1
-[2024/06/07 ; 17:18:54] 552
-[2024/06/07 ; 17:18:54] Selected Superior : 552
-[2024/06/07 ; 17:18:54] CHECK2:Employee{employeeId=553, employeeName='chinna kepa', employeeRank=4, reportsTo=552}
-[2024/06/07 ; 17:18:54] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=553, employee_id=552}
-[2024/06/07 ; 17:18:54] EMPLOYEE CAN BE INSERTED
-[2024/06/07 ; 17:18:54] LOGIN CREATED : login{username='553', password='chinna kepa', privilege='priv_user'}
-[2024/06/07 ; 17:19:08] Emp received: Employee{employeeId=0, employeeName='madhya kepa', employeeRank=2, reportsTo=0}
-[2024/06/07 ; 17:19:08] SuPERIOR Found : 1
-[2024/06/07 ; 17:19:08] 552
-[2024/06/07 ; 17:19:08] Selected Superior : 552
-[2024/06/07 ; 17:19:08] CHECK2:Employee{employeeId=554, employeeName='madhya kepa', employeeRank=2, reportsTo=552}
-[2024/06/07 ; 17:19:08] CHECKING FOR REPORTEE ASSIGNMENTReportee{reportee=554, employee_id=552}
-[2024/06/07 ; 17:19:08] EMPLOYEE CAN BE INSERTED
-[2024/06/07 ; 17:19:08] LOGIN CREATED : login{username='554', password='madhya kepa', privilege='priv_user'}
-[2024/06/07 ; 17:30:35] Emp received: Employee{employeeId=0, employeeName='chinna kepa', employeeRank=4, reportsTo=0}
-[2024/06/07 ; 17:30:35] SuPERIOR Found : 0
-[2024/06/07 ; 17:30:35] EMPLOYEE CAN BE INSERTED
-[2024/06/07 ; 17:30:35] LOGIN CREATED : login{username='602', password='chinna kepa', privilege='priv_user'}
-[2024/06/07 ; 17:30:52] Emp received: Employee{employeeId=0, employeeName='pedda kepa', employeeRank=1, reportsTo=0}
-[2024/06/07 ; 17:30:52] SuPERIOR Found : 0
+[2024/06/10 ; 13:39:06] Emp received: Employee{employeeId=0, employeeName='kep', employeeRank=4, reportsTo=0}
+[2024/06/10 ; 13:39:06] SuPERIOR Found : 0
+[2024/06/10 ; 13:39:06] INSERTING with no superior
+[2024/06/10 ; 13:39:06] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 13:39:06] FOUND REPORTS TO 0[]
+[2024/06/10 ; 13:39:06] EMPLOYEE CAN BE INSERTED
+[2024/06/10 ; 13:39:06] LOGIN CREATED : login{username='952', password='kep', privilege='priv_user'}
+[2024/06/10 ; 13:39:09] Emp received: Employee{employeeId=0, employeeName='kep11', employeeRank=1, reportsTo=0}
+[2024/06/10 ; 13:39:09] SuPERIOR Found : 0
+[2024/06/10 ; 13:39:09] INSERTING with no superior
+[2024/06/10 ; 13:39:09] POST SUPERIOR ASSIGNMENT
+[2024/06/10 ; 13:39:09] FOUND REPORTS TO 0[952]
+[2024/06/10 ; 13:39:09] REPORTS TO MODIFIED : 952953
+[2024/06/10 ; 13:39:09] REPORTEE TABLE UPDATED
+[2024/06/10 ; 13:39:09] TEST : 952->953
+[2024/06/10 ; 13:39:09] REPORTS TO UPDATED SUCCESSFULLY
+[2024/06/10 ; 13:39:09] EMPLOYEE CAN BE INSERTED
+[2024/06/10 ; 13:39:09] LOGIN CREATED : login{username='953', password='kep11', privilege='priv_user'}
