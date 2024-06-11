@@ -18,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
@@ -75,6 +76,57 @@ public class LoginController {
             lg.log("Login Failed");
             return new LoginSuccess();
         }
+    }
+
+    @RequestMapping("/promoteToOwner")
+    void promoteAdminToOwner(@RequestParam(name = "adminId") String adminId) throws IOException {
+        Logger lg = Logger.getInstance();
+        Login log = loginServiceImplementation.getLoginById(adminId);
+        if (log.getUsername() == null) {
+            lg.log("User not Found in Login");
+            return;
+        } else if (Objects.equals(log.getPrivilege(), "guest") || Objects.equals(log.getPrivilege(), "priv_user")) {
+            lg.log("User is not an Admin to be promoted");
+            return;
+        } else if (Objects.equals(log.getPrivilege(), "owner")) {
+            lg.log("User is already an Owner");
+            return;
+        }
+        lg.log("User " + adminId + " is being promoted to Owner");
+        loginServiceImplementation.updatePrivilege(adminId, "owner");
+    }
+
+    @RequestMapping("/demoteOwner")
+    void demoteOwnerToAdmin(@RequestParam(name = "ownerId") String ownerId) throws IOException {
+        Logger lg = Logger.getInstance();
+        Login log = loginServiceImplementation.getLoginById(ownerId);
+        if (log.getUsername() == null) {
+            lg.log("User not Found in Login");
+            return;
+        } else if (Objects.equals(log.getPrivilege(), "guest") || Objects.equals(log.getPrivilege(), "priv_user")) {
+            lg.log("User is not an Admin to be promoted");
+            return;
+        } else if (Objects.equals(log.getPrivilege(), "admin")) {
+            lg.log("User is already an Admin");
+            return;
+        }
+        lg.log("User " + ownerId + " is demoted to Admin");
+        loginServiceImplementation.updatePrivilege(ownerId, "admin");
+    }
+
+    @RequestMapping("/removeAdminOwner")
+    void removeAdminOwner(@RequestParam(name = "username") String username) throws IOException {
+        Logger lg = Logger.getInstance();
+        Login log = loginServiceImplementation.getLoginById(username);
+        if (log.getUsername() == null) {
+            lg.log("User not Found in Login");
+            return;
+        } else if (Objects.equals(log.getPrivilege(), "guest") || Objects.equals(log.getPrivilege(), "priv_user")) {
+            lg.log("User is not an Admin / Owner");
+            return;
+        }
+        lg.log("User " + username + " is removed");
+        loginServiceImplementation.removeLogin(username);
     }
 
 

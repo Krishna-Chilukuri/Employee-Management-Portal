@@ -8,6 +8,10 @@ import { ViewEmployeeComponent } from './view-employee/view-employee.component';
 import { PromoteEmployeeComponent } from './promote-employee/promote-employee.component';
 import { DemoteEmployeeComponent } from './demote-employee/demote-employee.component';
 import { HierarchiesComponent } from './hierarchies/hierarchies.component';
+import { PromoteToOwnerComponent } from './promote-to-owner/promote-to-owner.component';
+import { PromoteToAdminComponent } from './promote-to-admin/promote-to-admin.component';
+import { DemoteOwnerComponent } from './demote-owner/demote-owner.component';
+import { RemoveAdminOwnerComponent } from './remove-admin-owner/remove-admin-owner.component';
 
 export const routes: Routes = [
     {
@@ -54,5 +58,25 @@ export const routes: Routes = [
         path: 'hierarchies',
         component: HierarchiesComponent,
         title: "View Hierarchy",
+    },
+    {
+        path: 'promoteToOwner',
+        component: PromoteToOwnerComponent,
+        title: "Promote To Owner",
+    },
+    {
+        path: 'promoteToAdmin',
+        component: PromoteToAdminComponent,
+        title: "Promote To Admin",
+    },
+    {
+        path: 'demoteOwner',
+        component: DemoteOwnerComponent,
+        title: "Demote To Owner",
+    },
+    {
+        path: 'removeAdminOwner',
+        component: RemoveAdminOwnerComponent,
+        title: "Remove Admin/Owner",
     }
 ];

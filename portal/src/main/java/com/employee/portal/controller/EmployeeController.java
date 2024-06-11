@@ -342,6 +342,33 @@ public class EmployeeController {
         return retList;
     }
 
+    @RequestMapping("/promoteToAdmin")
+    void promoteToAdmin(@RequestParam(name = "empId") long empId) throws IOException {
+        Logger lg = Logger.getInstance();
+        lg.log("Promote to Admin requested for : " + empId);
+        Login log = loginServiceImplementation.getLoginById(String.valueOf(empId));
+        if (log.getUsername() == null) {
+            lg.log("User not Found");
+            return;
+        }
+        else if (Objects.equals(log.getPrivilege(), "guest")) {
+            lg.log("User is a Guest. Can't be promoted");
+            return;
+        }
+        else if (Objects.equals(log.getPrivilege(), "owner") || Objects.equals(log.getPrivilege(), "admin")) {
+            lg.log("User is already a " + log.getPrivilege());
+            return;
+        }
+        //user is priv_user
+        Login newLog = new Login();
+        newLog.setUsername(log.getUsername());
+        newLog.setPassword(log.getPassword());
+        newLog.setPrivilege("admin");
+        deleteEmployee(empId);
+        loginServiceImplementation.saveLogin(newLog);
+    }
+
+
     boolean isRankPossible(long employeeRank) {
         return (employeeServiceImpl.getRankCount(employeeRank) < employeeRank);
     }

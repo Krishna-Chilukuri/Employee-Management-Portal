@@ -37,5 +37,10 @@ public class LoginServiceImplementation implements LoginService {
         loginRepository.deleteById(username);
     }
 
+    @Override
+    public void updatePrivilege(String username, String privilege) {
+        loginRepository.updatePrivilegeUsingId(privilege, username);
+    }
+
 
 }

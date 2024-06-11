@@ -12,3 +12,26 @@
 [2024/06/11 ; 16:09:41] kp login successful!
 [2024/06/11 ; 16:11:41] Login Attempted
 [2024/06/11 ; 16:11:41] kp login successful!
+[2024/06/11 ; 17:09:50] Login Attempted
+[2024/06/11 ; 17:09:50] kp login successful!
+[2024/06/11 ; 17:32:43] User 1234 is being promoted to Owner
+[2024/06/11 ; 17:32:57] User 1234 is being promoted to Owner
+[2024/06/11 ; 17:33:52] User 1234 is being promoted to Owner
+[2024/06/11 ; 17:33:54] User is already an Owner
+[2024/06/11 ; 17:51:21] Promote to Admin requested for : 1402
+[2024/06/11 ; 17:51:21] Delete Request received for 1402
+[2024/06/11 ; 17:51:21] HERE : Employee{employeeId=1402, employeeName='asa1111', employeeRank=2, reportsTo=0}
+[2024/06/11 ; 17:51:21] Reportees to handle : [1004]
+[2024/06/11 ; 17:51:21] Colleagues : []
+[2024/06/11 ; 17:51:21] new Boss : 1004
+[2024/06/11 ; 17:51:21] NEW BOSS SELECTED FROM REPORTEE
+[2024/06/11 ; 17:51:21] REPORTEES HANDLED
+[2024/06/11 ; 17:51:21] Employee deleted
+[2024/06/11 ; 17:52:17] Promote to Admin requested for : 1402
+[2024/06/11 ; 17:52:17] User is already a owner
+[2024/06/11 ; 17:52:17] Delete Request received for 1402
+[2024/06/11 ; 17:52:17] HERE : Employee{employeeId=0, employeeName='null', employeeRank=0, reportsTo=0}
+[2024/06/11 ; 17:52:17] EMPloyee not available to delete
+[2024/06/11 ; 18:02:41] User 1402 is demoted to Admin
+[2024/06/11 ; 18:02:54] User 1402 is being promoted to Owner
+[2024/06/11 ; 18:10:19] User 1402 is removed

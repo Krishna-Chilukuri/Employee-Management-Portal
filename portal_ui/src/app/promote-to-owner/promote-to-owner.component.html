@@ -1,0 +1,8 @@
+<p>promote-to-owner works!</p>
+<div class="promoteOwnerDiv">
+    <form id="prom-own-form" class="promOwnForm" (ngSubmit)="promoteToOwner()">
+        <label for="adminUsername">Enter Admin Username to Promote to Owner</label>
+        <input type="text" name="adminUsername" id="adminUsername" [(ngModel)]="adminId">
+        <input type="submit" value="Promote">
+    </form>
+</div>

@@ -9,4 +9,5 @@ public interface LoginService {
     List<Login> findAll();
     Login saveLogin(Login log);
     void removeLogin(String username);
+    void updatePrivilege(String username, String privilege);
 }
