@@ -70,6 +70,11 @@ public class EmployeeServiceImplementation implements EmployeeService {
         employeeRepository.updateReportsToID(reportsTo, empId);
     }
 
+    @Override
+    public List<Long> getBossIds() {
+        return employeeRepository.getBossIds();
+    }
+
     public List<Long> getReporteesOfId(long empId) {
         return employeeRepository.getReportees(empId);
     }

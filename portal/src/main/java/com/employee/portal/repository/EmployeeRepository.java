@@ -27,4 +27,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT employeeId FROM Employee WHERE reportsTo = :empId ORDER BY employeeRank DESC")
     List<Long> getReportees(long empId);
+
+//    SELECT employee_id FROM employees WHERE employee_rank = (SELECT MIN(employee_rank) FROM employees);
+    @Query("SELECT employeeId FROM Employee WHERE employeeRank = (SELECT MIN(employeeRank) FROM Employee)")
+    List<Long> getBossIds();
 }

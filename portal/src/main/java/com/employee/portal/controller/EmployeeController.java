@@ -16,9 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
@@ -105,6 +103,133 @@ public class EmployeeController {
         }
         demoteProcess(employee, numDems);
         return new ResponseEntity<String>("Demotion Done", HttpStatus.OK);
+    }
+
+    @RequestMapping("/upperHierarchy")
+    List<viewableEmployee> upperHierarchy(@RequestParam(name = "empId") long empId) throws IOException {
+        Logger lg = Logger.getInstance();
+        if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
+            lg.log("Upper Hierarchy requested for an employee not present");
+            return new ArrayList<viewableEmployee>();
+        }
+
+        List<viewableEmployee> retList = new ArrayList<>();
+        Queue<Employee> empQ = new LinkedList<>();
+        List<Long> bossIds = employeeServiceImpl.getBossIds();
+        long targetRank = employeeServiceImpl.getEmployeeById(empId).getEmployeeRank();
+        List<Long> reportees;
+        Employee curr;
+
+
+
+        for (long bossId: bossIds) {
+            empQ.add(employeeServiceImpl.getEmployeeById(bossId));
+        }
+
+        while (empQ.peek() != null && empQ.peek().getEmployeeRank() < targetRank) {
+            curr = empQ.poll();
+            viewableEmployee emp = new viewableEmployee();
+            emp.setEmployee(curr);
+            if (curr != null) {
+                reportees = reporteeServiceImplementation.getReporteesById(curr.getEmployeeId());
+                for (long reportee: reportees) {
+                    empQ.add(employeeServiceImpl.getEmployeeById(reportee));
+                }
+                emp.setReportees(reportees);
+            }
+            retList.add(emp);
+        }
+        viewableEmployee emp = new viewableEmployee();
+        emp.setEmployee(employeeServiceImpl.getEmployeeById(empId));
+        emp.setReportees(reporteeServiceImplementation.getReporteesById(empId));
+        retList.add(emp);
+        return retList;
+    }
+
+    @RequestMapping("/lowerHierarchy")
+    List<viewableEmployee> lowerHierarchy(@RequestParam(name = "empId") long empId) throws IOException {
+        Logger lg = Logger.getInstance();
+        List<Long> reportees;
+        if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
+            lg.log("Lower Hierarchy requested for an employee not present");
+            return new ArrayList<viewableEmployee>();
+        }
+        List<viewableEmployee> retList = new ArrayList<>();
+        Queue<Employee> empQ = new LinkedList<>();
+        Employee curr;
+
+        empQ.add(employeeServiceImpl.getEmployeeById(empId));
+        lg.log("curr emp added");
+        while (empQ.peek() != null) {
+            curr = empQ.poll();
+            viewableEmployee emp = new viewableEmployee();
+            emp.setEmployee(curr);
+            reportees = reporteeServiceImplementation.getReporteesById(curr.getEmployeeId());
+            for (long reportee: reportees) {
+                lg.log("Reportee added : " + reportee);
+                empQ.add(employeeServiceImpl.getEmployeeById(reportee));
+            }
+            emp.setReportees(reportees);
+            retList.add(emp);
+        }
+        return retList;
+    }
+
+    @RequestMapping("/kStepHierarchy")
+    List<viewableEmployee> kStepHierarchy(@RequestParam(name = "empId") long empId, @RequestParam(name = "kVal") long k) throws IOException {
+        Logger lg = Logger.getInstance();
+        List<Long> reportees;
+        lg.log("REq received");
+        if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
+            lg.log("K-Step Hierarchy requested for an employee not present");
+            return new ArrayList<viewableEmployee>();
+        }
+        List<viewableEmployee> retList = new ArrayList<>();
+        long currK = k;
+        long nextEmpId = 0L;
+        boolean breakStat = false;
+        Employee curr = employeeServiceImpl.getEmployeeById(empId);
+        viewableEmployee emp = new viewableEmployee();
+        //To get higher rank superior of k step distance
+        while (currK > 0) {
+            nextEmpId = curr.getReportsTo();
+            if (nextEmpId == 0) {
+                breakStat = true;
+                break;
+            }
+            curr = employeeServiceImpl.getEmployeeById(nextEmpId);
+            currK--;
+        }
+        if (!breakStat && nextEmpId != 0) {
+            lg.log("Found K-Step Superior : "+ nextEmpId);
+            emp.setEmployee(employeeServiceImpl.getEmployeeById(nextEmpId));
+            emp.setReportees(reporteeServiceImplementation.getReporteesById(nextEmpId));
+            retList.add(emp);
+        }
+
+        //To get lower rank employees of k step distance
+        Queue<Long> kStepDownQ = new LinkedList<>();
+        Queue<Long> kStepDownK = new LinkedList<>();
+        kStepDownQ.add(empId);
+        kStepDownK.add(k);
+        while (kStepDownQ.peek() != null && kStepDownK.peek() != null) {
+            nextEmpId = kStepDownQ.poll();
+            currK = kStepDownK.poll();
+            if (currK > 0) {
+                currK--;
+                for (long reportee: reporteeServiceImplementation.getReporteesById(nextEmpId)) {
+                    kStepDownQ.add(reportee);
+                    kStepDownK.add(currK);
+                }
+            }
+            else if (currK == 0) {
+                emp.setEmployee(employeeServiceImpl.getEmployeeById(nextEmpId));
+                emp.setReportees(reporteeServiceImplementation.getReporteesById(nextEmpId));
+                retList.add(emp);
+            }
+        }
+        lg.log("RET LIST FOR K-STEP Hierarchy : " + retList);
+        return retList;
     }
 
     void promoteProcess(Employee employee, long numProms) throws IOException {

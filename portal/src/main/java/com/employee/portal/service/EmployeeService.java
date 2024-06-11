@@ -14,4 +14,5 @@ public interface EmployeeService {
     List<Long> getEmployeesByRank(long empRank);
     List<Long> getEmployeesByReportsTo(long empId, long newSuperiorRank);
     void updateReportsTo(long reportsTo, long empId);
+    List<Long> getBossIds();
 }
