@@ -1,7 +1,10 @@
-[2024/06/11 ; 14:09:32] REq received
-[2024/06/11 ; 14:09:32] RET LIST FOR K-STEP Hierarchy : []
-[2024/06/11 ; 14:09:38] REq received
-[2024/06/11 ; 14:09:38] Found K-Step Superior : 1402
-[2024/06/11 ; 14:09:38] RET LIST FOR K-STEP Hierarchy : [viewableEmployee{employee=Employee{employeeId=1402, employeeName='asa1111', employeeRank=2, reportsTo=0}, reportees=[1004]}]
-[2024/06/11 ; 14:09:43] REq received
-[2024/06/11 ; 14:09:43] RET LIST FOR K-STEP Hierarchy : []
+[2024/06/11 ; 15:58:17] Login Attempted
+[2024/06/11 ; 15:58:17] kp login successful!
+[2024/06/11 ; 16:00:37] Login Attempted
+[2024/06/11 ; 16:00:38] kp login successful!
+[2024/06/11 ; 16:01:52] Login Attempted
+[2024/06/11 ; 16:01:52] kp login successful!
+[2024/06/11 ; 16:03:06] Login Attempted
+[2024/06/11 ; 16:03:07] kp login successful!
+[2024/06/11 ; 16:03:52] Login Attempted
+[2024/06/11 ; 16:03:52] kp login successful!

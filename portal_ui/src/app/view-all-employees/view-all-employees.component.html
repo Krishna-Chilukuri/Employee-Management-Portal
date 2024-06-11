@@ -1,1 +1,21 @@
 <p>view-all-employees works!</p>
+<div class="viewAllEmpDiv">
+    <table>
+        <tbody>
+            <tr>
+                <th>Employee Id</th>
+                <th>Employee Name</th>
+                <th>Employee Rank</th>
+                <th>Reports To</th>
+                <th>Reportees</th>
+            </tr>
+            <tr *ngFor="let emp of data">
+                <td>{{emp.employee.employeeId}}</td>
+                <td>{{emp.employee.employeeName}}</td>
+                <td>{{emp.employee.employeeRank}}</td>
+                <td>{{emp.employee.reportsTo}}</td>
+                <td>{{emp.reportees}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

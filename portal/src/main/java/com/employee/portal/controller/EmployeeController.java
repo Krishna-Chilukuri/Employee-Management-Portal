@@ -330,8 +330,16 @@ public class EmployeeController {
     }
 
     @RequestMapping("/getAllEmployees")
-    public List<Employee> getAllEmployees() {
-        return employeeServiceImpl.getAllEmployees();
+    List<viewableEmployee> getAllEmployees() {
+        List<viewableEmployee> retList = new ArrayList<>();
+        List<Employee> allEmps = employeeServiceImpl.getAllEmployees();
+        for (Employee emp: allEmps) {
+            viewableEmployee employee = new viewableEmployee();
+            employee.setEmployee(emp);
+            employee.setReportees(reporteeServiceImplementation.getReporteesById(emp.getEmployeeId()));
+            retList.add(employee);
+        }
+        return retList;
     }
 
     boolean isRankPossible(long employeeRank) {

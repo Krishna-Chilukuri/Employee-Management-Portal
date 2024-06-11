@@ -8,10 +8,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/empPortalLogs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/portal/empPortalLogs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/controller/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/controller/EmployeeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/repository/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/repository/EmployeeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/EmployeeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/implementation/EmployeeServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/portal/src/main/java/com/employee/portal/service/implementation/EmployeeServiceImplementation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal_ui/src/app/hierarchies/hierarchies.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/portal_ui/src/app/hierarchies/hierarchies.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal_ui/src/app/view-all-employees/view-all-employees.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal_ui/src/app/view-all-employees/view-all-employees.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal_ui/src/app/view-all-employees/view-all-employees.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/portal_ui/src/app/view-all-employees/view-all-employees.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
