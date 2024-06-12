@@ -10,4 +10,6 @@ public interface LoginService {
     Login saveLogin(Login log);
     void removeLogin(String username);
     void updatePrivilege(String username, String privilege);
+
+    List<Login> getAdminOwners();
 }

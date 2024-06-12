@@ -3,6 +3,7 @@ package com.employee.portal.controller;
 import com.employee.portal.factory.Logger;
 import com.employee.portal.model.Login;
 import com.employee.portal.model.LoginSuccess;
+import com.employee.portal.model.viewableUser;
 import com.employee.portal.service.implementation.LoginServiceImplementation;
 import com.employee.portal.service.implementation.LoginSuccessImplementation;
 import jakarta.servlet.http.Cookie;
@@ -17,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -127,6 +129,23 @@ public class LoginController {
         }
         lg.log("User " + username + " is removed");
         loginServiceImplementation.removeLogin(username);
+    }
+
+    @RequestMapping("/viewAdminOwner")
+    List<viewableUser> viewAdminOwner() throws IOException {
+        Logger lg = Logger.getInstance();
+        lg.log("in viewAdminOwner");
+        List<viewableUser> retList = new ArrayList<>();
+        for (Login log: loginServiceImplementation.getAdminOwners()) {
+            viewableUser user = new viewableUser(log);
+//            lg.log("Returing : " + user );
+            retList.add(user);
+        }
+//        lg.log("RETURN OF ADMIN OWNER :  " + loginServiceImplementation.getAdminOwners());
+        return retList;
+//        for (Login log: loginServiceImplementation.getAdminOwners()) {
+//
+//        }
     }
 
 

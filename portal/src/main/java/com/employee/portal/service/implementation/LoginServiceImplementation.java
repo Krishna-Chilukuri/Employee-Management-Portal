@@ -42,5 +42,11 @@ public class LoginServiceImplementation implements LoginService {
         loginRepository.updatePrivilegeUsingId(privilege, username);
     }
 
+    @Override
+    public List<Login> getAdminOwners() {
+//        return loginRepository.
+        return loginRepository.getAdminOwner();
+    }
+
 
 }

@@ -4,7 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.stereotype.Component;
 
+@Component
 @Entity
 @Table(name="login")
 public class Login {

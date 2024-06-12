@@ -1,0 +1,15 @@
+<p>view-admin-owner works!</p>
+<div class="viewAdminOwnerDiv">
+    <table>
+        <tbody>
+            <tr>
+                <th>User Name</th>
+                <th>Privilege</th>
+            </tr>
+            <tr *ngFor="let user of data">
+                <td>{{user.username}}</td>
+                <td>{{user.privilege}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

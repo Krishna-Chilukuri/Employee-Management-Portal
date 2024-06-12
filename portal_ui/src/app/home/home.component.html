@@ -1,13 +1,13 @@
 <p>home works!</p>
 <div class="homePage">
 <div class="buttonGrid">
-    <div class="buttonItem">
+    <div *ngIf="privUser || admin || owner" class="buttonItem">
         <a class="button" routerLink="/addEmployee">
             Add Employee
             <!-- <button type="button">Click</button> -->
         </a>
     </div>
-    <div class="buttonItem">
+    <div *ngIf="privUser || admin || owner" class="buttonItem">
         <a routerLink="/removeEmployee">Remove Employee</a>
     </div>
     <div class="buttonItem">
@@ -16,25 +16,28 @@
     <div class="buttonItem">
         <a routerLink="/viewEmployee">View Employee</a>
     </div>
-    <div class="buttonItem">
+    <div *ngIf="privUser || admin || owner" class="buttonItem">
         <a routerLink="/promoteEmployee">Promote Employee</a>
     </div>
-    <div class="buttonItem">
+    <div *ngIf="privUser || admin || owner" class="buttonItem">
         <a routerLink="/demoteEmployee">Demote Employee</a>
     </div>
     <div class="buttonItem">
         <a routerLink="/hierarchies">View Hierarchies</a>
     </div>
-    <div class="buttonItem">
+    <div *ngIf="admin || owner" class="buttonItem">
+        <a routerLink="/viewAdminOwner">View Admins & Owners</a>
+    </div>
+    <div *ngIf="owner" class="buttonItem">
         <a routerLink="/promoteToOwner">Promote to Owner</a>
     </div>
-    <div class="buttonItem">
+    <div *ngIf="owner" class="buttonItem">
         <a routerLink="/promoteToAdmin">Promote to Admin</a>
     </div>
-    <div class="buttonItem">
+    <div *ngIf="owner" class="buttonItem">
         <a routerLink="/demoteOwner">Demote Owner</a>
     </div>
-    <div class="buttonItem">
+    <div *ngIf="owner" class="buttonItem">
         <a routerLink="/removeAdminOwner">Remove Admin/Owner</a>
     </div>
 </div>

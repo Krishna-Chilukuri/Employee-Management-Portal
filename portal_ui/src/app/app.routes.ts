@@ -12,6 +12,7 @@ import { PromoteToOwnerComponent } from './promote-to-owner/promote-to-owner.com
 import { PromoteToAdminComponent } from './promote-to-admin/promote-to-admin.component';
 import { DemoteOwnerComponent } from './demote-owner/demote-owner.component';
 import { RemoveAdminOwnerComponent } from './remove-admin-owner/remove-admin-owner.component';
+import { ViewAdminOwnerComponent } from './view-admin-owner/view-admin-owner.component';
 
 export const routes: Routes = [
     {
@@ -78,5 +79,10 @@ export const routes: Routes = [
         path: 'removeAdminOwner',
         component: RemoveAdminOwnerComponent,
         title: "Remove Admin/Owner",
+    },
+    {
+        path: 'viewAdminOwner',
+        component: ViewAdminOwnerComponent,
+        title: "View Admin & Owner",
     }
 ];
