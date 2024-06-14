@@ -15,7 +15,7 @@ export class PromoteEmployeeComponent {
     console.log("Promote Request for " + this.empId + " " + this.numProms);
     if (this.empId > 0 && this.numProms > 0) {
       console.log("Valid Promotion request");
-      fetch("http://localhost:8080/api/employees/promote?empId="+this.empId+"&numProms="+this.numProms, {
+      fetch("http://localhost:8080/api/employees/promote?empId="+this.empId+"&numProms="+this.numProms+"&sessionId="+localStorage.getItem("sessionId"), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

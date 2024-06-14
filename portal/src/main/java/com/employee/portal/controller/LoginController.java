@@ -2,23 +2,19 @@ package com.employee.portal.controller;
 
 import com.employee.portal.factory.Logger;
 import com.employee.portal.model.Login;
-import com.employee.portal.model.LoginSuccess;
+import com.employee.portal.model.Session;
 import com.employee.portal.model.viewableUser;
 import com.employee.portal.service.implementation.LoginServiceImplementation;
-import com.employee.portal.service.implementation.LoginSuccessImplementation;
+import com.employee.portal.service.implementation.SessionServiceImplementation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.apache.coyote.Response;
-import org.apache.juli.logging.Log;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,11 +23,11 @@ import java.util.Objects;
 @RequestMapping("/api/login")
 public class LoginController {
     private final LoginServiceImplementation loginServiceImplementation;
-    private final LoginSuccessImplementation loginSuccessImplementation;
+    private final SessionServiceImplementation sessionServiceImplementation;
 
-    public LoginController(LoginServiceImplementation loginServiceImplementation, LoginSuccessImplementation loginSuccessImplementation) {
+    public LoginController(LoginServiceImplementation loginServiceImplementation, SessionServiceImplementation sessionServiceImplementation) {
         this.loginServiceImplementation = loginServiceImplementation;
-        this.loginSuccessImplementation = loginSuccessImplementation;
+        this.sessionServiceImplementation = sessionServiceImplementation;
     }
 
 //    @RequestMapping("/findId")
@@ -47,10 +43,10 @@ public class LoginController {
 
 
     @GetMapping(value = "/getId", produces = "application/json")
-    public LoginSuccess getLogin(@RequestParam(name = "id") String username, @RequestParam(name = "password") String password) throws IOException {
+    public Session getLogin(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, HttpServletRequest request) throws IOException {
         Login login = loginServiceImplementation.getLoginById(username);
         if (login.getUsername() == null) {
-            return new LoginSuccess();
+            return new Session();
         }
         Logger lg = Logger.getInstance();
         lg.log("Login Attempted");
@@ -60,24 +56,62 @@ public class LoginController {
 //            Cookie ck = new Cookie("sessionId", "kp");
 //            response.addCookie(ck);
 
-            LoginSuccess ls = new LoginSuccess();
+            Session sessionRecord = new Session();
 
-            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpServletRequest request = servletRequestAttributes.getRequest();
+//            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+//            HttpServletRequest request = servletRequestAttributes.getRequest();
             HttpSession session = request.getSession();
             String sessionId = session.getId();
-            ls.setUsername(username);
-            ls.setSessionId(sessionId);
-            loginSuccessImplementation.saveLoginSuccess(ls);
+            String clientIp = request.getRemoteAddr();
+            sessionRecord.setSessionId(sessionId);
+            sessionRecord.setIpAddress(clientIp);
+            sessionRecord.setUsername(login.getUsername());
+            sessionRecord.setPrivilege(login.getPrivilege());
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MINUTE, 15);
+            Timestamp expiryTs = new Timestamp(calendar.getTimeInMillis());
+            sessionRecord.setExpiry(expiryTs);
 
-            lg.log(username + " login successful!");
-            return ls;
+            sessionServiceImplementation.saveSession(sessionRecord);
+
+
+            lg.log(username + " login successful! session Record : " + sessionRecord);
+
+            return sessionRecord;
 //            return Response.ok().entity(    )
         }
         else {
             lg.log("Login Failed");
-            return new LoginSuccess();
+            return new Session();
         }
+    }
+
+    @RequestMapping("/checkSession")
+    public Session checkSession(@RequestParam(name = "sessionId") String sessionId, HttpServletRequest request) throws IOException {
+        Logger lg = Logger.getInstance();
+        lg.log("Checking Session upon page load: " + sessionId);
+        Session currSession = sessionServiceImplementation.getSessionById(sessionId);
+        lg.log("Session: " + currSession);
+        Calendar calendar = Calendar.getInstance();
+        Timestamp currTs = new Timestamp(calendar.getTimeInMillis());
+        HttpSession session = request.getSession();
+        String currIp = request.getRemoteAddr();
+        if (currSession.getSessionId() == null) {
+            //No session
+            lg.log("Session not Found");
+            return new Session();//empty priv and sessionId
+        }
+        else if(currTs.after(currSession.getExpiry())) {
+            lg.log("Session Expired");
+            sessionServiceImplementation.deleteSessionById(sessionId);
+            return new Session();
+        }
+        else if(!currSession.getIpAddress().equals(currIp)) {
+            lg.log("Mismatch IP");
+            sessionServiceImplementation.deleteSessionById(sessionId);
+            return new Session();
+        }
+        return currSession;
     }
 
     @RequestMapping("/promoteToOwner")
@@ -152,5 +186,26 @@ public class LoginController {
     @RequestMapping("/getAll")
     public List<Login> getAllLogins() {
         return loginServiceImplementation.loginRepository.findAll();
+    }
+}
+
+class LoginReturn {
+    private String privilege;
+    private String sessionId;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege;
     }
 }

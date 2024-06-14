@@ -20,7 +20,7 @@ export class RemoveEmployeeComponent {
 
   async removeEmployee() {
     console.log(this.employeeId);
-    fetch("http://localhost:8080/api/employees/delete?empId="+this.employeeId, {
+    fetch("http://localhost:8080/api/employees/delete?empId="+this.employeeId+"&sessionId="+localStorage.getItem("sessionId"), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

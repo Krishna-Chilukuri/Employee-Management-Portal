@@ -4,11 +4,13 @@ import com.employee.portal.factory.Logger;
 import com.employee.portal.model.Employee;
 import com.employee.portal.model.Login;
 import com.employee.portal.model.Reportee;
+import com.employee.portal.model.Session;
 import com.employee.portal.service.EmployeeService;
 import com.employee.portal.service.implementation.EmployeeServiceImplementation;
 import com.employee.portal.service.implementation.LoginServiceImplementation;
 
 import com.employee.portal.service.implementation.ReporteeServiceImplementation;
+import com.employee.portal.service.implementation.SessionServiceImplementation;
 import jakarta.persistence.GeneratedValue;
 import org.apache.juli.logging.Log;
 import org.springframework.http.HttpStatus;
@@ -25,17 +27,36 @@ public class EmployeeController {
     private final EmployeeServiceImplementation employeeServiceImpl;
     private final LoginServiceImplementation loginServiceImplementation;
     private final ReporteeServiceImplementation reporteeServiceImplementation;
-    public EmployeeController(EmployeeServiceImplementation employeeServiceImpl, LoginServiceImplementation loginServiceImplementation, ReporteeServiceImplementation reporteeServiceImplementation) {
+    private final SessionServiceImplementation sessionServiceImplementation;
+    public EmployeeController(EmployeeServiceImplementation employeeServiceImpl, LoginServiceImplementation loginServiceImplementation, ReporteeServiceImplementation reporteeServiceImplementation, SessionServiceImplementation sessionServiceImplementation) {
         super();
         this.employeeServiceImpl = employeeServiceImpl;
         this.loginServiceImplementation = loginServiceImplementation;
         this.reporteeServiceImplementation = reporteeServiceImplementation;
+        this.sessionServiceImplementation = sessionServiceImplementation;
+    }
+
+    boolean checkPrivilege(String sessionId, long newRank) {
+        Session currSession = sessionServiceImplementation.getSessionById(sessionId);
+        if (currSession.getUsername() == null) {
+            return false;
+        }
+        else if (currSession.getPrivilege().equals("owner") || currSession.getPrivilege().equals("admin")) {
+            return true;
+        }
+        else if (currSession.getPrivilege().equals("guest")) {
+            return false;
+        }
+        //priv_user
+        long reqId = employeeServiceImpl.getEmployeeById(Long.parseLong(currSession.getUsername())).getEmployeeRank();
+        return reqId < newRank;
     }
 
     @RequestMapping("/save")
-    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) throws IOException {
+    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee, @RequestParam(name = "sessionId") String sessionId) throws IOException {
         Logger lg = Logger.getInstance();
-        lg.log("Emp received: " + employee);
+        lg.log("Emp received: " + employee + "req session ID : " + sessionId);
+        if (!checkPrivilege(sessionId, employee.getEmployeeRank())) return new ResponseEntity<Employee>(new Employee(), HttpStatus.NOT_FOUND);
         if (!isRankPossible(employee.getEmployeeRank())) {
             lg.log("RANK MAX CAP REACHED");
             return new ResponseEntity<Employee>(new Employee(), HttpStatus.CONFLICT);
@@ -53,7 +74,14 @@ public class EmployeeController {
     }
 
     @RequestMapping("/delete")
-    public void deleteEmployee(@RequestParam(name = "empId") long empId) throws IOException {
+    public void deleteEmployee(@RequestParam(name = "empId") long empId, @RequestParam String sessionId) throws IOException {
+        Logger lg = Logger.getInstance();
+        lg.log("IN Overloaded delete");
+        if (!checkPrivilege(sessionId, employeeServiceImpl.getEmployeeById(empId).getEmployeeRank())) return;
+        else deleteEmployee(empId);
+    }
+
+    public void deleteEmployee(long empId) throws IOException {
         Logger lg = Logger.getInstance();
         lg.log("Delete Request received for " + empId);
         lg.log("HERE : " + employeeServiceImpl.getEmployeeById(empId));
@@ -68,6 +96,7 @@ public class EmployeeController {
         lg.log("Employee deleted");
 
         loginServiceImplementation.removeLogin(String.valueOf(empId));
+        sessionServiceImplementation.deleteSessionByUsername(String.valueOf(empId));
         }
         catch (Exception e) {
             lg.log("CAUGHT : " + e);
@@ -76,9 +105,10 @@ public class EmployeeController {
     }
 
     @RequestMapping("/promote")
-    public ResponseEntity<String> promoteEmployee(@RequestParam(name = "empId") long empId, @RequestParam(name = "numProms") long numProms) throws IOException {
+    public ResponseEntity<String> promoteEmployee(@RequestParam(name = "empId") long empId, @RequestParam(name = "numProms") long numProms, @RequestParam(name = "sessionId") String sessionId) throws IOException {
         Logger lg = Logger.getInstance();
         lg.log("Promote Request received for :" + empId + " for " + numProms +" promotions");
+//        lg.log("Promote HERE" + (empId - numProms) + "->" + employeeServiceImpl.getEmployeeById(Long.parseLong(sessionServiceImplementation.getSessionById(sessionId).getUsername())));
         Employee employee = employeeServiceImpl.getEmployeeById(empId);
         if (employee.getEmployeeName() == null) {
             lg.log("Employee is not present to promote");
@@ -88,12 +118,13 @@ public class EmployeeController {
             lg.log("These number of promotions is not possible");
             return new ResponseEntity<>("These number of promotions is not possible", HttpStatus.BAD_REQUEST);
         }
+        if (!checkPrivilege(sessionId, (employeeServiceImpl.getEmployeeById(empId).getEmployeeRank() - numProms))) return new ResponseEntity<String>("You are not eligible for such a promotion", HttpStatus.FORBIDDEN);
         promoteProcess(employee, numProms);//Take return and send response based on it. RAnk max cap  or promotion from 1
         return new ResponseEntity<String>("Promotion Done", HttpStatus.OK);
     }
 
     @RequestMapping("/demote")
-    public ResponseEntity<String> demoteEmployee(@RequestParam(name = "empId") long empId, @RequestParam(name = "numDems") long numDems) throws IOException {
+    public ResponseEntity<String> demoteEmployee(@RequestParam(name = "empId") long empId, @RequestParam(name = "numDems") long numDems, @RequestParam(name = "sessionId") String sessionId) throws IOException {
         Logger lg = Logger.getInstance();
         lg.log("Demote Request received for :" + empId + " for " + numDems + " demotions");
         Employee employee = employeeServiceImpl.getEmployeeById(empId);
@@ -101,6 +132,7 @@ public class EmployeeController {
             lg.log("Employee is not present to demote");
             return new ResponseEntity<String>("Employee not Found", HttpStatus.NOT_FOUND);
         }
+        if (!checkPrivilege(sessionId, employeeServiceImpl.getEmployeeById(empId).getEmployeeRank())) return new ResponseEntity<String>("You can't demote this employee", HttpStatus.FORBIDDEN);
         demoteProcess(employee, numDems);
         return new ResponseEntity<String>("Demotion Done", HttpStatus.OK);
     }

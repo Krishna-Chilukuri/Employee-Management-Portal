@@ -1,8 +1,11 @@
 package com.employee.portal.service;
 
-import com.employee.portal.model.LoginSuccess;
+import com.employee.portal.model.Session;
 
-public interface LoginSuccessService {
-    LoginSuccess getLoginSuccessById(String sessionId);
-    LoginSuccess saveLoginSuccess(LoginSuccess logSS);
+public interface SessionService {
+    Session getSessionById(String sessionId);
+    Session saveSession(Session logSS);
+    void deleteSessionById(String sessionId);
+    void deleteSessionByUsername(String username);
+    void updatePrivilege(String username, String privilege);
 }

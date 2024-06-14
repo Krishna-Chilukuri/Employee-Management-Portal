@@ -16,7 +16,7 @@ export class DemoteEmployeeComponent {
     console.log("Demote Request for " + this.empId + " " + this.numDems);
     if (this.empId > 0 && this.numDems > 0) {
       console.log("Valid Demotion request");
-      fetch("http://localhost:8080/api/employees/demote?empId="+this.empId+"&numDems="+this.numDems, {
+      fetch("http://localhost:8080/api/employees/demote?empId="+this.empId+"&numDems="+this.numDems+"&sessionId="+localStorage.getItem("sessionId"), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

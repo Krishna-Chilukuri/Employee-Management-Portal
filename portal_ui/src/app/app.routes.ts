@@ -13,6 +13,7 @@ import { PromoteToAdminComponent } from './promote-to-admin/promote-to-admin.com
 import { DemoteOwnerComponent } from './demote-owner/demote-owner.component';
 import { RemoveAdminOwnerComponent } from './remove-admin-owner/remove-admin-owner.component';
 import { ViewAdminOwnerComponent } from './view-admin-owner/view-admin-owner.component';
+import { RouteGuardService, canAdminNavigate, canNavigate, canOwnerNavigate, canPrivNavigate } from './route-guard.service';
 
 export const routes: Routes = [
     {
@@ -24,16 +25,19 @@ export const routes: Routes = [
         path: 'home-component',
         component: HomeComponent,
         title: "Home Page",
+        canActivate: [canNavigate],
     },
     {
         path: 'addEmployee',
         component: AddEmployeeComponent,
         title: "Add Employee",
+        canActivate: [canPrivNavigate],
     },
     {
         path: 'removeEmployee',
         component: RemoveEmployeeComponent,
         title: "Remove Employee",
+        canActivate: [canPrivNavigate],
     },
     {
         path: 'viewAllEmployee',
@@ -49,11 +53,13 @@ export const routes: Routes = [
         path: 'promoteEmployee',
         component: PromoteEmployeeComponent,
         title: "Promote Employee",
+        canActivate: [canPrivNavigate],
     },
     {
         path: 'demoteEmployee',
         component: DemoteEmployeeComponent,
         title: "Demote Employee",
+        canActivate: [canPrivNavigate],
     },
     {
         path: 'hierarchies',
@@ -64,25 +70,30 @@ export const routes: Routes = [
         path: 'promoteToOwner',
         component: PromoteToOwnerComponent,
         title: "Promote To Owner",
+        canActivate: [canOwnerNavigate],
     },
     {
         path: 'promoteToAdmin',
         component: PromoteToAdminComponent,
         title: "Promote To Admin",
+        canActivate: [canOwnerNavigate],
     },
     {
         path: 'demoteOwner',
         component: DemoteOwnerComponent,
         title: "Demote To Owner",
+        canActivate: [canOwnerNavigate],
     },
     {
         path: 'removeAdminOwner',
         component: RemoveAdminOwnerComponent,
         title: "Remove Admin/Owner",
+        canActivate: [canOwnerNavigate],
     },
     {
         path: 'viewAdminOwner',
         component: ViewAdminOwnerComponent,
         title: "View Admin & Owner",
+        canActivate: [canAdminNavigate],
     }
 ];
