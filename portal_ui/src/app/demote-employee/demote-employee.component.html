@@ -1,10 +1,11 @@
-<p>demote-employee works!</p>
-<div class="demoteEmpDiv">
-    <form id="promote-emp-form" class="promoteEmpForm" (ngSubmit)="demoteEmployee()">
-        <label for="empId">Enter Employee ID</label>
-        <input type="number" name="empId" id="empId" [(ngModel)]="this.empId">
-        <label for="numProms">Enter number of Demotions</label>
-        <input type="number" name="numProms" id="numProms" [(ngModel)]="this.numDems">
-        <input type="submit" value="Demote Employee">
+<div class="midCommonDiv">
+    <form id="promote-emp-form" class="promoteEmpForm" (ngSubmit)="demoteEmployee()" ngNativeValidate>
+        <div class="inputEle">
+            <input type="number" name="empId" id="empId" [(ngModel)]="this.empId" placeholder="Employee Id" required>
+        </div>
+        <div class="inputEle">
+            <input type="number" name="numProms" id="numProms" [(ngModel)]="this.numDems" placeholder="Number of Demotions" required>
+        </div>
+        <input class="submitButton" type="submit" value="Demote Employee">
     </form>
 </div>

@@ -9,28 +9,26 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './demote-employee.component.scss'
 })
 export class DemoteEmployeeComponent {
-  empId: number = 0;
-  numDems: number = 0;
+  empId?: number;
+  numDems?: number;
 
   demoteEmployee() {
     console.log("Demote Request for " + this.empId + " " + this.numDems);
-    if (this.empId > 0 && this.numDems > 0) {
-      console.log("Valid Demotion request");
-      fetch("http://localhost:8080/api/employees/demote?empId="+this.empId+"&numDems="+this.numDems+"&sessionId="+localStorage.getItem("sessionId"), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then ((response) => {
+    console.log("Valid Demotion request");
+    fetch("http://localhost:8080/api/employees/demote?empId=" + this.empId + "&numDems=" + this.numDems + "&sessionId=" + localStorage.getItem("sessionId"), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
         if (!response.ok) {
-          throw new Error ("Demotion not possible");
+          throw new Error("Demotion not possible");
         }
         console.log("Demotion Completed");
       })
-      .catch ((error) => {
+      .catch((error) => {
         console.log("Error in Demote: " + error);
       });
-    }
   }
 }

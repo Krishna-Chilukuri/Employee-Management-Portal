@@ -13,7 +13,7 @@ import { AuthenticationServiceService } from '../authentication-service.service'
   styleUrl: './remove-admin-owner.component.scss'
 })
 export class RemoveAdminOwnerComponent {
-  username: string = '';
+  username?: string;
 
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
@@ -25,9 +25,11 @@ export class RemoveAdminOwnerComponent {
     fetch("http://localhost:8080/api/login/removeAdminOwner?username="+this.username)
     .then ((response) => {
       console.log(response);
+      window.location.reload();
     })
     .catch ((error) => {
       console.log("Error in Remove Admin / Owner : " + error);
+      window.location.reload();
     })
   }
 

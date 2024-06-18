@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './demote-owner.component.scss'
 })
 export class DemoteOwnerComponent {
-  ownerId: string = '';
+  ownerId?: string;
 
   demoteOwner() {
     console.log(this.ownerId);
@@ -17,9 +17,11 @@ export class DemoteOwnerComponent {
     fetch("http://localhost:8080/api/login/demoteOwner?ownerId="+this.ownerId)
     .then ((response) => {
       console.log(response);
+      window.location.reload();
     })
     .catch ((error) => {
       console.log("Error in Demote Owner : " + error);
+      window.location.reload();
     })
   }
 

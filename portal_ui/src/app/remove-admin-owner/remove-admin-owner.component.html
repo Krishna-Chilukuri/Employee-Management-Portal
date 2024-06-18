@@ -1,8 +1,8 @@
-<p>remove-admin-owner works!</p>
-<div class="removeAdminOwner">
-    <form id="rem-adm-own" class="remAdmOwnForm" (ngSubmit)="removeAdminOwner()">
-        <label for="username">Enter User Name to remove Admin / Owner</label>
-        <input type="text" name="username" id="username" [(ngModel)]="username">
-        <input type="submit" value="Remove">
+<div class="midCommonDiv">
+    <form id="rem-adm-own" class="remAdmOwnForm" (ngSubmit)="removeAdminOwner()" ngNativeValidate>
+        <div class="inputEle">
+            <input type="text" name="username" id="username" [(ngModel)]="username" placeholder="Enter Admin/Owner Username" required>
+        </div>
+        <input class="submitButton" type="submit" value="Remove">
     </form>
 </div>

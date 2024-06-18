@@ -11,11 +11,11 @@ import { FormsModule } from '@angular/forms';
 export class RemoveEmployeeComponent {
   // employee: Employee;
   jsonString: string;
-  employeeId: number;
+  employeeId?: number;
   constructor() {
     // this.employee = new Employee();
     this.jsonString = '';
-    this.employeeId = 0;
+    // this.employeeId = 0;
   }
 
   async removeEmployee() {
@@ -31,6 +31,7 @@ export class RemoveEmployeeComponent {
         throw new Error('Employee is not available');
       }
       console.log("Employee Removed");
+      window.location.reload();
     })
     .catch ((error) => {
       console.log("ERROR IN REMOVE EMP : " + error);

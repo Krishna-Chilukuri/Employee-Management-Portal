@@ -12,7 +12,7 @@ import { AuthenticationServiceService } from '../authentication-service.service'
   styleUrl: './promote-to-owner.component.scss'
 })
 export class PromoteToOwnerComponent {
-  adminId: string = '';
+  adminId?: string;
 
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
@@ -23,6 +23,7 @@ export class PromoteToOwnerComponent {
     fetch("http://localhost:8080/api/login/promoteToOwner?adminId="+this.adminId)
     .then ((response) => {
       console.log(response);
+      window.location.reload();
     })
     .catch ((error) => {
       console.log("Error in Promote to Owner : " + error);

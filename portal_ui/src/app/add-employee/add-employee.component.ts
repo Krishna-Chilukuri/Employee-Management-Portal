@@ -33,6 +33,8 @@ export class AddEmployeeComponent {
       var emp = Object.assign(new Employee(), data);
       console.log("RET VAL: " + emp);
       console.log(emp);
+      alert("Employee Insertion Done");
+      window.location.reload();
     })
     .catch ((error) => {
       console.log("ERROR IN ADD EMP : " + error);
@@ -42,7 +44,7 @@ export class AddEmployeeComponent {
 
 
 class Employee {
-  employeeName: string = '';
-  employeeRank: number = 0;
+  employeeName?: string;
+  employeeRank?: number;
   reportsTo: number = 0;
 }

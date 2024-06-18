@@ -1,0 +1,39 @@
+.radioGrid {
+    margin: 2% 27%;
+    display: flex;
+    grid-template-columns: auto;
+    // background-color: red;
+    justify-content: space-around;
+}
+
+#upper, #lower, #kStep {
+    accent-color: black;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 18px;
+    // background-color: red;
+    // border: none;
+    // display: grid;
+    // grid-template-columns: auto;
+    // justify-content: start;
+    // align-items: baseline;
+    // justify-content: start;
+    // align-items: start;
+}
+
+.tableCustom {
+    min-height: 10%;
+}
+
+tr {
+    height: 10px;
+}
+
+td, th{
+    border: 1px solid white;
+    // padding: auto;
+    text-align: center;
+}

@@ -13,7 +13,7 @@ import { AuthenticationServiceService } from '../authentication-service.service'
   styleUrl: './promote-to-admin.component.scss'
 })
 export class PromoteToAdminComponent {
-  empId: number = 0;
+  empId?: number;
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
   }
