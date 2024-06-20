@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AppComponent } from '../app.component';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-promote-employee',
@@ -11,6 +13,12 @@ import { FormsModule } from '@angular/forms';
 export class PromoteEmployeeComponent {
   empId?: number;
   numProms?: number;
+
+  constructor(private headerComp: AppComponent) {
+    this.headerComp.setUsername();
+  }
+
+
   promoteEmployee() {
     console.log("Promote Request for " + this.empId + " " + this.numProms);
     console.log("Valid Promotion request");

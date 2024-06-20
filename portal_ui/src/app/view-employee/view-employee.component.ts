@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
+import { AuthenticationServiceService } from '../authentication-service.service';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-view-employee',
@@ -19,11 +23,14 @@ export class ViewEmployeeComponent {
   jsonString: string;
   data: object;
   empReceived: boolean = false;
-  constructor() {
     // this.employeeId = 0;
+  constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
+    this.headerComp.setUsername();
+    this.headerComp.getUsername();
     this.jsonString = '';
     this.data = new Object();
   }
+  
 
   async viewEmployee() {
     console.log("Viewing : " + this.employeeId);

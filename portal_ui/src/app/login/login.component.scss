@@ -1,7 +1,7 @@
 .loginContainer {
     margin: 10% 25%;
     width: 50%;
-    height: 50%;
+    // min-height: 50%;
     display: flex;
     // justify-content: center;
     text-align: center;
@@ -26,7 +26,7 @@
             padding: 20px;
             background: transparent;
             outline: none;
-            border: 2px solid rgba(0, 0, 0, .5);
+            border: 2px solid rgba(255, 255, 255, .5);
             border-radius: 30px;
         }
 
@@ -52,12 +52,17 @@
         // height: 100%;
         font-weight: 500;
         background: transparent;
-        border: 2px solid rgba(0, 0, 0, .5);
+        border: 2px solid rgba(255, 255, 255, .5);
         border-radius: 30px;
         cursor: pointer;
         text-align: center;
         font-size: large;
         // line-height: 50px;
         // background-color: green;
+    }
+
+    .submitButton:hover {
+        color: var(--dark-button-highlight-text);
+        background-color: var(--dark-button-highlight-color);
     }
 }

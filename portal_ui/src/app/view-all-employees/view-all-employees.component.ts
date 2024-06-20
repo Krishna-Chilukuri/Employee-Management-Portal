@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
+import { AuthenticationServiceService } from '../authentication-service.service';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-view-all-employees',
@@ -11,7 +15,10 @@ import { Component } from '@angular/core';
 export class ViewAllEmployeesComponent {
   data: any = [];
 
-  constructor() {  fetch("http://localhost:8080/api/employees/getAllEmployees")
+  
+  constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
+    this.headerComp.setUsername();
+    fetch("http://localhost:8080/api/employees/getAllEmployees")
     .then ((response) => response.json())
     .then ((res) => {
       console.log(res);
@@ -21,4 +28,5 @@ export class ViewAllEmployeesComponent {
       console.log("Error in get all Employees : " + error);
     })
   }
+  
 }

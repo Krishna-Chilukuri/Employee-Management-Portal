@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AppComponent } from '../app.component';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-demote-employee',
@@ -11,6 +13,10 @@ import { FormsModule } from '@angular/forms';
 export class DemoteEmployeeComponent {
   empId?: number;
   numDems?: number;
+
+  constructor(private headerComp: AppComponent) {
+    this.headerComp.setUsername();
+  }
 
   demoteEmployee() {
     console.log("Demote Request for " + this.empId + " " + this.numDems);

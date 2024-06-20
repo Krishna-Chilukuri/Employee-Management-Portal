@@ -54,4 +54,7 @@ public class LoginServiceImplementation implements LoginService {
     }
 
 
+    public void updatePassword(String username, String password) {
+        loginRepository.updatePasswordById(username, password);
+    }
 }

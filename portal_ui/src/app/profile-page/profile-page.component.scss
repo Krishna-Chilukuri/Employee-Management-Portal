@@ -1,0 +1,27 @@
+h1 {
+    color: var(--text-color);
+}
+
+.userDetails{
+    margin: 0 25%;
+    display: grid;
+    grid-template-columns: auto auto;
+    // background-color: red;
+    // border: 2px solid black;
+    // justify-content: left;
+    // font-size: large;
+    font-size: larger;
+}
+
+// .empDetails :nth-child(odd) {
+//     justify-self: right;
+// }
+
+.userDetails :nth-child(even) {
+    justify-self: left;
+}
+
+// .customSubmitPassword {
+//     background-color: red;
+//     // width: 50%;
+// }

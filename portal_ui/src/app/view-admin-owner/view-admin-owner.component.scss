@@ -20,8 +20,12 @@ tr {
     height: 10px;
 }
 
+tr:hover {
+    background-color: var(--table-highlight-row);
+}
+
 td, th{
-    border: 1px solid white;
+    // border: 1px solid var(--text-color);
     // padding: auto;
     text-align: center;
 }

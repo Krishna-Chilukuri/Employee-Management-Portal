@@ -1,13 +1,13 @@
 <div class="midCommonDiv">
     <form id="add-emp-form" class="addEmpForm" (ngSubmit)="addEmployee()" ngNativeValidate>
         <div class="inputEle">
-            <input type="text" name="empName" id="empName" [(ngModel)] = "employee.employeeName" placeholder="Enter Employee Name">
+            <input type="text" name="empName" id="empName" [(ngModel)] = "employee.employeeName" placeholder="Enter Employee Name" required>
         </div>
         <div class="inputEle">
-            <input type="number" name="empRank" id="empRank" [(ngModel)] = "employee.employeeRank" placeholder="Enter Employee Rank">
+            <input type="number" name="empRank" id="empRank" [(ngModel)] = "employee.employeeRank" placeholder="Enter Employee Rank" required>
         </div>
         <!-- <label for="empRank">Enter Employee Rank : </label> -->
         <input class="submitButton" type="submit" value="Add Employee">
     </form>
-    <div class="resultDiv" id="resultOfAdding"></div>
+    <div class="midCommonDiv" id="resultOfAdding" *ngIf="resultSection != ''">{{resultSection}}</div>
 </div>

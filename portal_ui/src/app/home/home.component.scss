@@ -3,7 +3,7 @@
     width: 50%;
     // height: 50vh;
     // background-color: red;
-    border: 1px solid rgba(0, 0, 0, .5);
+    border: 1px solid rgba(255, 255, 255, .5);
 }
 
 .buttonGrid {
@@ -11,7 +11,6 @@
     display: grid;
     grid-template-columns: auto auto;
     backdrop-filter: blur(10px);
-
 }
 
 .buttonItem {
@@ -20,7 +19,7 @@
     background: transparent;
     // background-color: red;
     height: 36px;
-    border: 2px solid rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 30px;
     display: flex;
     justify-content: center;
@@ -31,6 +30,12 @@
         text-align: center;
         width: 100%;
         text-decoration: none;
-        color: black;
+        color: var(--text-color);
     }
+
+    transition: transform .5s ease;
+}
+
+.buttonItem:hover {
+    transform: scale(1.05);
 }

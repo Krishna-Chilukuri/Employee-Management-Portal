@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { response } from 'express';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-home',
@@ -17,39 +18,26 @@ export class HomeComponent {
   owner: boolean = false;
   admin: boolean = false;
   privUser: boolean = false;
-  constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
-    this.checkSession();
+  constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService, private sessionChecker: SessionCheckerService) {
+    this.sessionCheck();
+    // this.headerComp.getUsername();
+    // this.checkSession();
   }
-  async checkSession() {
-    if (typeof(localStorage) === 'undefined') {
-      this.router.navigate(['/']);
-    }
-    try {
-      const response = await fetch("http://localhost:8080/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
-      const data = await response.json();
-      console.log("DATA : " + JSON.stringify(data));
-      this.headerComp.username = data.username;
-      this.authService.userPriv = data.privilege;
-      switch (data.privilege) {
-        case "owner":
-          this.owner = true;
-          break;
-        case "admin":
-          this.admin = true;
-          break;
-        case "priv_user":
-          this.privUser = true;
-          break;
-        case "guest":
-          break;
-        default:
-          // Unknown user type
-          this.router.navigate(['/']);
-          break;
-      }
-    }
-    catch(error) {
-      console.log("Error in page load check : " + error);
+  async sessionCheck() {
+    let data = await this.sessionChecker.checkSession();
+    this.headerComp.username = data.username;
+    switch(data.privilege) {
+      case "owner":
+        this.owner = true;
+        break;
+      case "admin":
+        this.admin = true;
+        break;
+      case "priv_user":
+        this.privUser = true;
+        break;
+      // default:
+      //   this.router.navigate(['/']);
     }
   }
 }

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
+import { AuthenticationServiceService } from '../authentication-service.service';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-remove-employee',
@@ -12,11 +16,14 @@ export class RemoveEmployeeComponent {
   // employee: Employee;
   jsonString: string;
   employeeId?: number;
-  constructor() {
+  
+  constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
+    this.headerComp.setUsername();
+    this.jsonString = '';
     // this.employee = new Employee();
     this.jsonString = '';
-    // this.employeeId = 0;
   }
+  
 
   async removeEmployee() {
     console.log(this.employeeId);
@@ -31,7 +38,7 @@ export class RemoveEmployeeComponent {
         throw new Error('Employee is not available');
       }
       console.log("Employee Removed");
-      window.location.reload();
+      // window.location.reload();
     })
     .catch ((error) => {
       console.log("ERROR IN REMOVE EMP : " + error);

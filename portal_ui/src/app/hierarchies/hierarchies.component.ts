@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { error } from 'console';
 import { response } from 'express';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-hierarchies',
@@ -17,6 +18,12 @@ export class HierarchiesComponent {
   data: any = [];
   gotResult: boolean = false;
   choiceOfHie: string = '';
+
+  constructor(private headerComp: AppComponent) {
+    this.headerComp.setUsername();
+  }
+
+
   getHierarchy() {
     // console.log("Get Hierarchy Req FOR: " + this.empId);
     // console.log("Choice: " + this.choiceOfHie + typeof(this.choiceOfHie));
@@ -51,8 +58,10 @@ export class HierarchiesComponent {
           // },
         })
           .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
+          .then((dat) => {
+            this.data = dat;
+            if (dat.length == 0) this.gotResult = false;
+            console.log(dat);
           })
           .catch((error) => {
             console.log("Error in Lower Hierarchy :" + error);
@@ -64,8 +73,10 @@ export class HierarchiesComponent {
           method: 'GET',
         })
           .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
+          .then((dat) => {
+            this.data = dat;
+            if (dat.length == 0) this.gotResult = false;
+            console.log(dat);
           })
           .catch((error) => {
             console.log("Error in K-Step Hierarchy : " + error);

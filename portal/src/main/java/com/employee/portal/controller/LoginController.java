@@ -182,6 +182,19 @@ public class LoginController {
 //        }
     }
 
+    @RequestMapping("/changePassword")
+    String changePassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) throws IOException {
+        Logger lg = Logger.getInstance();
+        try{
+            lg.log("Change Password request received for "+username);
+            loginServiceImplementation.updatePassword(username, password);
+        }
+        catch (Exception e) {
+            return e.toString();
+        }
+        return "Password Changed Successfully !!!";
+    }
+
 
     @RequestMapping("/getAll")
     public List<Login> getAllLogins() {

@@ -27,7 +27,7 @@ export const canOwnerNavigate: CanActivateFn = (
   state: RouterStateSnapshot
 ) => {
   if (inject(AuthenticationServiceService).isAuthenticated()) {
-    if (inject(AuthenticationServiceService).userPriv == 'owner') {
+    if (inject(AuthenticationServiceService).getPrivilege() == 'owner') {
       return true;
     }
     else {
@@ -68,7 +68,8 @@ export const canPrivNavigate: CanActivateFn = (
   state: RouterStateSnapshot
 ) => {
   if (inject(AuthenticationServiceService).isAuthenticated()) {
-    if (inject(AuthenticationServiceService).userPriv == 'priv_user' || inject(AuthenticationServiceService).userPriv == 'admin' || inject(AuthenticationServiceService).userPriv == 'owner') {
+    let userPrivilege = inject(AuthenticationServiceService).getPrivilege();
+    if (userPrivilege == 'priv_user' || userPrivilege == 'admin' || userPrivilege == 'owner') {
       return true;
     }
     else {
