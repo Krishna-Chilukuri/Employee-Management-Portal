@@ -18,6 +18,7 @@ export class ViewAllEmployeesComponent {
   
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.headerComp.setUsername();
+    this.headerComp.pageTitle = "View All Employees";
     fetch("http://localhost:8080/api/employees/getAllEmployees")
     .then ((response) => response.json())
     .then ((res) => {

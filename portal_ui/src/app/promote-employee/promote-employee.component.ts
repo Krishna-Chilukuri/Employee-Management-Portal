@@ -16,6 +16,7 @@ export class PromoteEmployeeComponent {
 
   constructor(private headerComp: AppComponent) {
     this.headerComp.setUsername();
+    this.headerComp.pageTitle = "Promote Employee";
   }
 
 

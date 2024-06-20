@@ -20,6 +20,7 @@ export class HomeComponent {
   privUser: boolean = false;
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService, private sessionChecker: SessionCheckerService) {
     this.sessionCheck();
+    this.headerComp.pageTitle = "Employee Management Portal";
     // this.headerComp.getUsername();
     // this.checkSession();
   }

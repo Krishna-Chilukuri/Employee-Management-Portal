@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AppComponent } from '../app.component';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-demote-owner',
@@ -10,6 +12,11 @@ import { FormsModule } from '@angular/forms';
 })
 export class DemoteOwnerComponent {
   ownerId?: string;
+
+  constructor(private headerComp: AppComponent, private sessionChecker: SessionCheckerService) {
+    this.headerComp.setUsername();
+    this.headerComp.pageTitle = "Demote Owner";
+  }
 
   demoteOwner() {
     console.log(this.ownerId);

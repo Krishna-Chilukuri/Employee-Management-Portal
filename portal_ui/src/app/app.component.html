@@ -7,7 +7,7 @@
         <div class="left">
             <a routerLink="/home-component">Home</a>
         </div>
-        <!-- <div class="center">Page Title</div> -->
+        <div class="center">{{pageTitle}}</div>
         <div class="aboutProfile">
             <div class="menuItem">
                 <a routerLink="/profilePage">Profile: {{username}}</a>
@@ -17,7 +17,12 @@
                 <!-- <button type="button" (click)="onLogout()">Logout</button> -->
             </div>
             <div class="menuItem">
-                <a href="#">About</a>
+                <a routerLink="/aboutPage">About</a>
+            </div>
+            <div class="menuItem">
+                <input type="checkbox" id="themeSwitcher" (click)="checkBoxClicked()">
+                <label for="themeSwitcher"></label>
+                <!-- <button><label class="themeSwitcher"></label></button> -->
             </div>
             <!-- <div class="menuItem">
                 <img src="menu-icon.png" alt="Menu">

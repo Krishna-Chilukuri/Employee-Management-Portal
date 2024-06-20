@@ -24,6 +24,7 @@ export class ProfilePageComponent {
 
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
+    this.headerComp.pageTitle = this.userName + " Profile";
   }
   async checkSession() {
     if (typeof(localStorage) === 'undefined') {

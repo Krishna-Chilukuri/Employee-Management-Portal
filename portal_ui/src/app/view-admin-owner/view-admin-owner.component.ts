@@ -17,6 +17,7 @@ export class ViewAdminOwnerComponent {
 
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
+    this.headerComp.pageTitle = "View Admins & Owners";
     fetch("http://localhost:8080/api/login/viewAdminOwner")
     .then ((response) => response.json())
     .then ((obj) => {

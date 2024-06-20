@@ -21,6 +21,7 @@ export class HierarchiesComponent {
 
   constructor(private headerComp: AppComponent) {
     this.headerComp.setUsername();
+    this.headerComp.pageTitle = "Hierarchies";
   }
 
 
@@ -61,6 +62,7 @@ export class HierarchiesComponent {
           .then((dat) => {
             this.data = dat;
             if (dat.length == 0) this.gotResult = false;
+            else this.gotResult = true;
             console.log(dat);
           })
           .catch((error) => {
@@ -76,6 +78,7 @@ export class HierarchiesComponent {
           .then((dat) => {
             this.data = dat;
             if (dat.length == 0) this.gotResult = false;
+            else this.gotResult = true;
             console.log(dat);
           })
           .catch((error) => {

@@ -26,7 +26,7 @@ export class ViewEmployeeComponent {
     // this.employeeId = 0;
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.headerComp.setUsername();
-    this.headerComp.getUsername();
+    this.headerComp.pageTitle = "View Employee";
     this.jsonString = '';
     this.data = new Object();
   }

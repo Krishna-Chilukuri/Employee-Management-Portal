@@ -18,6 +18,7 @@ import { SessionCheckerService } from './session-checker.service';
 export class AppComponent {
   title = 'portal_ui';
   username: string;
+  pageTitle: string = 'Employee Management Portal';
 
   constructor(private router:Router, private sessionChecker: SessionCheckerService) {
     this.username = '';
@@ -40,6 +41,12 @@ export class AppComponent {
     localStorage.removeItem("userPriv");
     console.log("Logged Out");
     this.username = '';
+    this.pageTitle = "Employee Management Portal";
     this.router.navigate(['/']);
+  }
+
+  checkBoxClicked() {
+    alert("Theme switched");
+    console.log("Theme Switched");
   }
 }

@@ -16,6 +16,7 @@ export class PromoteToAdminComponent {
   empId?: number;
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
+    this.headerComp.pageTitle = "Promote To Admin";
   }
   promoteToAdmin() {
     console.log(this.empId);

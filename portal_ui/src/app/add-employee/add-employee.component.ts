@@ -23,6 +23,7 @@ export class AddEmployeeComponent {
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     // this.checkSession();
     this.headerComp.setUsername();
+    this.headerComp.pageTitle = "Add Employee"
     this.employee = new Employee();
     this.jsonString = '';
   }

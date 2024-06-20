@@ -16,6 +16,7 @@ export class DemoteEmployeeComponent {
 
   constructor(private headerComp: AppComponent) {
     this.headerComp.setUsername();
+    this.headerComp.pageTitle = "Demote Employee";
   }
 
   demoteEmployee() {

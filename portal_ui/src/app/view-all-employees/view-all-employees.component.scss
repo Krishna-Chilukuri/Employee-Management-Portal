@@ -2,6 +2,7 @@ table {
     border-collapse: collapse;
     width: 100%;
     font-size: 18px;
+    table-layout: fixed;
     // background-color: red;
     // border: none;
     // display: grid;
@@ -26,6 +27,20 @@ tr:hover {
 
 td, th{
     // border: 1px solid var(--text-color);
-    // padding: auto;
+    padding: 10px 20px;
     text-align: center;
+    // overflow: ;
+}
+
+td:last-child {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+td:last-child:hover {
+    overflow: visible;
+    height: auto;
+    position: absolute;
+    text-overflow: clip;
 }

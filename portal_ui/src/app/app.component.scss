@@ -158,3 +158,45 @@ button {
 .menuItem {
     margin-right: 3vw;
 }
+
+
+label{
+    border: 2px solid var(--text-color);
+    cursor: pointer;
+    display: block;
+    position: relative;
+    width: 50px;
+    height: 20px;
+    // margin-top: 2%;
+    border-radius: 200px;
+    background-color: var(--nav-bar-color);
+    transition: 0.5s;
+}
+
+label:after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: 1px;
+    left: 3px;
+    background: linear-gradient(180deg, rgb(124, 124, 124), var(--bg-color));
+    border-radius: 20px;
+    transition: 0.5s;
+}
+
+input{
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+input:checked + label {
+    background-color: var(--dark-accent-color);
+}
+
+input:checked + label:after {
+    left: 42px;
+    transform: translateX(-100%);
+    background: linear-gradient(180deg, #ffcc89, #fc9002);
+}

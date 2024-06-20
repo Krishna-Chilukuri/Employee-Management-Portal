@@ -19,6 +19,7 @@ export class RemoveEmployeeComponent {
   
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.headerComp.setUsername();
+    this.headerComp.pageTitle = "Remove Employee";
     this.jsonString = '';
     // this.employee = new Employee();
     this.jsonString = '';
