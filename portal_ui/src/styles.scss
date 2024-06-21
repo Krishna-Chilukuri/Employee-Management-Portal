@@ -1,18 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
 :root{
-    --text-color: white;
-    --nav-bar-color: #1F1B24;
-    --bg-color: #121212;
-    // --dark-accent-color: 
-    // --accent-color: ;
-    --table-highlight-row: #3e3746;
+    --dark-text-color: #FAF9F6;
+    --dark-bg-color: #121212;
+    --dark-nav-bar-color: #1F1B24;
+    --dark-table-highlight-row: #3e3746;
     --dark-button-highlight-text: #121212;
     --dark-button-highlight-color: #c2c2c2;
-    // --table-highlight-row: rgb(58, 58, 100);
     --dark-accent-color: #90B8F8;
-    // --dark-accent-color: #ECEFF1;
-    // --primary-color: ;
-    // --secondary-color: ;
+    --dark-button-border: #FAF9F6;
+
+    --light-text-color: #121212;
+    --light-bg-color: #FAF9F6;
+    --light-nav-bar-color: #81D4FA;
+    --light-table-highlight-row: #bae3f7;
+    --light-button-highlight-text: #121212;
+    --light-button-highlight-color: #bae9ff;
+    --light-accent-color: #90B8F8;
+    --light-button-border: #121212;
+
+    --currTheme: dark;
+    --text-color: var(--dark-text-color);
+    --bg-color: var(--dark-bg-color);
+    --nav-bar-color: var(--dark-nav-bar-color);
+    --table-highlight-row: var(--dark-table-highlight-row);
+    --button-highlight-text: var(--dark-button-highlight-text);
+    --button-highlight-color: var(--dark-button-highlight-color);
+    --accent-color: var(--dark-accent-color);
+    --button-border: var(--dark-button-border);
+    --box-shadow: #868686;
 }
 
 * {
@@ -30,22 +45,6 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
-    // background: url(114439.jpg);
-    // background-position: center;
-    // background-repeat: repeat-y;
-    // background: rgba(203, 193, 193, 0.363);
-    // background: peachpuff;
-    // background-image: ;
-    // background-color: #5F85DB;
-    // background-size: cover;
-    // background-position: center;
-    // background-color: #353941;
-    // background-color: #222831;
-    // color: #EEEEEE;
-    // color: #fff;
-// }
-
-
 
 .midCommonDiv {
     margin: 10% 25%;
@@ -59,9 +58,6 @@ body {
     border: 1px solid #313131;
     backdrop-filter: blur(10px);
     box-shadow: 3px 3px 3px 3px #313131;
-    // border-radius: 50px;
-    // background-size: 25%;
-    // box-shadow: inset 0 39px 56px -36px hsla(0, 0%, 100%, 0.5), inset 0 7px 11px -4px hsla(0, 0%, 100%, 0.25), inset 0 -82px 68px -64px rgba(96, 68, 144, 0.3), inset 0 98px 100px -48px rgba(202, 172, 255, 0.3), inset 0 4px 18px 0 rgba(154, 146, 210, 0.3), inset 0 1px 40px 0 rgba(227, 222, 255, 0.2);
     border-radius: 5px;
 }
 
@@ -77,7 +73,7 @@ body {
         padding: 20px;
         background: transparent;
         outline: none;
-        border: 2px solid rgba(255, 255, 255, .5);
+        border: 2px solid var(--button-border);
         border-radius: 30px;
     }
 
@@ -104,7 +100,7 @@ body {
     // height: 100%;
     font-weight: 500;
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, .5);
+    border: 2px solid var(--button-border);
     border-radius: 30px;
     cursor: pointer;
     text-align: center;
@@ -114,8 +110,8 @@ body {
 }
 
 .submitButton:hover {
-    color: var(--dark-button-highlight-text);
-    background-color: var(--dark-button-highlight-color);
+    color: var(--button-highlight-text);
+    background-color: var(--button-highlight-color);
 }
 
 // .submitButton:hover {

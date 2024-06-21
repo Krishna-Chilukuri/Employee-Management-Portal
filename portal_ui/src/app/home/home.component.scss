@@ -3,7 +3,7 @@
     width: 50%;
     // height: 50vh;
     // background-color: red;
-    border: 1px solid rgba(255, 255, 255, .5);
+    border: 1px solid var(--button-border);
 }
 
 .buttonGrid {
@@ -19,7 +19,7 @@
     background: transparent;
     // background-color: red;
     height: 36px;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    border: 2px solid var(--button-border);
     border-radius: 30px;
     display: flex;
     justify-content: center;

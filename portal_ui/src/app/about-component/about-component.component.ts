@@ -11,7 +11,6 @@ import { AppComponent } from '../app.component';
 export class AboutComponentComponent {
 
   constructor(private headerComp: AppComponent) {
-    this.headerComp.setUsername();
     this.headerComp.pageTitle = "About Page";
   }
 }

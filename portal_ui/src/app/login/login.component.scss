@@ -12,7 +12,7 @@
     // border: 2px solid black;
     backdrop-filter: blur(10px);
     // color: white;
-    box-shadow: 3px 3px 3px 3px #868686;
+    box-shadow: 3px 3px 3px 3px var(--box-shadow);
     border-radius: 5px;
 
     .inputEle {
@@ -26,7 +26,7 @@
             padding: 20px;
             background: transparent;
             outline: none;
-            border: 2px solid rgba(255, 255, 255, .5);
+            border: 2px solid var(--button-border);
             border-radius: 30px;
         }
 
@@ -52,7 +52,7 @@
         // height: 100%;
         font-weight: 500;
         background: transparent;
-        border: 2px solid rgba(255, 255, 255, .5);
+        border: 2px solid var(--button-border);
         border-radius: 30px;
         cursor: pointer;
         text-align: center;
@@ -62,7 +62,7 @@
     }
 
     .submitButton:hover {
-        color: var(--dark-button-highlight-text);
-        background-color: var(--dark-button-highlight-color);
+        color: var(--button-highlight-text);
+        background-color: var(--button-highlight-color);
     }
 }
