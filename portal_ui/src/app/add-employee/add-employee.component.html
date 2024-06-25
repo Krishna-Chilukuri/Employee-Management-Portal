@@ -1,10 +1,13 @@
-<p>add-employee works!</p>
-<div class="addEmpDiv">
+<div class="midCommonDiv">
     <form id="add-emp-form" class="addEmpForm" (ngSubmit)="addEmployee()" ngNativeValidate>
-        <label for="empName">Enter Employee Name :</label>
-        <input type="text" name="empName" id="empName" [(ngModel)] = "employee.employeeName">
-        <label for="empRank">Enter Employee Rank : </label>
-        <input type="number" name="empRank" id="empRank" [(ngModel)] = "employee.employeeRank">
-        <input type="submit" value="Add Employee">
+        <div class="inputEle">
+            <input type="text" name="empName" id="empName" [(ngModel)] = "employee.employeeName" placeholder="Enter Employee Name" required>
+        </div>
+        <div class="inputEle">
+            <input type="number" name="empRank" id="empRank" [(ngModel)] = "employee.employeeRank" placeholder="Enter Employee Rank" required>
+        </div>
+        <!-- <label for="empRank">Enter Employee Rank : </label> -->
+        <input class="submitButton" type="submit" value="Add Employee">
     </form>
+    <div class="midCommonDiv" id="resultOfAdding" *ngIf="resultSection != ''">{{resultSection}}</div>
 </div>

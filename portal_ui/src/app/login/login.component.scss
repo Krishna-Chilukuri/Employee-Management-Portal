@@ -1,24 +1,68 @@
 .loginContainer {
-    // background-color: red;
     margin: 10% 25%;
     width: 50%;
-    height: 50vh;
-    display: grid;
+    // min-height: 50%;
+    display: flex;
     // justify-content: center;
-    // align-items: center;
-    // justify-items: center;
+    text-align: center;
+    align-items: center;
+    background: transparent;
+    display: grid;
+    border: 1px solid rgba(255, 253, 253, 0.5);
+    // border: 2px solid black;
+    backdrop-filter: blur(10px);
+    // color: white;
+    box-shadow: 3px 3px 3px 3px var(--box-shadow);
+    border-radius: 5px;
 
-    .loginForm {
-        // margin: ;
-        margin: 10% 10%;
-        display: grid;
-        grid-template-columns: auto auto;
-        // background-color: blue;
-        justify-content: center;
-        align-items: center;
-
-        :last-child {
-            grid-column: 1 / 3;
+    .inputEle {
+        height: 50px;
+        position: relative;
+        margin: 2% 25%;
+        
+        input {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            background: transparent;
+            outline: none;
+            border: 2px solid var(--button-border);
+            border-radius: 30px;
         }
+
+        
+        input:focus::placeholder {
+            opacity: 0;
+            transition:  opacity 0.5s ease-out;
+        }
+        
+        .iconPos {
+            position: absolute;
+            right: 20px;
+            top: 25%;
+        }
+
+    }
+    .submitButton {
+        margin: 2% 25%;
+        // width: 100%;
+        height: 50px;
+        // background-color: red;
+        width: 50%;
+        // height: 100%;
+        font-weight: 500;
+        background: transparent;
+        border: 2px solid var(--button-border);
+        border-radius: 30px;
+        cursor: pointer;
+        text-align: center;
+        font-size: large;
+        // line-height: 50px;
+        // background-color: green;
+    }
+
+    .submitButton:hover {
+        color: var(--button-highlight-text);
+        background-color: var(--button-highlight-color);
     }
 }

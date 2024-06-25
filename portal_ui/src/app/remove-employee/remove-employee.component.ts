@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
+import { AuthenticationServiceService } from '../authentication-service.service';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-remove-employee',
@@ -11,16 +15,20 @@ import { FormsModule } from '@angular/forms';
 export class RemoveEmployeeComponent {
   // employee: Employee;
   jsonString: string;
-  employeeId: number;
-  constructor() {
+  employeeId?: number;
+  
+  constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
+    this.headerComp.setUsername();
+    this.headerComp.pageTitle = "Remove Employee";
+    this.jsonString = '';
     // this.employee = new Employee();
     this.jsonString = '';
-    this.employeeId = 0;
   }
+  
 
   async removeEmployee() {
     console.log(this.employeeId);
-    fetch("http://localhost:8080/api/employees/delete?empId="+this.employeeId+"&sessionId="+localStorage.getItem("sessionId"), {
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/delete?empId="+this.employeeId+"&sessionId="+localStorage.getItem("sessionId"), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -31,6 +39,7 @@ export class RemoveEmployeeComponent {
         throw new Error('Employee is not available');
       }
       console.log("Employee Removed");
+      // window.location.reload();
     })
     .catch ((error) => {
       console.log("ERROR IN REMOVE EMP : " + error);

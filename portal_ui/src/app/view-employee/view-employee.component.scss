@@ -1,0 +1,18 @@
+.empDetails{
+    margin: 0 25%;
+    display: grid;
+    grid-template-columns: auto auto;
+    // background-color: red;
+    // border: 2px solid black;
+    // justify-content: left;
+    // font-size: large;
+    font-size: larger;
+}
+
+// .empDetails :nth-child(odd) {
+//     justify-self: right;
+// }
+
+.empDetails :nth-child(even) {
+    justify-self: left;
+}

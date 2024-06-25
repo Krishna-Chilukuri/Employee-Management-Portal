@@ -11,7 +11,7 @@
 	<groupId>com.employee</groupId>
 	<artifactId>portal</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>portal</name>
 	<description>Employee Management Portal</description>
 	<properties>

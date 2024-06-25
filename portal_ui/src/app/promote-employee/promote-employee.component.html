@@ -1,10 +1,11 @@
-<p>promote-employee works!</p>
-<div class="promoteEmpDiv">
-    <form id="promote-emp-form" class="promoteEmpForm" (ngSubmit)="promoteEmployee()">
-        <label for="empId">Enter Employee ID</label>
-        <input type="number" name="empId" id="empId" [(ngModel)]="this.empId">
-        <label for="numProms">Enter number of Promotions</label>
-        <input type="number" name="numProms" id="numProms" [(ngModel)]="this.numProms">
-        <input type="submit" value="Promote Employee">
+<div class="midCommonDiv">
+    <form id="promote-emp-form" class="promoteEmpForm" (ngSubmit)="promoteEmployee()" ngNativeValidate>
+        <div class="inputEle">
+            <input type="number" name="empId" id="empId" [(ngModel)]="this.empId" placeholder="Employee Id" required>
+        </div>
+        <div class="inputEle">
+            <input type="number" name="numProms" id="numProms" [(ngModel)]="this.numProms" placeholder="Number of Promotions" required>
+        </div>
+        <input class="submitButton" type="submit" value="Promote Employee">
     </form>
 </div>

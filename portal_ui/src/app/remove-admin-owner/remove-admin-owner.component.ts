@@ -13,21 +13,24 @@ import { AuthenticationServiceService } from '../authentication-service.service'
   styleUrl: './remove-admin-owner.component.scss'
 })
 export class RemoveAdminOwnerComponent {
-  username: string = '';
+  username?: string;
 
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
+    this.headerComp.pageTitle = "Remove Admin / Owner";
   }
 
   removeAdminOwner() {
     console.log(this.username);
 
-    fetch("http://localhost:8080/api/login/removeAdminOwner?username="+this.username)
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/removeAdminOwner?username="+this.username)
     .then ((response) => {
       console.log(response);
+      window.location.reload();
     })
     .catch ((error) => {
       console.log("Error in Remove Admin / Owner : " + error);
+      window.location.reload();
     })
   }
 
@@ -36,7 +39,7 @@ export class RemoveAdminOwnerComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("http://localhost:8080/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;
