@@ -28,7 +28,7 @@ export class RemoveEmployeeComponent {
 
   async removeEmployee() {
     console.log(this.employeeId);
-    fetch("http://localhost:8080/api/employees/delete?empId="+this.employeeId+"&sessionId="+localStorage.getItem("sessionId"), {
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/delete?empId="+this.employeeId+"&sessionId="+localStorage.getItem("sessionId"), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

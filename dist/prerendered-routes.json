@@ -1,0 +1,20 @@
+{
+  "routes": [
+    "/",
+    "/aboutPage",
+    "/addEmployee",
+    "/demoteEmployee",
+    "/demoteOwner",
+    "/hierarchies",
+    "/home-component",
+    "/profilePage",
+    "/promoteEmployee",
+    "/promoteToAdmin",
+    "/promoteToOwner",
+    "/removeAdminOwner",
+    "/removeEmployee",
+    "/viewAdminOwner",
+    "/viewAllEmployee",
+    "/viewEmployee"
+  ]
+}

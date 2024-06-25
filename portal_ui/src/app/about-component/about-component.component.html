@@ -1,4 +1,120 @@
-<div class="midCommonDiv">
+<!-- <div class="midCommonDiv">
     <p>about-component works!</p>
     https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors
+</div> -->
+<div class="aboutPageContainer">
+    <div class="projectDescription">
+        <p>
+        This is a full stack project to manage hierarchy of employees in an organization. Front end is build using Angular. Server side uses Spring Boot and data is stored using MySQL server. Route guards are implemented to prevent access without proper authorization and session id is used to track the current login session. Basic login with session id and ip address is implemented at present. Further development idea is to implement a more secure technique. Each employee has a rank associated (1 being the highest rank possible - Boss). Each rank can have rank number of employees (Only 17 employees can be of the rank 17). <br><br>
+        Repo Link: <span class="gitLink"><a href="https://github.com/Krishna-Chilukuri/Employee-Management-Portal">https://github.com/Krishna-Chilukuri/Employee-Management-Portal</a></span><br>
+        Following operations can be performed on this hierarchy:</p>
+        <table>
+            <tr>
+                <th class="operationTable">Operation</th>
+                <th class="descriptionTable">Description</th>
+            </tr>
+            <tr>
+                <td>Add Employee</td>
+                <td>An Employee can be added to the hierarchy by providing an employee name and rank. The rank clause is
+                    checked and then the employee is inserted into the hierarchy. Rebalancing of the hierarchy is done
+                    to ensure that employees of rank less than that of the employee being inserted do not end up being
+                    in the same level of the tree if visualized.</td>
+            </tr>
+            <tr>
+                <td>Remove Employee</td>
+                <td>An Employee is removed based on the employee Id. If the employee has reportees assigned, they are
+                    assigned to some colleague of same rank or the boss of the employee. If both are not present, the
+                    highest rank reportee of the reportees is promoted and becomes the boss for the remaining reportees.
+                </td>
+            </tr>
+            <tr>
+                <td>View All Employees</td>
+                <td>All Employees of the organization are displayed. Each employee record consists of Employee Id, Name,
+                    Rank, Reportees(Juniors) and Reports To(Boss).</td>
+            </tr>
+            <tr>
+                <td>View Employee</td>
+                <td>A Particular Employee can be retrieved using the ID. The record consists of Employee Id, Name, Rank,
+                    Reportees(Juniors) and Reports To(Boss). Further developments are being done to search based on the
+                    name of the employee</td>
+            </tr>
+            <tr>
+                <td>View Hierarchies</td>
+                <td>Upper, Lower and K-Step hierarchies of an employee can be viewed based on the ID of the employee.
+                    <ol class="subOpsList">
+                        <li><b>Upper Hierarchy</b> consists of all the employees of the hierarchy that are above the
+                            current employee along with the current employee.</li>
+                        <li><b>Lower Hierarchy</b> consists of the sub tree of the hierarchy where the current employee
+                            is the boss.</li>
+                        <li><b>K-Step Hierarchy</b> returns the employees at a distance of k from the current employee
+                            (Boss at k distance and Juniors at k distance).</li>
+                    </ol>
+                </td>
+            </tr>
+            <tr>
+                <td>Promote Employee</td>
+                <td>Employee can be promoted by k ranks if the rank clauses permit it. For each promotion,if rank clause is not violated, that particular employee is removed from hierarchy and then added back with the updated rank.</td>
+            </tr>
+            <tr>
+                <td>Demote Employee</td>
+                <td>Employee can be demoted by k ranks if the rank clauses permit it. For each demotion,if rank clause is not violated, that particular employee is removed from hierarchy and then added back with the updated rank.</td>
+            </tr>
+        </table>
+        
+        There are 4 types of privileges in this application:
+        <ol class="ownerList">
+            <li><b>Guest: </b> Users of this privilege are permitted only to view the hierarchy.</li>
+            <li><b>Privileged User: </b> Every employee in the hierarchy is a privileged user. They can add, remove, promote or demote employees that are below them in hierarchy. However, promotions are not possible to the same rank as that of the user.</li>
+            <li><b>Admin: </b> Admin users can be described as privileged users with a rank 0. So, they can modify the hierarchy however needed. An employee from the hierarchy can be promoted to Admin privilege by a Owner.</li>
+            <li><b>Owner: </b> Owners have all the privileges as that of Admins and can promote a user to Admin or Owner, demote an Owner and remove an Admin/ Owner. Owner exclusive operations are: 
+                <table>
+                    <tr>
+                        <th class="operationTable">Operation</th>
+                        <th class="descriptionTable">Description</th>
+                    </tr>
+                    <tr>
+                        <td>Promote to Admin</td>
+                        <td>An Employee can be promoted to be an Admin. When this is done, that particular employee is removed from the hierarchy. It can be described as being rank 0.</td>
+                    </tr>
+                    <tr>
+                        <td>Promote to Owner</td>
+                        <td>An Admin is promoted to Owner.</td>
+                    </tr>
+                    <tr>
+                        <td>Demote Owner</td>
+                        <td>An Owner is demoted to Admin.</td>
+                    </tr>
+                    <tr>
+                        <td>Remove Admin/ Owner</td>
+                        <td>Remove an Admin or Owner user from the application.</td>
+                    </tr>
+            </table>
+            </li>
+        </ol>
+    </div>
+    Following are some credentials to use the application: 
+    <div class="loginAndPicGrid">
+        <div class="loginDetails">
+            <table>
+                <tr>
+                    <th>Privilege / Type of User</th>
+                    <th>User Name</th>
+                    <th>Password</th>
+                </tr>
+                <tr>
+                    <td>Guest User</td>
+                    <td>guestUser1</td>
+                    <td>guestPassTest</td>
+                </tr>
+                <tr>
+                    <td>Privileged User</td>
+                    <td>someID</td>
+                    <td>privPassTest</td>
+                </tr>
+            </table>
+        </div>
+        <div class="hierarchyPicture">
+            <img src="" alt="" class="hierarchyPicture">
+        </div>
+    </div>
 </div>

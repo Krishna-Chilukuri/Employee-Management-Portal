@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "portal-employee-management",
     "public": "dist/browser",
     "ignore": [
       "firebase.json",

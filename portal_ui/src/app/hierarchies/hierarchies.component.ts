@@ -32,7 +32,7 @@ export class HierarchiesComponent {
     switch (this.choiceOfHie) {
       case "upper":
         console.log("Upper Hierarchy Selected for " + this.empId);
-        fetch("http://localhost:8080/api/employees/upperHierarchy?empId=" + this.empId, {
+        fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/upperHierarchy?empId=" + this.empId, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export class HierarchiesComponent {
         break;
       case "lower":
         console.log("Lower Hierarchy Selected for " + this.empId);
-        fetch("http://localhost:8080/api/employees/lowerHierarchy?empId=" + this.empId, {
+        fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/lowerHierarchy?empId=" + this.empId, {
           method: 'GET',
           // headers: {
           //   'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export class HierarchiesComponent {
         break;
       case "kStep":
         console.log("kStep Hierarchy selected for " + this.empId + " for " + this.kVal + " steps");
-        fetch("http://localhost:8080/api/employees/kStepHierarchy?empId=" + this.empId + "&kVal=" + this.kVal, {
+        fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/kStepHierarchy?empId=" + this.empId + "&kVal=" + this.kVal, {
           method: 'GET',
         })
           .then((response) => response.json())

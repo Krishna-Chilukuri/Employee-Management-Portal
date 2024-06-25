@@ -32,7 +32,7 @@ export class AddEmployeeComponent {
     console.log(this.employee.employeeName);
     console.log(this.employee.employeeRank);
     this.jsonString = JSON.stringify(this.employee);
-    fetch("http://localhost:8080/api/employees/save?sessionId=" + localStorage.getItem("sessionId"), {
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/save?sessionId=" + localStorage.getItem("sessionId"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

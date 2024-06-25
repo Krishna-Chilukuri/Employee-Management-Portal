@@ -62,21 +62,21 @@ public class EmployeeController {
             return new ResponseEntity<Employee>(new Employee(), HttpStatus.CONFLICT);
         }
         employee = addtoHierarchy(employee);
-        lg.log("EMPLOYEE CAN BE INSERTED");
+        // lg.log("EMPLOYEE CAN BE INSERTED");
         Login logUser = new Login();
         // employee = employeeServiceImpl.saveEmployee(employee);
         logUser.setUsername(String.valueOf(employee.getEmployeeId()));
         logUser.setPassword(employee.getEmployeeName());
         logUser.setPrivilege("priv_user");
         logUser = loginServiceImplementation.saveLogin(logUser);
-        lg.log("LOGIN CREATED : " + logUser);
+        // lg.log("LOGIN CREATED : " + logUser);
         return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
     }
 
     @RequestMapping("/delete")
     public void deleteEmployee(@RequestParam(name = "empId") long empId, @RequestParam String sessionId) throws IOException {
         Logger lg = Logger.getInstance();
-        lg.log("IN Overloaded delete");
+        // lg.log("IN Overloaded delete");
         if (!checkPrivilege(sessionId, employeeServiceImpl.getEmployeeById(empId).getEmployeeRank())) return;
         else deleteEmployee(empId);
     }
@@ -84,16 +84,16 @@ public class EmployeeController {
     public void deleteEmployee(long empId) throws IOException {
         Logger lg = Logger.getInstance();
         lg.log("Delete Request received for " + empId);
-        lg.log("HERE : " + employeeServiceImpl.getEmployeeById(empId));
+        // lg.log("HERE : " + employeeServiceImpl.getEmployeeById(empId));
         if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
-            lg.log("EMPloyee not available to delete");
+            // lg.log("EMPloyee not available to delete");
             return;
         }
         handleReportees(empId);
-        lg.log("REPORTEES HANDLED");
+        // lg.log("REPORTEES HANDLED");
         try{
         employeeServiceImpl.deleteEmployee(empId);
-        lg.log("Employee deleted");
+        // lg.log("Employee deleted");
 
         loginServiceImplementation.removeLogin(String.valueOf(empId));
         sessionServiceImplementation.deleteSessionByUsername(String.valueOf(empId));
@@ -111,11 +111,11 @@ public class EmployeeController {
 //        lg.log("Promote HERE" + (empId - numProms) + "->" + employeeServiceImpl.getEmployeeById(Long.parseLong(sessionServiceImplementation.getSessionById(sessionId).getUsername())));
         Employee employee = employeeServiceImpl.getEmployeeById(empId);
         if (employee.getEmployeeName() == null) {
-            lg.log("Employee is not present to promote");
+            // lg.log("Employee is not present to promote");
             return new ResponseEntity<String>("Employee not Found", HttpStatus.NOT_FOUND);
         }
         if (employee.getEmployeeRank() - numProms <= 0) {
-            lg.log("These number of promotions is not possible");
+            // lg.log("These number of promotions is not possible");
             return new ResponseEntity<>("These number of promotions is not possible", HttpStatus.BAD_REQUEST);
         }
         if (!checkPrivilege(sessionId, (employeeServiceImpl.getEmployeeById(empId).getEmployeeRank() - numProms))) return new ResponseEntity<String>("You are not eligible for such a promotion", HttpStatus.FORBIDDEN);
@@ -129,7 +129,7 @@ public class EmployeeController {
         lg.log("Demote Request received for :" + empId + " for " + numDems + " demotions");
         Employee employee = employeeServiceImpl.getEmployeeById(empId);
         if (employee.getEmployeeName() == null) {
-            lg.log("Employee is not present to demote");
+            // lg.log("Employee is not present to demote");
             return new ResponseEntity<String>("Employee not Found", HttpStatus.NOT_FOUND);
         }
         if (!checkPrivilege(sessionId, employeeServiceImpl.getEmployeeById(empId).getEmployeeRank())) return new ResponseEntity<String>("You can't demote this employee", HttpStatus.FORBIDDEN);
@@ -141,7 +141,7 @@ public class EmployeeController {
     List<viewableEmployee> upperHierarchy(@RequestParam(name = "empId") long empId) throws IOException {
         Logger lg = Logger.getInstance();
         if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
-            lg.log("Upper Hierarchy requested for an employee not present");
+            // lg.log("Upper Hierarchy requested for an employee not present");
             return new ArrayList<viewableEmployee>();
         }
 
@@ -183,7 +183,7 @@ public class EmployeeController {
         Logger lg = Logger.getInstance();
         List<Long> reportees;
         if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
-            lg.log("Lower Hierarchy requested for an employee not present");
+            // lg.log("Lower Hierarchy requested for an employee not present");
             return new ArrayList<viewableEmployee>();
         }
         List<viewableEmployee> retList = new ArrayList<>();
@@ -191,14 +191,14 @@ public class EmployeeController {
         Employee curr;
 
         empQ.add(employeeServiceImpl.getEmployeeById(empId));
-        lg.log("curr emp added");
+        // lg.log("curr emp added");
         while (empQ.peek() != null) {
             curr = empQ.poll();
             viewableEmployee emp = new viewableEmployee();
             emp.setEmployee(curr);
             reportees = reporteeServiceImplementation.getReporteesById(curr.getEmployeeId());
             for (long reportee: reportees) {
-                lg.log("Reportee added : " + reportee);
+                // lg.log("Reportee added : " + reportee);
                 empQ.add(employeeServiceImpl.getEmployeeById(reportee));
             }
             emp.setReportees(reportees);
@@ -211,9 +211,9 @@ public class EmployeeController {
     List<viewableEmployee> kStepHierarchy(@RequestParam(name = "empId") long empId, @RequestParam(name = "kVal") long k) throws IOException {
         Logger lg = Logger.getInstance();
         List<Long> reportees;
-        lg.log("REq received");
+        // lg.log("REq received");
         if (employeeServiceImpl.getEmployeeById(empId).getEmployeeName() == null) {
-            lg.log("K-Step Hierarchy requested for an employee not present");
+            // lg.log("K-Step Hierarchy requested for an employee not present");
             return new ArrayList<viewableEmployee>();
         }
         List<viewableEmployee> retList = new ArrayList<>();
@@ -233,7 +233,7 @@ public class EmployeeController {
             currK--;
         }
         if (!breakStat && nextEmpId != 0) {
-            lg.log("Found K-Step Superior : "+ nextEmpId);
+            // lg.log("Found K-Step Superior : "+ nextEmpId);
             emp.setEmployee(employeeServiceImpl.getEmployeeById(nextEmpId));
             emp.setReportees(reporteeServiceImplementation.getReporteesById(nextEmpId));
             retList.add(emp);
@@ -260,7 +260,7 @@ public class EmployeeController {
                 retList.add(emp);
             }
         }
-        lg.log("RET LIST FOR K-STEP Hierarchy : " + retList);
+        // lg.log("RET LIST FOR K-STEP Hierarchy : " + retList);
         return retList;
     }
 
@@ -268,20 +268,20 @@ public class EmployeeController {
         Logger lg = Logger.getInstance();
         while (numProms > 0) {
             if (employee.getEmployeeRank() == 1) {//Redundant check (checked already at promoteEmployee())
-                lg.log("Promotion from 1 is not possible");
+                // lg.log("Promotion from 1 is not possible");
                 break;
             }
             long nextRank = employee.getEmployeeRank() - 1;
             long nextLvlCount = employeeServiceImpl.getRankCount(nextRank);
             if (nextLvlCount == nextRank) {
-                lg.log("RANK MAX CAP REACHED");
+                // lg.log("RANK MAX CAP REACHED");
                 break;
             }
             handleReportees(employee.getEmployeeId());
             employee.setEmployeeRank(nextRank);
             employee = addtoHierarchy(employee);
             numProms--;
-            lg.log("Promoted " + employee.getEmployeeId() + " to " + employee.getEmployeeRank());
+            // lg.log("Promoted " + employee.getEmployeeId() + " to " + employee.getEmployeeRank());
         }
     }
 
@@ -291,16 +291,16 @@ public class EmployeeController {
             long nextRank = employee.getEmployeeRank() + 1;
             long nextLvlCount = employeeServiceImpl.getRankCount(nextRank);
             if (nextLvlCount == nextRank) {
-                lg.log("RANK MAX CAP REACHED");
+                // lg.log("RANK MAX CAP REACHED");
                 break;
             }
             handleReportees(employee.getEmployeeId());
             employee.setEmployeeRank(nextRank);
             employeeServiceImpl.updateEmployee(employee, employee.getEmployeeId());
-            lg.log("Emp Of Rank : " + (nextRank - 1) + " are : " + employeeServiceImpl.getEmployeesByRank(nextRank - 1) + "curr emp : " + employee);
+            // lg.log("Emp Of Rank : " + (nextRank - 1) + " are : " + employeeServiceImpl.getEmployeesByRank(nextRank - 1) + "curr emp : " + employee);
             employee = addtoHierarchy(employee);
             numDems--;
-            lg.log("Demoted " + employee.getEmployeeId() + " to " + employee.getEmployeeRank());
+            // lg.log("Demoted " + employee.getEmployeeId() + " to " + employee.getEmployeeRank());
         }
     }
 
@@ -309,27 +309,27 @@ public class EmployeeController {
         Logger lg = Logger.getInstance();
         List<Long> reporteesIds = employeeServiceImpl.getReporteesOfId(empId);
         if (reporteesIds.isEmpty()) {
-            lg.log("No reportees to handle");
+            // lg.log("No reportees to handle");
             return;
         }
-        lg.log("Reportees to handle : "+ reporteesIds );
+        // lg.log("Reportees to handle : "+ reporteesIds );
         long newReportsTo = 0L;
         long remRank = employeeServiceImpl.getEmployeeById(empId).getEmployeeRank();
         List<Long> colleagueIds = employeeServiceImpl.getEmployeesByRank(remRank);
         colleagueIds.remove(empId);
-        lg.log("Colleagues : " + colleagueIds);
+        // lg.log("Colleagues : " + colleagueIds);
         if (colleagueIds.isEmpty()) {
             //find superior
             long superiorId = employeeServiceImpl.getEmployeeById(empId).getReportsTo();
             if (superiorId == 0) {
                 //no superiors: Promote the highest reportee and use as new Boss
                 newReportsTo = reporteesIds.remove(0);
-                lg.log("new Boss : " + newReportsTo);
+                // lg.log("new Boss : " + newReportsTo);
                 reporteeServiceImplementation.removeReportee(newReportsTo);
                 Employee emp = employeeServiceImpl.getEmployeeById(newReportsTo);
                 emp.setReportsTo(0);
                 if (emp.getEmployeeRank() >= 2) emp.setEmployeeRank(emp.getEmployeeRank() - 1);
-                lg.log("NEW BOSS SELECTED FROM REPORTEE");
+                // lg.log("NEW BOSS SELECTED FROM REPORTEE");
             }
             else {
                 reporteeServiceImplementation.removeReportee(empId);
@@ -380,15 +380,15 @@ public class EmployeeController {
         lg.log("Promote to Admin requested for : " + empId);
         Login log = loginServiceImplementation.getLoginById(String.valueOf(empId));
         if (log.getUsername() == null) {
-            lg.log("User not Found");
+            // lg.log("User not Found");
             return;
         }
         else if (Objects.equals(log.getPrivilege(), "guest")) {
-            lg.log("User is a Guest. Can't be promoted");
+            // lg.log("User is a Guest. Can't be promoted");
             return;
         }
         else if (Objects.equals(log.getPrivilege(), "owner") || Objects.equals(log.getPrivilege(), "admin")) {
-            lg.log("User is already a " + log.getPrivilege());
+            // lg.log("User is already a " + log.getPrivilege());
             return;
         }
         //user is priv_user
@@ -409,7 +409,7 @@ public class EmployeeController {
         Random randGen = new Random();
         Logger lg = Logger.getInstance();
         long superiorRank = employee.getEmployeeRank() - 1;
-        lg.log("SUPERIOR RANK : " + superiorRank);
+        // lg.log("SUPERIOR RANK : " + superiorRank);
         while (superiorRank > 0) {
             if (employeeServiceImpl.getRankCount(superiorRank) == 0) {
                 superiorRank--;
@@ -420,47 +420,47 @@ public class EmployeeController {
             }
         }
         long superiorId = 0L;
-        lg.log("SuPERIOR Found : " + superiorRank);
+        // lg.log("SuPERIOR Found : " + superiorRank);
         if (superiorRank > 0) {//Superior Available
             List<Long> superiorIds = employeeServiceImpl.getEmployeesByRank(superiorRank);
-            for (long empId: superiorIds) {
-                lg.log(String.valueOf(empId));
-            }
+            // for (long empId: superiorIds) {
+            //     lg.log(String.valueOf(empId));
+            // }
             superiorId = superiorIds.get(randGen.nextInt(superiorIds.size()));
-            lg.log("Selected Superior : " + superiorId);
+            // lg.log("Selected Superior : " + superiorId);
             employee.setReportsTo(superiorId);
             Reportee reportee = new Reportee();
             employee = employeeServiceImpl.saveEmployee(employee);
-            lg.log("CHECK2:"+employee);
+            // lg.log("CHECK2:"+employee);
             reportee.setEmployee_id(superiorId);
             reportee.setReportee(employee.getEmployeeId());
-            lg.log("CHECKING FOR REPORTEE ASSIGNMENT" + reportee);
+            // lg.log("CHECKING FOR REPORTEE ASSIGNMENT" + reportee);
             reporteeServiceImplementation.saveReportee(reportee);
         }
         else {
-            lg.log("INSERTING with no superior");
+            // lg.log("INSERTING with no superior");
             employee.setReportsTo(0);
             employee = employeeServiceImpl.saveEmployee(employee);
         }
         //find if there are any reportsTo = 0
-        lg.log("POST SUPERIOR ASSIGNMENT");
+        // lg.log("POST SUPERIOR ASSIGNMENT");
         List<Long> noReportsToIds = employeeServiceImpl.getEmployeesByReportsTo(0, employee.getEmployeeRank());
-        lg.log("FOUND REPORTS TO 0" + noReportsToIds);
+        // lg.log("FOUND REPORTS TO 0" + noReportsToIds);
         long empId = employee.getEmployeeId();
         Reportee repo = new Reportee();
 //        Employee repoEmp;
         repo.setEmployee_id(empId);
         for (long repoId: noReportsToIds) {
-            lg.log("REPORTS TO MODIFIED : " + repoId + empId);
+            // lg.log("REPORTS TO MODIFIED : " + repoId + empId);
             //Every (repoId, employee.getEmployeeId()) ni add to reportees
             //Every repoId ki add employee.getEmployeeId() as reportsTo
             repo.setReportee(repoId);
             reporteeServiceImplementation.saveReportee(repo);
 //            repoEmp = employeeServiceImpl.getEmployeeById(repoId);
-            lg.log("REPORTEE TABLE UPDATED");
+            // lg.log("REPORTEE TABLE UPDATED");
 //            repoEmp.setReportsTo(empId);
             //ERROR IN updateReportsTo
-            lg.log("TEST : " + repoId + "->" + empId);
+            // lg.log("TEST : " + repoId + "->" + empId);
             try{
             employeeServiceImpl.updateReportsTo(empId, repoId);
             }
@@ -469,7 +469,7 @@ public class EmployeeController {
             }
 //            employeeServiceImpl.deleteEmployee(repoId);//Update instead of delete
 //            employeeServiceImpl.saveEmployee(repoEmp);
-            lg.log("REPORTS TO UPDATED SUCCESSFULLY");
+            // lg.log("REPORTS TO UPDATED SUCCESSFULLY");
         }
         if (superiorId != 0) {
             //Rebalancing superior reportees of rank > new Employee rank

@@ -20,7 +20,7 @@ export class PromoteToAdminComponent {
   }
   promoteToAdmin() {
     console.log(this.empId);
-    fetch("http://localhost:8080/api/employees/promoteToAdmin?empId="+this.empId)
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/promoteToAdmin?empId="+this.empId)
     .then ((response) => {
       console.log(response);
     })
@@ -34,7 +34,7 @@ export class PromoteToAdminComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("http://localhost:8080/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;

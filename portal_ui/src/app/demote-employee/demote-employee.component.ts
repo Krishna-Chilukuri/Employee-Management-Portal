@@ -22,7 +22,7 @@ export class DemoteEmployeeComponent {
   demoteEmployee() {
     console.log("Demote Request for " + this.empId + " " + this.numDems);
     console.log("Valid Demotion request");
-    fetch("http://localhost:8080/api/employees/demote?empId=" + this.empId + "&numDems=" + this.numDems + "&sessionId=" + localStorage.getItem("sessionId"), {
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/demote?empId=" + this.empId + "&numDems=" + this.numDems + "&sessionId=" + localStorage.getItem("sessionId"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

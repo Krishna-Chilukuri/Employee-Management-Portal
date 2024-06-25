@@ -21,7 +21,7 @@ export class SessionCheckerService {
     try {
       if (typeof(localStorage) !== 'undefined') {
         console.log("Before fetch in service : Session CHecker");
-        const response = await fetch("http://localhost:8080/api/login/checkSession?sessionId=" + localStorage.getItem("sessionId"));
+        const response = await fetch("https://ltdfl12f3g.execute-api.us-east-1.amazonaws.com/Prod/?sessionId=" + localStorage.getItem("sessionId"));
         console.log("Before await");
         data = await response.json();
         console.log("DATA : " + JSON.stringify(data));

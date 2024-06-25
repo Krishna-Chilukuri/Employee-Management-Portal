@@ -13,7 +13,7 @@ import { AuthenticationServiceService } from '../authentication-service.service'
 })
 export class LoginComponent {
   loginCreds : LoginCreds;
-  checkUrl : string = "http://localhost:8080/api/login/getId";
+  checkUrl : string = "https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/getId";
   jsonString : string;
   constructor(private router: Router, private authService: AuthenticationServiceService) {
     if (typeof(localStorage) !== 'undefined' && localStorage.getItem("loginStat") == "true") {
@@ -39,7 +39,7 @@ export class LoginComponent {
     // document.getElementById("login-form").reset();
     // window.location.reload();
     //+"&password="+JSON.stringify(this.loginCreds.password)
-    // fetch("http://localhost:8080/api/login/getId?id="+this.loginCreds.userId).then((data) => {
+    // fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/getId?id="+this.loginCreds.userId).then((data) => {
     //   data.json().then((obj) => {
     //     console.log(obj);
     //   })

@@ -35,7 +35,7 @@ export class ViewEmployeeComponent {
   async viewEmployee() {
     console.log("Viewing : " + this.employeeId);
     
-    fetch("http://localhost:8080/api/employees/view?empId="+this.employeeId, {
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/view?empId="+this.employeeId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

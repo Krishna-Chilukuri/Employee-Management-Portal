@@ -45,21 +45,23 @@ public class LoginController {
     @GetMapping(value = "/getId", produces = "application/json")
     public Session getLogin(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, HttpServletRequest request) throws IOException {
         Login login = loginServiceImplementation.getLoginById(username);
+        Logger lg = Logger.getInstance();
         if (login.getUsername() == null) {
+            lg.log("Returning null 1");
             return new Session();
         }
-        Logger lg = Logger.getInstance();
-        lg.log("Login Attempted");
+        // Logger lg = Logger.getInstance();
+        // lg.log("Login Attempted");
         if (login.getPassword().equals(password)) {
-//            Cookie
-//            Logger lg= Logger.getInstance();
-//            Cookie ck = new Cookie("sessionId", "kp");
-//            response.addCookie(ck);
-
+            //            Cookie
+            //            Logger lg= Logger.getInstance();
+            //            Cookie ck = new Cookie("sessionId", "kp");
+            //            response.addCookie(ck);
+            
             Session sessionRecord = new Session();
-
-//            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-//            HttpServletRequest request = servletRequestAttributes.getRequest();
+            
+            //            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            //            HttpServletRequest request = servletRequestAttributes.getRequest();
             HttpSession session = request.getSession();
             String sessionId = session.getId();
             String clientIp = request.getRemoteAddr();
@@ -71,17 +73,18 @@ public class LoginController {
             calendar.add(Calendar.MINUTE, 15);
             Timestamp expiryTs = new Timestamp(calendar.getTimeInMillis());
             sessionRecord.setExpiry(expiryTs);
-
+            
             sessionServiceImplementation.saveSession(sessionRecord);
-
-
+            
+            
             lg.log(username + " login successful! session Record : " + sessionRecord);
-
+            
             return sessionRecord;
-//            return Response.ok().entity(    )
+            //            return Response.ok().entity(    )
         }
         else {
-            lg.log("Login Failed");
+            // lg.log("Login Failed");
+            lg.log("Returning null 2");
             return new Session();
         }
     }
@@ -89,20 +92,20 @@ public class LoginController {
     @RequestMapping("/checkSession")
     public Session checkSession(@RequestParam(name = "sessionId") String sessionId, HttpServletRequest request) throws IOException {
         Logger lg = Logger.getInstance();
-        lg.log("Checking Session upon page load: " + sessionId);
+        // lg.log("Checking Session upon page load: " + sessionId);
         Session currSession = sessionServiceImplementation.getSessionById(sessionId);
-        lg.log("Session: " + currSession);
+        // lg.log("Session: " + currSession);
         Calendar calendar = Calendar.getInstance();
         Timestamp currTs = new Timestamp(calendar.getTimeInMillis());
         HttpSession session = request.getSession();
         String currIp = request.getRemoteAddr();
         if (currSession.getSessionId() == null) {
             //No session
-            lg.log("Session not Found");
+            // lg.log("Session not Found");
             return new Session();//empty priv and sessionId
         }
         else if(currTs.after(currSession.getExpiry())) {
-            lg.log("Session Expired");
+            // lg.log("Session Expired");
             sessionServiceImplementation.deleteSessionById(sessionId);
             return new Session();
         }
@@ -119,16 +122,16 @@ public class LoginController {
         Logger lg = Logger.getInstance();
         Login log = loginServiceImplementation.getLoginById(adminId);
         if (log.getUsername() == null) {
-            lg.log("User not Found in Login");
+            // lg.log("User not Found in Login");
             return;
         } else if (Objects.equals(log.getPrivilege(), "guest") || Objects.equals(log.getPrivilege(), "priv_user")) {
-            lg.log("User is not an Admin to be promoted");
+            // lg.log("User is not an Admin to be promoted");
             return;
         } else if (Objects.equals(log.getPrivilege(), "owner")) {
-            lg.log("User is already an Owner");
+            // lg.log("User is already an Owner");
             return;
         }
-        lg.log("User " + adminId + " is being promoted to Owner");
+        // lg.log("User " + adminId + " is being promoted to Owner");
         loginServiceImplementation.updatePrivilege(adminId, "owner");
     }
 
@@ -137,16 +140,16 @@ public class LoginController {
         Logger lg = Logger.getInstance();
         Login log = loginServiceImplementation.getLoginById(ownerId);
         if (log.getUsername() == null) {
-            lg.log("User not Found in Login");
+            // lg.log("User not Found in Login");
             return;
         } else if (Objects.equals(log.getPrivilege(), "guest") || Objects.equals(log.getPrivilege(), "priv_user")) {
-            lg.log("User is not an Admin to be promoted");
+            // lg.log("User is not an Admin to be promoted");
             return;
         } else if (Objects.equals(log.getPrivilege(), "admin")) {
-            lg.log("User is already an Admin");
+            // lg.log("User is already an Admin");
             return;
         }
-        lg.log("User " + ownerId + " is demoted to Admin");
+        // lg.log("User " + ownerId + " is demoted to Admin");
         loginServiceImplementation.updatePrivilege(ownerId, "admin");
     }
 
@@ -155,20 +158,20 @@ public class LoginController {
         Logger lg = Logger.getInstance();
         Login log = loginServiceImplementation.getLoginById(username);
         if (log.getUsername() == null) {
-            lg.log("User not Found in Login");
+            // lg.log("User not Found in Login");
             return;
         } else if (Objects.equals(log.getPrivilege(), "guest") || Objects.equals(log.getPrivilege(), "priv_user")) {
-            lg.log("User is not an Admin / Owner");
+            // lg.log("User is not an Admin / Owner");
             return;
         }
-        lg.log("User " + username + " is removed");
+        // lg.log("User " + username + " is removed");
         loginServiceImplementation.removeLogin(username);
     }
 
     @RequestMapping("/viewAdminOwner")
     List<viewableUser> viewAdminOwner() throws IOException {
         Logger lg = Logger.getInstance();
-        lg.log("in viewAdminOwner");
+        // lg.log("in viewAdminOwner");
         List<viewableUser> retList = new ArrayList<>();
         for (Login log: loginServiceImplementation.getAdminOwners()) {
             viewableUser user = new viewableUser(log);
@@ -186,7 +189,7 @@ public class LoginController {
     String changePassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) throws IOException {
         Logger lg = Logger.getInstance();
         try{
-            lg.log("Change Password request received for "+username);
+            // lg.log("Change Password request received for "+username);
             loginServiceImplementation.updatePassword(username, password);
         }
         catch (Exception e) {
