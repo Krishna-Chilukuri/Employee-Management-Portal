@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = "https://portal-employee-management.web.app/")
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
