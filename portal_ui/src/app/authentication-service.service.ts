@@ -15,7 +15,7 @@ export class AuthenticationServiceService {
   async loginService(username: string, password: string): Promise<boolean> {
     console.log("IN AUTH SERVICE");
     try {
-      const response = await fetch("http://localhost:8080/api/login/getId?username="+username+"&password="+password);
+      const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/getId?username="+username+"&password="+password);
       // const data = response.json();
       const data = await response.json();
       console.log("Login Done: " + JSON.stringify(data));
