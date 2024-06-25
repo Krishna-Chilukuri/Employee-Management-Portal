@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "portal-employee-management",
+    "public": "dist/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

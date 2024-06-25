@@ -1,8 +1,8 @@
-<p>promote-to-admin works!</p>
-<div class="promoteAdminDiv">
-    <form id="prom-adm-form" class="promAdmForm" (ngSubmit)="promoteToAdmin()">
-        <label for="empId">Enter Employee ID to promote to Admin</label>
-        <input type="number" name="empId" id="empId" [(ngModel)]="empId"><br>
-        <input type="submit" value="Promote">
+<div class="midCommonDiv">
+    <form id="prom-adm-form" class="promAdmForm" (ngSubmit)="promoteToAdmin()" ngNativeValidate>
+        <div class="inputEle">
+            <input type="number" name="empId" id="empId" [(ngModel)]="empId" placeholder="Employee Id" required>
+        </div>
+        <input class="submitButton" type="submit" value="Promote">
     </form>
 </div>

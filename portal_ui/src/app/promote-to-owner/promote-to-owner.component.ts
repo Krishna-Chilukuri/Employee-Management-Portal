@@ -12,17 +12,19 @@ import { AuthenticationServiceService } from '../authentication-service.service'
   styleUrl: './promote-to-owner.component.scss'
 })
 export class PromoteToOwnerComponent {
-  adminId: string = '';
+  adminId?: string;
 
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
+    this.headerComp.pageTitle = "Promote To Owner";
   }
 
   promoteToOwner() {
     console.log(this.adminId);
-    fetch("http://localhost:8080/api/login/promoteToOwner?adminId="+this.adminId)
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/promoteToOwner?adminId="+this.adminId)
     .then ((response) => {
       console.log(response);
+      window.location.reload();
     })
     .catch ((error) => {
       console.log("Error in Promote to Owner : " + error);
@@ -33,7 +35,7 @@ export class PromoteToOwnerComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("http://localhost:8080/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;

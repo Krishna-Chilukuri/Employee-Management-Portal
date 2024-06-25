@@ -1,8 +1,8 @@
-<p>demote-owner works!</p>
-<div class="demoteOwnerDiv">
-    <form id="dem-own-form" class="demOwnForm" (ngSubmit)="demoteOwner()">
-        <label for="ownerUsername">Enter Owner User Name to Demote</label>
-        <input type="text" name="ownerUsername" id="ownerUsername" [(ngModel)]="ownerId">
-        <input type="submit" value="Demote">
+<div class="midCommonDiv">
+    <form id="dem-own-form" class="demOwnForm" (ngSubmit)="demoteOwner()" ngNativeValidate>
+        <div class="inputEle">
+            <input type="text" name="ownerUsername" id="ownerUsername" [(ngModel)]="ownerId" placeholder="Enter Owner Username" required>
+        </div>
+        <input class="submitButton" type="submit" value="Demote">
     </form>
 </div>

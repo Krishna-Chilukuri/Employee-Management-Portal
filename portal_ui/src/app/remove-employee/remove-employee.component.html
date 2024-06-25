@@ -1,8 +1,11 @@
-<p>remove-employee works!</p>
-<div class="removeEmpDiv">
+<div class="midCommonDiv">
     <form id="remove-emp-form" class="removeEmpForm" (ngSubmit) = "removeEmployee()" ngNativeValidate>
-        <label for="empId">Enter Employee ID</label>
-        <input type="number" name="empId" id="empId" [(ngModel)]="employeeId">
-        <input type="submit" value="Remove Employee">
+        <div class="inputEle">
+            <input type="number" name="empId" id="empId" [(ngModel)]="employeeId" placeholder="Enter Employee Id" required>
+        </div>
+        <input class="submitButton" type="submit" value="Remove Employee">
     </form>
 </div>
+
+<!-- <div class="midCommonDiv" id="resultSection"></div> -->
+ <!-- NEED TO SET THE RESULT OF REMOVING IN FRONT END -->

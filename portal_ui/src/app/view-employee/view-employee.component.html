@@ -1,8 +1,20 @@
-<p>view-employee works!</p>
-<div class="viewEmpDiv">
-    <form id="view-emp-form" class="viewEmpForm" (ngSubmit)="viewEmployee()">
-        <label for="empId">Enter Employee ID</label>
-        <input type="number" name="empId" id="empId" [(ngModel)]="employeeId">
-        <input type="submit" value="View Employee">
+<div class="midCommonDiv">
+    <form id="view-emp-form" class="viewEmpForm" (ngSubmit)="viewEmployee()" ngNativeValidate>
+        <div class="inputEle">
+            <input type="number" name="empId" id="empId" placeholder="Employee ID" [(ngModel)]="employeeId" required>
+        </div>
+        <input class="submitButton viewEmpSubmitButton" type="submit" value="View Employee">
     </form>
+    <div class="empDetails" *ngIf="empReceived">
+        <div class="item"><b>Id</b></div>
+        <div class="item">{{resEmpId}}</div>
+        <div class="item"><b>Name</b></div>
+        <div class="item">{{employeeName}}</div>
+        <div class="item"><b>Rank</b></div>
+        <div class="item">{{employeeRank}}</div>
+        <div class="item"><b>Reports To</b></div>
+        <div class="item">{{reportsTo}}</div>
+        <div class="item"><b>Reportees</b></div>
+        <div class="item">{{reportees}}</div>
+    </div>
 </div>

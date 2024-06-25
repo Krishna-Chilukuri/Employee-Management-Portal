@@ -16,4 +16,9 @@ public interface LoginRepository extends JpaRepository<Login, String> {
 
     @Query("SELECT l FROM Login l WHERE l.privilege = 'admin' or l.privilege = 'owner'")
     List<Login> getAdminOwner();
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Login SET password = :password WHERE username = :username")
+    void updatePasswordById(String username, String password);
 }

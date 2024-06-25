@@ -1,0 +1,31 @@
+
+<div class="midCommonDiv">
+    <h1>PROFILE PAGE</h1>
+    <div class="userDetails">
+        <!-- <div class="item"><b>Id</b></div>
+        <div class="item">{{}}</div> -->
+        <div class="item"><b>User Name</b></div>
+        <div class="item">{{userName}}</div>
+        <!-- <div class="item"><b>Rank</b></div>
+        <div class="item">{{employeeRank}}</div> -->
+        <!-- <div class="item"><b>Reports To</b></div>
+        <div class="item">{{reportsTo}}</div>
+        <div class="item"><b>Reportees</b></div>
+        <div class="item">{{reportees}}</div> -->
+        <div class="item"><b>Privilege</b></div>
+        <div class="item">{{userPrivilege}}</div>
+        <div class="item" *ngIf="empReceived"><b>Rank: </b></div>
+        <div class="item" *ngIf="empReceived"><b>{{userRank}}</b></div>
+        <div class="item" *ngIf="empReceived"><b>Reports To: </b></div>
+        <div class="item" *ngIf="empReceived">{{userReportsTo}}</div>
+        <div class="item" *ngIf="empReceived"><b>Reportees: </b></div>
+        <div class="item" *ngIf="empReceived">{{userReportees}}</div>
+    </div>
+    <div class="changePassword">
+        <form (ngSubmit)="changePassword()" ngNativeValidate>
+            <!-- <div class="item" *ngIf="userPrivilege != 'Guest User'">Enter new Password : </div> -->
+            <div class="inputEle"><input type="password" name="newPass" id="newPass" [(ngModel)]="newPassword" placeholder="Enter new Password" required></div>
+            <input type="submit" value="Change Password" class="submitButton">
+        </form>
+    </div>
+</div>

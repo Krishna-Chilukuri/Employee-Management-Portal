@@ -1,33 +1,65 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
+import { AuthenticationServiceService } from '../authentication-service.service';
+import { SessionCheckerService } from '../session-checker.service';
 
 @Component({
   selector: 'app-view-employee',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './view-employee.component.html',
   styleUrl: './view-employee.component.scss'
 })
 export class ViewEmployeeComponent {
-  employeeId: number;
+  employeeId?: number;
+  resEmpId?: number;
+  employeeName?: string;
+  employeeRank?: string;
+  reportsTo?: string;
+  reportees?: string;
   jsonString: string;
-  constructor() {
-    this.employeeId = 0;
+  data: object;
+  empReceived: boolean = false;
+    // this.employeeId = 0;
+  constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
+    this.headerComp.setUsername();
+    this.headerComp.pageTitle = "View Employee";
     this.jsonString = '';
+    this.data = new Object();
   }
+  
 
   async viewEmployee() {
     console.log("Viewing : " + this.employeeId);
     
-    fetch("http://localhost:8080/api/employees/view?empId="+this.employeeId, {
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/view?empId="+this.employeeId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
     .then ((response) => response.json())
-    .then ((data) => {
-      console.log(data);
+    .then ((dat) => {
+      console.log(dat);
+      this.data = dat;
+      this.employeeId = dat?.employee?.employeeId ?? 0;
+      if (this.employeeId == 0) {
+        console.log("Employee is not Present");
+        this.empReceived = false;
+        return;
+      }
+      else {
+        this.resEmpId = this.employeeId;
+        this.employeeName = dat?.employee?.employeeName ?? '';
+        this.employeeRank = dat?.employee?.employeeRank ?? '';
+        this.reportsTo = dat?.employee?.reportsTo ?? 'None';
+        if(this.reportsTo == '0') this.reportsTo = 'None';
+        this.reportees = dat?.reportees ?? '';
+        this.empReceived = true;
+      }
     })
     .catch ((error) => {
       console.log("Error in View EMP: " + error);

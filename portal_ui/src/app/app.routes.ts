@@ -14,6 +14,8 @@ import { DemoteOwnerComponent } from './demote-owner/demote-owner.component';
 import { RemoveAdminOwnerComponent } from './remove-admin-owner/remove-admin-owner.component';
 import { ViewAdminOwnerComponent } from './view-admin-owner/view-admin-owner.component';
 import { RouteGuardService, canAdminNavigate, canNavigate, canOwnerNavigate, canPrivNavigate } from './route-guard.service';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { AboutComponentComponent } from './about-component/about-component.component';
 
 export const routes: Routes = [
     {
@@ -95,5 +97,16 @@ export const routes: Routes = [
         component: ViewAdminOwnerComponent,
         title: "View Admin & Owner",
         canActivate: [canAdminNavigate],
+    },
+    {
+        path: 'profilePage',
+        component: ProfilePageComponent,
+        title: "Profile Page",
+        canActivate: [canNavigate],
+    },
+    {
+        path: 'aboutPage',
+        component: AboutComponentComponent,
+        title: "About Page",
     }
 ];

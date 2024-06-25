@@ -1,16 +1,48 @@
-<p>hierarchies works!</p>
-<div class="hierarchiesDiv">
+<div class="midCommonDiv">
     <form id="hierarchy-form" class="hierarchyForm" (ngSubmit)="getHierarchy()" ngNativeValidate>
-        <label for="empId">Enter Employee ID</label>
-        <input type="number" name="empId" id="empId" [(ngModel)]="empId">
-        <label for="kVal">Enter k</label>
-        <input type="number" name="kVal" id="kVal" [(ngModel)]="kVal">
-        <input type="radio" name="typeOfHie" id="upper" value="upper" required [(ngModel)]="choiceOfHie">
-        <label for="upper">Upper Hierarchy</label>
-        <input type="radio" name="typeOfHie" id="lower" value="lower" [(ngModel)]="choiceOfHie">
-        <label for="lower">Lower Hierarchy</label>
-        <input type="radio" name="typeOfHie" id="kStep" value="kStep"[(ngModel)]="choiceOfHie">
-        <label for="kStep">K-Step Hierarchy</label>
-        <input type="submit" value="View Hierarchy">
+        <div class="inputEle">
+            <input type="number" name="empId" id="empId" [(ngModel)]="empId" placeholder="Employee Id" required>
+        </div>
+        <div class="inputEle">
+            <input type="number" name="kVal" id="kVal" [(ngModel)]="kVal" placeholder="K Value" required>
+        </div>
+        <div class="radioGrid">
+            <div class="gridItem">
+                <input type="radio" name="typeOfHie" id="upper" value="upper" required [(ngModel)]="choiceOfHie">
+                <label for="upper"> Upper</label>
+            </div>
+            <div class="gridItem">
+                <input type="radio" name="typeOfHie" id="lower" value="lower" [(ngModel)]="choiceOfHie">
+                <label for="lower"> Lower</label>
+            </div>
+            <div class="gridItem">
+                <input type="radio" name="typeOfHie" id="kStep" value="kStep"[(ngModel)]="choiceOfHie">
+                <label for="kStep"> K-Step</label>
+            </div>
+        </div>
+        <input class="submitButton" type="submit" value="View Hierarchy">
     </form>
 </div>
+
+<div *ngIf="gotResult" class="midCommonDiv tableCustom">
+    <table>
+        <tbody>
+            <tr>
+                <th>Employee Id</th>
+                <th>Employee Name</th>
+                <th>Employee Rank</th>
+                <th>Reports To</th>
+                <th>Reportees</th>
+            </tr>
+            <tr *ngFor="let emp of data">
+                <td>{{emp.employee.employeeId}}</td>
+                <td>{{emp.employee.employeeName}}</td>
+                <td>{{emp.employee.employeeRank}}</td>
+                <td>{{emp.employee.reportsTo}}</td>
+                <td>{{emp.reportees}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="!gotResult" class="midCommonDiv"><h2>No Hierarchy found for the above selection !!</h2></div>

@@ -17,7 +17,8 @@ export class ViewAdminOwnerComponent {
 
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.checkSession();
-    fetch("http://localhost:8080/api/login/viewAdminOwner")
+    this.headerComp.pageTitle = "View Admins & Owners";
+    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/viewAdminOwner")
     .then ((response) => response.json())
     .then ((obj) => {
       console.log(obj);
@@ -33,7 +34,7 @@ export class ViewAdminOwnerComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("http://localhost:8080/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;
