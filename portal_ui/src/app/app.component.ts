@@ -103,6 +103,7 @@ export class AppComponent {
     console.log("LogOut clicked");
     localStorage.removeItem("loginStat");
     localStorage.removeItem("userPriv");
+    localStorage.removeItem("sessionId");
     console.log("Logged Out");
     this.username = '';
     this.pageTitle = "Employee Management Portal";

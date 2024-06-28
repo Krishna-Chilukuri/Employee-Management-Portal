@@ -33,7 +33,7 @@ export class AuthenticationServiceService {
       localStorage.setItem("loginStat", this.loginStat ? "true" : "false");
       localStorage.setItem("userPriv", this.userPriv);
       localStorage.setItem("sessionId", this.sessionId);
-      localStorage.setItem("username", data.username);
+      // localStorage.setItem("username", data.username);
       return true;
     }
     catch (error) {
