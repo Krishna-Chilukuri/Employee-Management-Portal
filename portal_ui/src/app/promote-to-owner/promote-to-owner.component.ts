@@ -21,7 +21,7 @@ export class PromoteToOwnerComponent {
 
   promoteToOwner() {
     console.log(this.adminId);
-    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/promoteToOwner?adminId="+this.adminId)
+    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/promoteToOwner?adminId="+this.adminId)
     .then ((response) => {
       console.log(response);
       window.location.reload();
@@ -35,7 +35,7 @@ export class PromoteToOwnerComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;

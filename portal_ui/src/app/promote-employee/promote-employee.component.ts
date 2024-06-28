@@ -23,7 +23,7 @@ export class PromoteEmployeeComponent {
   promoteEmployee() {
     console.log("Promote Request for " + this.empId + " " + this.numProms);
     console.log("Valid Promotion request");
-    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/promote?empId=" + this.empId + "&numProms=" + this.numProms + "&sessionId=" + localStorage.getItem("sessionId"), {
+    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/promote?empId=" + this.empId + "&numProms=" + this.numProms + "&sessionId=" + localStorage.getItem("sessionId"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

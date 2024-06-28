@@ -108,5 +108,5 @@ export const routes: Routes = [
         path: 'aboutPage',
         component: AboutComponentComponent,
         title: "About Page",
-    }
+    },
 ];

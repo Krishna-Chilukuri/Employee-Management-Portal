@@ -8,6 +8,7 @@
             <a routerLink="/home-component">Home</a>
         </div>
         <div class="center">{{pageTitle}}</div>
+        <button class="menuButton" (click)="menuToggle()"><img src= "menu_dark.png" alt="Menu" srcset="" id="dispImg"></button>
         <div class="aboutProfile">
             <div class="menuItem">
                 <a routerLink="/profilePage">Profile: {{username}}</a>
@@ -34,4 +35,13 @@
             
     </nav>
 </header>
-<router-outlet />
+<body>
+    <div class="navbarMenu" id="navbarMenu">
+        <a routerLink="/profilePage">Profile: {{username}}</a>
+        <a href="#" (click)="onLogout()">LogOut</a>
+        <a routerLink="/aboutPage">About</a>
+        <!-- <input type="checkbox" id="themeSwitcher" (click)="checkBoxClicked()">
+                <label for="themeSwitcher"></label> -->
+    </div>
+    <router-outlet />
+</body>

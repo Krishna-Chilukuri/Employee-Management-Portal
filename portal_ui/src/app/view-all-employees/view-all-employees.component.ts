@@ -19,7 +19,7 @@ export class ViewAllEmployeesComponent {
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.headerComp.setUsername();
     this.headerComp.pageTitle = "View All Employees";
-    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/getAllEmployees")
+    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/getAllEmployees")
     .then ((response) => response.json())
     .then ((res) => {
       console.log(res);

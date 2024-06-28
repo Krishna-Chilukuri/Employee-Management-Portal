@@ -21,7 +21,7 @@ export class DemoteOwnerComponent {
   demoteOwner() {
     console.log(this.ownerId);
 
-    fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/demoteOwner?ownerId="+this.ownerId)
+    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/demoteOwner?ownerId="+this.ownerId)
     .then ((response) => {
       console.log(response);
       window.location.reload();

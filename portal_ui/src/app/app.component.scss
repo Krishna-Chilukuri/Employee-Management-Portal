@@ -16,11 +16,25 @@
     }
 }
 
+.menuButton {
+    display: none;
+    background: none;
+    border: none;
+    margin-right: 10px;
+}
+
+.navbarMenu {
+    // background-color: red;
+    // width: 100%;
+    // height: 100%;
+    display: none;
+}
+
 .navHeader {
-    position: fixed;
+    // position: fixed;
     // z-index: 1;
-    top: 0;
-    left: 0;
+    // top: 0;
+    // left: 0;
     width: 100%;
     background: var(--nav-bar-color);
     // backdrop-filter: blur(10px);
@@ -203,4 +217,36 @@ input:checked + label:after {
     left: 42px;
     transform: translateX(-100%);
     background: linear-gradient(180deg, #ffcc89, #fc9002);
+}
+
+@media screen and (max-width: 1000px) {
+    .center {
+        display: none;
+    }
+}
+@media screen and (max-width: 650px) {
+    .menuButton {
+        display: flex;
+    }
+
+    .aboutProfile {
+        display: none;
+    }
+
+    .navbgActive{
+        background-color: var(--nav-bar-color);
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+        // position: relative;
+        // margin: 5vh 10vw;
+    }
+    .navbgActive a{
+        padding: 10vw 25%;
+        font-size: large;
+        font-weight: 450;
+    }
+
+
 }

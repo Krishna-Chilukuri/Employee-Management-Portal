@@ -8,6 +8,7 @@
     --dark-button-highlight-color: #c2c2c2;
     --dark-accent-color: #90B8F8;
     --dark-button-border: #FAF9F6;
+    --dark-menu-button: "menu_light.png";
 
     --light-text-color: #121212;
     --light-bg-color: #FAF9F6;
@@ -17,6 +18,7 @@
     --light-button-highlight-color: #bae9ff;
     --light-accent-color: #FAF9F6;
     --light-button-border: #121212;
+    --light-menu-button: "menu_dark.png";
 
     --currTheme: light;
     --text-color: var(--light-text-color);
@@ -27,6 +29,7 @@
     --button-highlight-color: var(--light-button-highlight-color);
     --accent-color: var(--light-accent-color);
     --button-border: var(--light-button-border);
+    --menu-button: var(--light-menu-button);
     --box-shadow: #868686;
 }
 
@@ -48,7 +51,7 @@ body {
 
 .midCommonDiv {
     margin: 10% 25%;
-    width: 50%;
+    // width: 50%;
     padding: 15px 10px;
     // min-height: 50%;
     display: flex;
@@ -112,6 +115,15 @@ body {
 .submitButton:hover {
     color: var(--button-highlight-text);
     background-color: var(--button-highlight-color);
+}
+
+@media screen and (max-width: 650px) {
+    // body {
+    //     background-color: red;
+    // }
+    .midCommonDiv {
+        margin: 10% 5%;
+    }
 }
 
 // .submitButton:hover {

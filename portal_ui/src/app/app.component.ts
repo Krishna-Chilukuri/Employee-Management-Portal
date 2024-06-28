@@ -21,6 +21,7 @@ export class AppComponent {
   pageTitle: string = 'Employee Management Portal';
 
   constructor(private router: Router, private sessionChecker: SessionCheckerService) {
+    // let ele = document.getElementById("dispImg") as HTMLImageElement | null;
     if (typeof (localStorage) !== 'undefined') {
       if (localStorage.getItem("theme")) {
         switch (localStorage.getItem("theme")) {
@@ -38,9 +39,9 @@ export class AppComponent {
             document.documentElement.style.setProperty('--accent-color', 'var(--light-accent-color)');
             document.documentElement.style.setProperty('--button-border', 'var(--light-button-border)');
             break;
-          case "dark":
-            document.documentElement.style.setProperty('--currTheme', 'dark');
-            document.documentElement.style.setProperty('--text-color', 'var(--dark-text-color)');
+            case "dark":
+              document.documentElement.style.setProperty('--currTheme', 'dark');
+              document.documentElement.style.setProperty('--text-color', 'var(--dark-text-color)');
             // document.documentElement.style.setProperty('--bg-color', '#121212');
             document.documentElement.style.setProperty('--bg-color', 'var(--dark-bg-color)');
             document.documentElement.style.setProperty('--nav-bar-color', 'var(--dark-nav-bar-color)');
@@ -58,9 +59,33 @@ export class AppComponent {
         let currTheme = getComputedStyle(document.documentElement).getPropertyValue('--currTheme');
         localStorage.setItem("theme", currTheme);
         console.log(localStorage.getItem("theme"));
+  
       }
     }
     this.setUsername();
+  }
+
+  menuToggle() {
+    console.log("Menu Button Clicked!!");
+    let ele = document.getElementById("navbarMenu");
+    let imgele = document.getElementById("dispImg") as HTMLImageElement | null;
+    console.log(ele);
+    if (ele?.classList.contains("navbgActive")) {
+      ele.classList.remove("navbgActive");
+      if (imgele) {
+        imgele.src = "menu_dark.png";
+      }
+      else {
+        console.log("null in imgele");
+      }
+    }
+    else {
+      if (imgele) {
+        imgele.src = "close_dark.png";
+      }
+      console.log("adding navbgactive");
+      ele?.classList.add("navbgActive");
+    }
   }
 
   async setUsername() {

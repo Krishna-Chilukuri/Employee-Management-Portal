@@ -31,7 +31,7 @@ export class ProfilePageComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;
@@ -46,7 +46,7 @@ export class ProfilePageComponent {
           break;
         case "priv_user":
           this.userPrivilege = "Privileged User";
-          const response2 = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/employees/view?empId="+this.userName);
+          const response2 = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/view?empId="+this.userName);
           const data2 = await response2.json();
           console.log("EMP DATA : " + JSON.stringify(data2));
           if (data2?.employee?.employeeId != this.userName) {
@@ -79,7 +79,7 @@ export class ProfilePageComponent {
 
   async changePassword() {
     console.log("new password: " + this.newPassword);
-    const response = await fetch("https://emp-management-portal-server.calmfield-5b49f4b7.eastus.azurecontainerapps.io/api/login/changePassword?username="+this.userName+"&password="+this.newPassword);
+    const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/changePassword?username="+this.userName+"&password="+this.newPassword);
     const retVal = await response.text();
     console.log(retVal);
     alert(retVal);
