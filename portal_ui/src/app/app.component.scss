@@ -222,6 +222,7 @@ input:checked + label:after {
 @media screen and (max-width: 1000px) {
     .center {
         display: none;
+        font-size: medium;
     }
 }
 @media screen and (max-width: 650px) {

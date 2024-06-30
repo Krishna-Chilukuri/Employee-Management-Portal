@@ -65,6 +65,23 @@ export class AppComponent {
     this.setUsername();
   }
 
+  resetToggle() {
+    console.log("In reset toggle");
+    let ele = document.getElementById("navbarMenu");
+    let imgele = document.getElementById("dispImg") as HTMLImageElement | null;
+    console.log(ele);
+    if (ele?.classList.contains("navbgActive")) {
+      ele.classList.remove("navbgActive");
+      if (imgele) {
+        imgele.src = "menu_dark.png";
+      }
+      else {
+        console.log("null in imgele");
+      }
+    }
+    this.onLogout();
+  }
+
   menuToggle() {
     console.log("Menu Button Clicked!!");
     let ele = document.getElementById("navbarMenu");
@@ -109,6 +126,8 @@ export class AppComponent {
     this.pageTitle = "Employee Management Portal";
     this.router.navigate(['/']);
   }
+
+  
 
   checkBoxClicked() {
     // alert("Theme switched");

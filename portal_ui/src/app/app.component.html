@@ -1,14 +1,11 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <header class="navHeader">
     <nav>
         <div class="left">
             <a routerLink="/home-component">Home</a>
         </div>
         <div class="center">{{pageTitle}}</div>
-        <button class="menuButton" (click)="menuToggle()"><img src= "menu_dark.png" alt="Menu" srcset="" id="dispImg"></button>
+        <button class="menuButton" (click)="menuToggle()"><img src="menu_dark.png" alt="Menu" srcset=""
+                id="dispImg"></button>
         <div class="aboutProfile">
             <div class="menuItem">
                 <a routerLink="/profilePage">Profile: {{username}}</a>
@@ -32,16 +29,14 @@
                 <img src="close-icon.png" alt="Menu">
             </div> -->
         </div>
-            
+
     </nav>
 </header>
-<!-- <body>
-    <div class="navbarMenu" id="navbarMenu">
-        <a routerLink="/profilePage">Profile: {{username}}</a>
-        <a href="#" (click)="onLogout()">LogOut</a>
-        <a routerLink="/aboutPage">About</a>
-        <input type="checkbox" id="themeSwitcher" (click)="checkBoxClicked()">
-                <label for="themeSwitcher"></label>
-    </div> -->
-    <router-outlet />
-<!-- </body> -->
+<div class="navbarMenu" id="navbarMenu">
+    <a routerLink="/profilePage" (click)="menuToggle()">Profile: {{username}}</a>
+    <a href="#" (click)="resetToggle()">LogOut</a>
+    <a routerLink="/aboutPage" (click)="menuToggle()">About</a>
+    <!-- <input type="checkbox" id="themeSwitcher" (click)="checkBoxClicked()">
+    <label for="themeSwitcher"></label> -->
+</div>
+<router-outlet />
