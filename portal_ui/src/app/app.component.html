@@ -1,7 +1,7 @@
 <header class="navHeader">
     <nav>
         <div class="left">
-            <a routerLink="/home-component">Home</a>
+            <a routerLink="/home-component" (click)="resetHome()">Home</a>
         </div>
         <div class="center">{{pageTitle}}</div>
         <button class="menuButton" (click)="menuToggle()"><img src="menu_dark.png" alt="Menu" srcset=""
@@ -39,4 +39,6 @@
     <!-- <input type="checkbox" id="themeSwitcher" (click)="checkBoxClicked()">
     <label for="themeSwitcher"></label> -->
 </div>
-<router-outlet />
+<div class="routerDiv" *ngIf="menuClosed">
+    <router-outlet />
+</div>

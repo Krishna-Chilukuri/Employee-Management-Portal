@@ -19,6 +19,7 @@ export class AppComponent {
   title = 'portal_ui';
   username: string = '';
   pageTitle: string = 'Employee Management Portal';
+  menuClosed: boolean = true;
 
   constructor(private router: Router, private sessionChecker: SessionCheckerService) {
     // let ele = document.getElementById("dispImg") as HTMLImageElement | null;
@@ -65,7 +66,8 @@ export class AppComponent {
     this.setUsername();
   }
 
-  resetToggle() {
+  resetHome() {
+    this.menuClosed = true;
     console.log("In reset toggle");
     let ele = document.getElementById("navbarMenu");
     let imgele = document.getElementById("dispImg") as HTMLImageElement | null;
@@ -79,10 +81,16 @@ export class AppComponent {
         console.log("null in imgele");
       }
     }
+  }
+
+  resetToggle() {
+    this.resetHome();
     this.onLogout();
   }
 
   menuToggle() {
+    if (this.menuClosed) this.menuClosed = false;
+    else this.menuClosed = true;
     console.log("Menu Button Clicked!!");
     let ele = document.getElementById("navbarMenu");
     let imgele = document.getElementById("dispImg") as HTMLImageElement | null;
