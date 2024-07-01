@@ -1,8 +1,9 @@
 table {
     border-collapse: collapse;
+    border-spacing: 2px;
     width: 100%;
-    font-size: 18px;
-    table-layout: fixed;
+    // font-size: 18px;
+    // table-layout: fixed;
     // background-color: red;
     // border: none;
     // display: grid;
@@ -15,6 +16,7 @@ table {
 
 .tableCustom {
     min-height: 10%;
+    overflow-x: auto;
 }
 
 tr {
@@ -27,10 +29,17 @@ tr:hover {
 
 td, th{
     // border: 1px solid var(--text-color);
-    padding: 10px 20px;
+    // padding: 10px 20px;
+    // display: table-cell;
     text-align: center;
+    min-width: max-content;
     // overflow: ;
 }
+
+// th {
+//     display: table-cell;
+//     vertical-align: in;
+// }
 
 td:last-child {
     overflow: hidden;
@@ -43,4 +52,13 @@ td:last-child:hover {
     height: auto;
     position: absolute;
     text-overflow: clip;
+}
+
+@media screen and (max-width: 1000px) {
+    th {
+        padding: 5px;
+        // background-color: red;
+        // border: 1px solid green;
+        // font-size: 1rem  
+    }
 }

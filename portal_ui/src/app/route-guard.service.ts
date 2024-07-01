@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Route, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationServiceService } from './authentication-service.service';
+import { AppComponent } from './app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export const canNavigate: CanActivateFn = (
   if (inject(AuthenticationServiceService).isAuthenticated()) {
     return true;
   } else {
+    // inject(AppComponent).pageTitle = "Employee Management Portal";
     inject(Router).navigate(['/']);
     return false;
   }

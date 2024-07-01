@@ -1,8 +1,30 @@
 .aboutPageContainer {
-    margin: 20vh 5vw;
+    margin: 10vh 10vw;
     // background-color: red;
     display: grid;
     grid-template-columns: auto;
+}
+
+.specsGrid {
+    display: grid;
+    grid-template-columns: 15% 85%;
+}
+
+ul {
+    list-style: none;
+}
+
+.specItem {
+    margin: 10px 10px;
+    padding: 10px 10px;
+}
+
+.specsGrid .testCredsHead {
+    grid-column: 1 / 3;
+}
+
+.specsGrid .loginDetails{
+    grid-column: 1 / 3;
 }
 
 .loginAndPicGrid {
@@ -16,8 +38,9 @@
 
 .loginDetails {
     // width: 70%;
-    margin: 10px;
-    padding: 10px;
+    margin: 2px;
+    padding: 2px;
+    overflow-x: auto;
     // background-color: red;
 }
 
@@ -86,4 +109,45 @@ td, th{
 
 .gitLink:hover {
     transform: scale(1.005);
+}
+
+.usersDiv li b {
+    padding: 7px;
+}
+
+.usersDiv ol {
+    list-style-position: inside;
+}
+
+.specItem a {
+    text-decoration: none;
+}
+
+.specItem a:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    // transition: scale(1.25) 0.3s ease;
+}
+
+@media screen and (max-width: 1240px) {
+    .specsGrid {
+        grid-template-columns: auto;
+    }
+    .specsGrid .testCredsHead {
+        grid-column: auto;
+    }
+    
+    .specsGrid .loginDetails{
+        grid-column: auto;
+    }
+
+    .loginDetails td, th{
+        padding: 0;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .passCol {
+        width: 36%;
+    }
 }

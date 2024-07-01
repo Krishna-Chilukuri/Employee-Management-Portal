@@ -18,7 +18,7 @@
     // width: 100%;
     background: transparent;
     // background-color: red;
-    height: 36px;
+    height: 63%;
     border: 2px solid var(--button-border);
     border-radius: 30px;
     display: flex;
@@ -38,4 +38,16 @@
 
 .buttonItem:hover {
     transform: scale(1.05);
+}
+
+@media screen and (max-width: 1000px) {
+    .buttonItem {
+        width: 75%;
+        margin: 5% 15%;
+    }
+
+    .midCommonDiv {
+        margin: 10% 5%;
+        font-size: small;
+    }
 }

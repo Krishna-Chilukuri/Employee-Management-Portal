@@ -11,6 +11,7 @@ import { AppComponent } from '../app.component';
 export class AboutComponentComponent {
 
   constructor(private headerComp: AppComponent) {
+    // console.log("set now");
     this.headerComp.pageTitle = "About Page";
   }
 }

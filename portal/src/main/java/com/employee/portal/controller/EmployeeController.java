@@ -490,12 +490,12 @@ public class EmployeeController {
         return employee;
     }
 
-//    @RequestMapping("/addOwner")
-//    public void AddOwner(@RequestParam("username") String usname, @RequestParam("password") String password) {
+//    @RequestMapping("/addUser")
+//    public void addUser(@RequestParam("username") String usname, @RequestParam("password") String password) {
 //        Login log = new Login();
 //        log.setUsername(usname);
 //        log.setPassword(password);
-//        log.setPrivilege("owner");
+//        log.setPrivilege("guest");
 //        loginServiceImplementation.saveLogin(log);
 //    }
 }

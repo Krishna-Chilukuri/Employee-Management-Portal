@@ -117,7 +117,7 @@ body {
     background-color: var(--button-highlight-color);
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 1000px) {
     // body {
     //     background-color: red;
     // }
@@ -125,6 +125,19 @@ body {
         margin: 10% 5%;
         font-size: small;
     }
+
+    body {
+        font-size: small;
+    }
+
+    .submitButton {
+        font-size: medium;
+    }
+
+    .inputEle {
+        margin: 2% 10%;
+    }
+
 }
 
 // .submitButton:hover {
