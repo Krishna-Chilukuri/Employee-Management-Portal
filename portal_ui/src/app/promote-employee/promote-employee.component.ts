@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from '../app.component';
 import { SessionCheckerService } from '../session-checker.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-promote-employee',
@@ -23,7 +24,7 @@ export class PromoteEmployeeComponent {
   promoteEmployee() {
     console.log("Promote Request for " + this.empId + " " + this.numProms);
     console.log("Valid Promotion request");
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/promote?empId=" + this.empId + "&numProms=" + this.numProms + "&sessionId=" + localStorage.getItem("sessionId"), {
+    fetch(backend_url + "/api/employees/promote?empId=" + this.empId + "&numProms=" + this.numProms + "&sessionId=" + localStorage.getItem("sessionId"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

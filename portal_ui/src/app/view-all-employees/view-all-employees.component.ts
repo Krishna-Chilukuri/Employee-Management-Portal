@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
 import { SessionCheckerService } from '../session-checker.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-view-all-employees',
@@ -19,7 +20,7 @@ export class ViewAllEmployeesComponent {
   constructor(private router: Router, private headerComp: AppComponent, private authService: AuthenticationServiceService) {
     this.headerComp.setUsername();
     this.headerComp.pageTitle = "View All Employees";
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/getAllEmployees")
+    fetch(backend_url + "/api/employees/getAllEmployees")
     .then ((response) => response.json())
     .then ((res) => {
       console.log(res);

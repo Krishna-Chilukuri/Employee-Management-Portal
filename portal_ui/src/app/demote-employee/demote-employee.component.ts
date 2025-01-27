@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from '../app.component';
 import { SessionCheckerService } from '../session-checker.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-demote-employee',
@@ -22,7 +23,7 @@ export class DemoteEmployeeComponent {
   demoteEmployee() {
     console.log("Demote Request for " + this.empId + " " + this.numDems);
     console.log("Valid Demotion request");
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/demote?empId=" + this.empId + "&numDems=" + this.numDems + "&sessionId=" + localStorage.getItem("sessionId"), {
+    fetch(backend_url + "/api/employees/demote?empId=" + this.empId + "&numDems=" + this.numDems + "&sessionId=" + localStorage.getItem("sessionId"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

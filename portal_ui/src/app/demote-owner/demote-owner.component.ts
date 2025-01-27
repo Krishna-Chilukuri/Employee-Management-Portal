@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from '../app.component';
 import { SessionCheckerService } from '../session-checker.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-demote-owner',
@@ -21,7 +22,7 @@ export class DemoteOwnerComponent {
   demoteOwner() {
     console.log(this.ownerId);
 
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/demoteOwner?ownerId="+this.ownerId)
+    fetch(backend_url + "/api/login/demoteOwner?ownerId="+this.ownerId)
     .then ((response) => {
       console.log(response);
       window.location.reload();

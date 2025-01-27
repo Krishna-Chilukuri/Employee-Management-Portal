@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { error } from 'console';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-remove-admin-owner',
@@ -23,7 +24,7 @@ export class RemoveAdminOwnerComponent {
   removeAdminOwner() {
     console.log(this.username);
 
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/removeAdminOwner?username="+this.username)
+    fetch(backend_url + "/api/login/removeAdminOwner?username="+this.username)
     .then ((response) => {
       console.log(response);
       window.location.reload();
@@ -39,7 +40,7 @@ export class RemoveAdminOwnerComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch(backend_url + "/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;

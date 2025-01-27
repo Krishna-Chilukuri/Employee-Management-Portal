@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
 import { SessionCheckerService } from '../session-checker.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-view-employee',
@@ -35,7 +36,7 @@ export class ViewEmployeeComponent {
   async viewEmployee() {
     console.log("Viewing : " + this.employeeId);
     
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/view?empId="+this.employeeId, {
+    fetch(backend_url + "/api/employees/view?empId="+this.employeeId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

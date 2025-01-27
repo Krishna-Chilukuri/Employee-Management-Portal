@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AuthenticationServiceService } from './authentication-service.service';
+import { backend_url } from '../environments/environments';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class SessionCheckerService {
     try {
       if (typeof(localStorage) !== 'undefined') {
         console.log("Before fetch in service : Session CHecker");
-        const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/checkSession?sessionId=" + localStorage.getItem("sessionId"));
+        const response = await fetch(backend_url + "/api/login/checkSession?sessionId=" + localStorage.getItem("sessionId"));
         console.log("Before await");
         data = await response.json();
         console.log("DATA : " + JSON.stringify(data));

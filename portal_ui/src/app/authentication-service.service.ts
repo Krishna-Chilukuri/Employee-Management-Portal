@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { response } from 'express';
 import { delay } from 'rxjs';
+import { backend_url } from '../environments/environments';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthenticationServiceService {
   async loginService(username: string, password: string): Promise<boolean> {
     console.log("IN AUTH SERVICE");
     try {
-      const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/getId?username="+username+"&password="+password);
+      const response = await fetch(backend_url + "/api/login/getId?username="+username+"&password="+password);
       // const data = response.json();
       const data = await response.json();
       console.log("Login Done: " + JSON.stringify(data));

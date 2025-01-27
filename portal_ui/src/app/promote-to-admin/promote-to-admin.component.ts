@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { error } from 'console';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-promote-to-admin',
@@ -20,7 +21,7 @@ export class PromoteToAdminComponent {
   }
   promoteToAdmin() {
     console.log(this.empId);
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/promoteToAdmin?empId="+this.empId)
+    fetch(backend_url + "/api/employees/promoteToAdmin?empId="+this.empId)
     .then ((response) => {
       console.log(response);
     })
@@ -34,7 +35,7 @@ export class PromoteToAdminComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch(backend_url + "/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;

@@ -6,6 +6,7 @@ import { response } from 'express';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
 import { SessionCheckerService } from '../session-checker.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-add-employee',
@@ -32,7 +33,7 @@ export class AddEmployeeComponent {
     console.log(this.employee.employeeName);
     console.log(this.employee.employeeRank);
     this.jsonString = JSON.stringify(this.employee);
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/save?sessionId=" + localStorage.getItem("sessionId"), {
+    fetch(backend_url + "/api/employees/save?sessionId=" + localStorage.getItem("sessionId"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

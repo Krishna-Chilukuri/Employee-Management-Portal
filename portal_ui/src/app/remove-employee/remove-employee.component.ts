@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
 import { SessionCheckerService } from '../session-checker.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-remove-employee',
@@ -28,7 +29,7 @@ export class RemoveEmployeeComponent {
 
   async removeEmployee() {
     console.log(this.employeeId);
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/delete?empId="+this.employeeId+"&sessionId="+localStorage.getItem("sessionId"), {
+    fetch(backend_url + "/api/employees/delete?empId="+this.employeeId+"&sessionId="+localStorage.getItem("sessionId"), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 import { AuthenticationServiceService } from '../authentication-service.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-promote-to-owner',
@@ -21,7 +22,7 @@ export class PromoteToOwnerComponent {
 
   promoteToOwner() {
     console.log(this.adminId);
-    fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/promoteToOwner?adminId="+this.adminId)
+    fetch(backend_url + "/api/login/promoteToOwner?adminId="+this.adminId)
     .then ((response) => {
       console.log(response);
       window.location.reload();
@@ -35,7 +36,7 @@ export class PromoteToOwnerComponent {
       this.router.navigate(['/']);
     }
     try {
-      const response = await fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
+      const response = await fetch(backend_url + "/api/login/checkSession?sessionId="+localStorage.getItem("sessionId"));
       const data = await response.json();
       console.log("DATA : " + JSON.stringify(data));
       this.headerComp.username = data.username;

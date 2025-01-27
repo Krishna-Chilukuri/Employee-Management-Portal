@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { error } from 'console';
 import { response } from 'express';
 import { AppComponent } from '../app.component';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-hierarchies',
@@ -32,7 +33,7 @@ export class HierarchiesComponent {
     switch (this.choiceOfHie) {
       case "upper":
         console.log("Upper Hierarchy Selected for " + this.empId);
-        fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/upperHierarchy?empId=" + this.empId, {
+        fetch(backend_url + "/api/employees/upperHierarchy?empId=" + this.empId, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ export class HierarchiesComponent {
         break;
       case "lower":
         console.log("Lower Hierarchy Selected for " + this.empId);
-        fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/lowerHierarchy?empId=" + this.empId, {
+        fetch(backend_url + "/api/employees/lowerHierarchy?empId=" + this.empId, {
           method: 'GET',
           // headers: {
           //   'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ export class HierarchiesComponent {
         break;
       case "kStep":
         console.log("kStep Hierarchy selected for " + this.empId + " for " + this.kVal + " steps");
-        fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/employees/kStepHierarchy?empId=" + this.empId + "&kVal=" + this.kVal, {
+        fetch(backend_url + "/api/employees/kStepHierarchy?empId=" + this.empId + "&kVal=" + this.kVal, {
           method: 'GET',
         })
           .then((response) => response.json())

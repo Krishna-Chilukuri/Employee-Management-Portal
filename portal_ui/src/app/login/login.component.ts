@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 // import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationServiceService } from '../authentication-service.service';
+import { backend_url } from '../../environments/environments';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ import { AuthenticationServiceService } from '../authentication-service.service'
 })
 export class LoginComponent {
   loginCreds : LoginCreds;
-  checkUrl : string = "https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/getId";
+  checkUrl : string = backend_url + "/api/login/getId";
   jsonString : string;
   constructor(private router: Router, private authService: AuthenticationServiceService) {
     if (typeof(localStorage) !== 'undefined' && localStorage.getItem("loginStat") == "true") {
@@ -39,7 +40,7 @@ export class LoginComponent {
     // document.getElementById("login-form").reset();
     // window.location.reload();
     //+"&password="+JSON.stringify(this.loginCreds.password)
-    // fetch("https://emp-management-portal-23a41acb3a8b.herokuapp.com/api/login/getId?id="+this.loginCreds.userId).then((data) => {
+    // fetch(backend_url + "/api/login/getId?id="+this.loginCreds.userId).then((data) => {
     //   data.json().then((obj) => {
     //     console.log(obj);
     //   })

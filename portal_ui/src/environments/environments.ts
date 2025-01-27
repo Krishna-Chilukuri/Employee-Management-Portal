@@ -1,0 +1,1 @@
+export const backend_url = "https://emp-management-portal-23a41acb3a8b.herokuapp.com";
