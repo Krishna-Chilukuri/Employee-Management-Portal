@@ -27,6 +27,7 @@ export class AuthenticationServiceService {
         this.sessionId = data.sessionId;
       }
       else {
+        console.log("Privilege is null");
         this.loginStat = false;
         this.userPriv = '';
         this.sessionId = '';
@@ -38,7 +39,7 @@ export class AuthenticationServiceService {
       return true;
     }
     catch (error) {
-      console.log(error);
+      console.log("Error: " + error);
       return false;
     }
   }

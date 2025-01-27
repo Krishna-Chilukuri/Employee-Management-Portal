@@ -23,6 +23,7 @@ export class SessionCheckerService {
       if (typeof(localStorage) !== 'undefined') {
         console.log("Before fetch in service : Session CHecker");
         const response = await fetch(backend_url + "/api/login/checkSession?sessionId=" + localStorage.getItem("sessionId"));
+        console.log("Session ID used : ", localStorage.getItem("sessionId"));
         console.log("Before await");
         data = await response.json();
         console.log("DATA : " + JSON.stringify(data));
@@ -53,9 +54,9 @@ export class SessionCheckerService {
             break;
         }
       }
-      // else {
-      //   console.log("No local storage : ELSE");
-      // }
+      else {
+        console.log("No local storage : ELSE");
+      }
     }
     catch (error) {
       console.log("Error in page load check Session Checker : " + error);
